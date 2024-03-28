@@ -25,7 +25,7 @@ class API {
 
   Future<String> refreshAccessToken(String refreshToken) async {
     const url =
-        'http://192.168.1.15:8080/api/token/refreshAccessToken'; // 10.0.2.2
+        'http://10.0.2.2:8080/api/token/refreshAccessToken'; // 10.0.2.2
     var headers = {'authorization': refreshToken};
 
     try {
@@ -93,7 +93,7 @@ class API {
   }
 
   Future<List<ClassesStudent>> getClassesStudent() async {
-    const URL = 'http://192.168.1.15:8080/api/student/classes'; //10.0.2.2
+    const URL = 'http://10.0.2.2:8080/api/student/classes'; //10.0.2.2
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -181,7 +181,7 @@ class API {
   }
 
   // Future<List<AttendanceData>> getAttendanceDetailForDetailPage(String classID) async {
-  //   final URL = 'http://192.168.1.15:8080/api/student/classes/detail/$classID'; //10.0.2.2
+  //   final URL = 'http://10.0.2.2:8080/api/student/classes/detail/$classID'; //10.0.2.2
 
   //   var accessToken = await getAccessToken();
   //   var headers = {'authorization': accessToken};
@@ -269,7 +269,7 @@ class API {
   // }
 
   Future<List<ReportModel>> getReportDataForStudent() async {
-    final URL = 'http://192.168.1.15:8080/api/student/reports'; //10.0.2.2
+    final URL = 'http://10.0.2.2:8080/api/student/reports'; //10.0.2.2
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -363,7 +363,7 @@ class API {
   Future<List<AttendanceDetailDataForDetailPage>>
       getAttendanceDetailForDetailPage(String classID) async {
     final URL =
-        'http://192.168.1.15:8080/api/student/classes/detail/$classID'; //10.0.2.2
+        'http://10.0.2.2:8080/api/student/classes/detail/$classID'; //10.0.2.2
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -452,7 +452,7 @@ class API {
   }
 
   Future<bool> uploadMultipleImage(String studentID, List<XFile> images) async {
-    final url = 'http://192.168.1.15:8080/test/uploadMultipleFiles';
+    final url = 'http://10.0.2.2:8080/test/uploadMultipleFiles';
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.fields['studentID'] = studentID;
     for (var image in images) {
@@ -475,7 +475,7 @@ class API {
 
   Future<ReportData?> viewReport(int? reportID) async {
     final URL =
-        'http://192.168.1.15:8080/api/student/reports/detail/$reportID'; //10.0.2.2
+        'http://10.0.2.2:8080/api/student/reports/detail/$reportID'; //10.0.2.2
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -519,7 +519,7 @@ class API {
 
   Future<String> submitReport(String classID, String formID, String topic,
       String problem, String message, List<XFile?> listXFile) async {
-    final URL = 'http://192.168.1.15:8080/api/student/report/submit'; //10.0.2.2
+    final URL = 'http://10.0.2.2:8080/api/student/report/submit'; //10.0.2.2
     // var imageBytes = await fileImage.readAsBytes();
     // var imageFile =
     //     http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -617,7 +617,7 @@ class API {
   Future<String> editReport(int reportID, String topic, String problem,
       String message, List<XFile?> listXFile, List<String> listDelete) async {
     final URL =
-        'http://192.168.1.15:8080/api/student/report/edit/$reportID'; //10.0.2.2
+        'http://10.0.2.2:8080/api/student/report/edit/$reportID'; //10.0.2.2
     // var imageBytes = await fileImage.readAsBytes();
     // var imageFile =
     //     http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -725,7 +725,7 @@ class API {
       double latitude,
       double longitude,
       XFile fileImage) async {
-    const URL = 'http://192.168.1.15:8080/api/student/takeAttendance';
+    const URL = 'http://10.0.2.2:8080/api/student/takeAttendance';
     var imageBytes = await fileImage.readAsBytes();
     var imageFile =
         http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -784,7 +784,7 @@ class API {
       double latitude,
       double longitude,
       XFile fileImage) async {
-    const URL = 'http://192.168.1.15:8080/api/student/takeAttendanceOffline';
+    const URL = 'http://10.0.2.2:8080/api/student/takeAttendanceOffline';
     var imageBytes = await fileImage.readAsBytes();
     var imageFile =
         http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -825,7 +825,7 @@ class API {
   }
 
   Future<bool> testHello() async {
-    final url = 'http://192.168.1.15:8080/test/testHello';
+    final url = 'http://10.0.2.2:8080/test/testHello';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       dynamic resData = jsonDecode(response.body);
