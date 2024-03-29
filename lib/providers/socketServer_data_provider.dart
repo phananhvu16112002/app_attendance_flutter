@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:attendance_system_nodejs/models/AttendanceDetail.dart';
-import 'package:attendance_system_nodejs/models/AttendanceForm.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/AttendanceFormForDetailPage.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/AttendanceFormDataForDetailPage.dart';
+import 'package:attendance_system_nodejs/models/attendance_detail.dart';
+import 'package:attendance_system_nodejs/models/attendance_form.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_form_for_detail_page.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_form_for_detail_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:async';

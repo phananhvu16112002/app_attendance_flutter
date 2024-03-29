@@ -1,5 +1,5 @@
-import 'package:attendance_system_nodejs/models/Student.dart';
-import 'package:attendance_system_nodejs/services/GetLocation.dart';
+import 'package:attendance_system_nodejs/models/student.dart';
+import 'package:attendance_system_nodejs/services/get_location/get_location_services.dart';
 import 'package:flutter/material.dart';
 
 class StudentDataProvider with ChangeNotifier {

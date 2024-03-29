@@ -1,15 +1,20 @@
-import 'package:attendance_system_nodejs/adapter/AttendanceFormAdapter.dart';
-import 'package:attendance_system_nodejs/adapter/ClassesStudent.dart';
-import 'package:attendance_system_nodejs/adapter/CourseAdapter.dart';
-import 'package:attendance_system_nodejs/adapter/DataOfflineAdapter.dart';
-import 'package:attendance_system_nodejs/adapter/StudentAdapter.dart';
-import 'package:attendance_system_nodejs/adapter/StudentClassesAdapter.dart';
-import 'package:attendance_system_nodejs/adapter/TeacherAdapter.dart';
-import 'package:attendance_system_nodejs/adapter/ClassAdapter.dart';
-import 'package:attendance_system_nodejs/models/AttendanceForm.dart';
-import 'package:attendance_system_nodejs/models/ClassesStudent.dart';
-import 'package:attendance_system_nodejs/models/DataOffline.dart';
-import 'package:attendance_system_nodejs/models/StudentClasses.dart';
+import 'package:attendance_system_nodejs/adapter/attendance_form_adapter.dart';
+import 'package:attendance_system_nodejs/adapter/class_student_adapter.dart';
+import 'package:attendance_system_nodejs/adapter/course_adapter.dart';
+import 'package:attendance_system_nodejs/adapter/data_offline_adapter.dart';
+import 'package:attendance_system_nodejs/adapter/student_adapter.dart';
+import 'package:attendance_system_nodejs/adapter/student_classes_adapter.dart';
+import 'package:attendance_system_nodejs/adapter/teacher_adapter.dart';
+import 'package:attendance_system_nodejs/adapter/class_adapter.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_form_for_detail_page.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/feedback.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/report_data_for_detail_page.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/report_image.dart';
+import 'package:attendance_system_nodejs/models/attendance_detail.dart';
+import 'package:attendance_system_nodejs/models/attendance_form.dart';
+import 'package:attendance_system_nodejs/models/class_student.dart';
+import 'package:attendance_system_nodejs/models/data_offline.dart';
+import 'package:attendance_system_nodejs/models/student_classes.dart';
 import 'package:attendance_system_nodejs/providers/attendanceDetail_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/attendanceFormForDetailPage_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/attendanceForm_data_provider.dart';
@@ -17,24 +22,31 @@ import 'package:attendance_system_nodejs/providers/classesStudent_data_provider.
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/CreateNewPassword.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/FlashScreen.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/ForgotPassword.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/ForgotPasswordOTPPage.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/OTPPage.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/RegisterPage.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/SignInPage.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/UploadImage.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/create_new_password.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/flash_screen.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/forgot_password.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/forgot_password_otp_page.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/otp_page.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/register_page.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/upload_image.dart';
 // import 'package:attendance_system_nodejs/screens/Authentication/SplashScreen.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/WelcomePage.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
-import 'package:attendance_system_nodejs/screens/DetailHome/ReportClass.dart';
+import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/detail_page.dart';
+import 'package:attendance_system_nodejs/screens/DetailHome/edit_report_page/edit_report_page.dart';
+import 'package:attendance_system_nodejs/screens/DetailHome/report_attendance/report_attendance.dart';
+import 'package:attendance_system_nodejs/screens/DetailHome/report_class/report_class.dart';
+import 'package:attendance_system_nodejs/screens/Home/after_attendance_form/after_attendance_form.dart';
+import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_QR/attendance_form_page_qr.dart';
+import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_offline/attendance_form_page_offline.dart';
+import 'package:attendance_system_nodejs/screens/Home/attendanceform_page/attendance_form_page.dart';
 // import 'package:attendance_system_nodejs/screens/DetailHome/ReportAttendance.dart';
 // import 'package:attendance_system_nodejs/screens/Home/AfterAttendance.dart';
 // import 'package:attendance_system_nodejs/screens/Home/AttendanceFormPage.dart';
-import 'package:attendance_system_nodejs/screens/Home/DetailReport.dart';
-import 'package:attendance_system_nodejs/screens/Home/HomePage.dart';
-import 'package:attendance_system_nodejs/screens/Home/Profile.dart';
+import 'package:attendance_system_nodejs/screens/Home/detail_report/detail_report.dart';
+import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
+import 'package:attendance_system_nodejs/screens/Home/profile_page/profile.dart';
 // import 'package:attendance_system_nodejs/TestApp/Test.dart';
 // import 'package:attendance_system_nodejs/TestApp/TestAvatar.dart';
 // import 'package:attendance_system_nodejs/TestApp/TestConnection.dart';
@@ -111,8 +123,189 @@ class _MyAppState extends State<MyApp> {
         '/ProfilePage': (context) => const ProfilePage(),
         // '/DetailReport': (context) => const DetailReport(),
       },
-      home: const FlashScreen(),
+      home: FlashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
+
+
+// AfterAttendance(
+//         attendanceDetail: AttendanceDetail(
+//             studentDetail: 'studentDetail',
+//             classDetail: 'classDetail',
+//             attendanceForm: AttendanceForm(
+//                 formID: 'formID',
+//                 classes: 'classes',
+//                 startTime: '',
+//                 endTime: '',
+//                 dateOpen: '',
+//                 status: false,
+//                 typeAttendance: 0,
+//                 location: 'location',
+//                 latitude: 0.0,
+//                 longtitude: 0.0,
+//                 radius: 0.0),
+//             result: 1,
+//             dateAttendanced: '',
+//             location: 'location',
+//             note: 'note',
+//             latitude: 0.0,
+//             longitude: 0.0,
+//             url: ''),
+//         classesStudent: ClassesStudent(
+//             studentID: 'studentID',
+//             classID: 'classID',
+//             total: 10,
+//             totalPresence: 10,
+//             totalAbsence: 10,
+//             totalLate: 10,
+//             roomNumber: 'A0505',
+//             shiftNumber: 5,
+//             startTime: '',
+//             endTime: '',
+//             classType: 'classType',
+//             group: 'group',
+//             subGroup: 'subGroup',
+//             courseID: 'courseID',
+//             teacherID: 'teacherID',
+//             courseName: 'courseName',
+//             totalWeeks: 10,
+//             requiredWeeks: 2,
+//             credit: 2,
+//             teacherEmail: 'teacherEmail',
+//             teacherName: 'teacherName',
+//             progress: 0.5),
+//       ),
+
+// AttendanceFormPage(
+//         classesStudent: ClassesStudent(
+//             studentID: 'studentID',
+//             classID: 'classID',
+//             total: 10,
+//             totalPresence: 10,
+//             totalAbsence: 10,
+//             totalLate: 10,
+//             roomNumber: 'A0505',
+//             shiftNumber: 5,
+//             startTime: '',
+//             endTime: '',
+//             classType: 'classType',
+//             group: 'group',
+//             subGroup: 'subGroup',
+//             courseID: 'courseID',
+//             teacherID: 'teacherID',
+//             courseName: 'courseName',
+//             totalWeeks: 10,
+//             requiredWeeks: 2,
+//             credit: 2,
+//             teacherEmail: 'teacherEmail',
+//             teacherName: 'teacherName',
+//             progress: 0.5),
+//       ),
+
+// EditReportPage(
+//         classesStudent: ClassesStudent(
+//             studentID: 'studentID',
+//             classID: 'classID',
+//             total: 10,
+//             totalPresence: 10,
+//             totalAbsence: 10,
+//             totalLate: 10,
+//             roomNumber: 'roomNumber',
+//             shiftNumber: 5,
+//             startTime: 'startTime',
+//             endTime: 'endTime',
+//             classType: 'classType',
+//             group: 'group',
+//             subGroup: 'subGroup',
+//             courseID: 'courseID',
+//             teacherID: 'teacherID',
+//             courseName: 'courseName',
+//             totalWeeks: 10,
+//             requiredWeeks: 2,
+//             credit: 2,
+//             teacherEmail: 'teacherEmail',
+//             teacherName: 'teacherName',
+//             progress: 0.5),
+//         reportData: ReportData(
+//             reportID: 1,
+//             topic: 'topic',
+//             problem: 'problem',
+//             message: 'message',
+//             status: 'Pending',
+//             createdAt: 'createdAt',
+//             checkNew: false,
+//             important: false,
+//             reportImage: [ReportImage(imageID: 'imageID', imageURL: '')],
+//             feedBack: FeedBack(
+//                 feedbackID: 1,
+//                 topicFeedback: 'topicFeedback',
+//                 messageFeedback: 'messageFeedback',
+//                 confirmStatus: 'Pending',
+//                 createdAtFeedBack: '')),
+//       ),
+
+
+// ReportAttendance(
+//         classesStudent: ClassesStudent(
+//             studentID: 'studentID',
+//             classID: 'classID',
+//             total: 10,
+//             totalPresence: 10,
+//             totalAbsence: 10,
+//             totalLate: 10,
+//             roomNumber: 'roomNumber',
+//             shiftNumber: 5,
+//             startTime: 'startTime',
+//             endTime: 'endTime',
+//             classType: 'classType',
+//             group: 'group',
+//             subGroup: 'subGroup',
+//             courseID: 'courseID',
+//             teacherID: 'teacherID',
+//             courseName: 'courseName',
+//             totalWeeks: 10,
+//             requiredWeeks: 2,
+//             credit: 2,
+//             teacherEmail: 'teacherEmail',
+//             teacherName: 'teacherName',
+//             progress: 0.5),
+//         attendanceFormDataForDetailPage: AttendanceFormDataForDetailPage(
+//             formID: '1',
+//             startTime: '',
+//             endTime: '',
+//             status: false,
+//             dateOpen: '',
+//             type: 0,
+//             latitude: 0.0,
+//             longitude: 0.0,
+//             radius: 0.0),
+//       ),
+
+
+// DetailPage(
+//         classesStudent: ClassesStudent(
+//             studentID: 'studentID',
+//             classID: 'classID',
+//             total: 10,
+//             totalPresence: 10,
+//             totalAbsence: 10,
+//             totalLate: 10,
+//             roomNumber: 'roomNumber',
+//             shiftNumber: 5,
+//             startTime: 'startTime',
+//             endTime: 'endTime',
+//             classType: 'classType',
+//             group: 'group',
+//             subGroup: 'subGroup',
+//             courseID: 'courseID',
+//             teacherID: 'teacherID',
+//             courseName: 'courseName',
+//             totalWeeks: 10,
+//             requiredWeeks: 2,
+//             credit: 2,
+//             teacherEmail: 'teacherEmail',
+//             teacherName: 'teacherName',
+//             progress: 0.5),
+//       ),

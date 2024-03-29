@@ -1,4 +1,4 @@
-import 'package:attendance_system_nodejs/models/AttendanceForm.dart';
+import 'package:attendance_system_nodejs/models/attendance_form.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceFormDataProvider with ChangeNotifier {

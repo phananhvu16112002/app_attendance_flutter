@@ -1,4 +1,4 @@
-import 'package:attendance_system_nodejs/models/Class.dart';
+import 'package:attendance_system_nodejs/models/class.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hive_flutter/hive_flutter.dart';

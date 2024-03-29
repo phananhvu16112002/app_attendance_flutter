@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:attendance_system_nodejs/models/AttendanceDetail.dart';
-import 'package:attendance_system_nodejs/models/ClassesStudent.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/AttendanceDataForDetailPage.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/AttendanceDetailDataForDetailPage.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/ReportDataForDetailPage.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ModelForAPI_ReportPage_Version1/ReportModel.dart';
-import 'package:attendance_system_nodejs/models/StudentClasses.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/WelcomePage.dart';
-import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
+import 'package:attendance_system_nodejs/models/attendance_detail.dart';
+import 'package:attendance_system_nodejs/models/class_student.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_form_data_for_detail_page.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_detail_for_detail_page.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/report_data_for_detail_page.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/ModelForAPI_ReportPage_Version1/report_model.dart';
+import 'package:attendance_system_nodejs/models/student_classes.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
+// import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
+import 'package:attendance_system_nodejs/utils/constraints.dart';
+import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ import 'package:flutter/material.dart';
 class API {
   BuildContext context;
   API(this.context);
+  final String baseURL = Constrants().baseURlLocalhost;
 
   Future<String> getAccessToken() async {
     SecureStorage secureStorage = SecureStorage();
@@ -24,8 +27,7 @@ class API {
   }
 
   Future<String> refreshAccessToken(String refreshToken) async {
-    const url =
-        'http://10.0.2.2:8080/api/token/refreshAccessToken'; // 10.0.2.2
+    var url = 'http://$baseURL:8080/api/token/refreshAccessToken'; // $baseURL
     var headers = {'authorization': refreshToken};
 
     try {
@@ -93,7 +95,7 @@ class API {
   }
 
   Future<List<ClassesStudent>> getClassesStudent() async {
-    const URL = 'http://10.0.2.2:8080/api/student/classes'; //10.0.2.2
+    var URL = 'http://$baseURL:8080/api/student/classes'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -180,96 +182,8 @@ class API {
     }
   }
 
-  // Future<List<AttendanceData>> getAttendanceDetailForDetailPage(String classID) async {
-  //   final URL = 'http://10.0.2.2:8080/api/student/classes/detail/$classID'; //10.0.2.2
-
-  //   var accessToken = await getAccessToken();
-  //   var headers = {'authorization': accessToken};
-  //   try {
-  //     final response = await http.get(Uri.parse(URL), headers: headers);
-  //     if (response.statusCode == 200) {
-  //       dynamic responseData = jsonDecode(response.body);
-  //       List<AttendanceData> data = [];
-
-  //       if (responseData is List) {
-  //         for (var temp in responseData) {
-  //           if (temp is Map<String, dynamic>) {
-  //             try {
-  //               data.add(AttendanceData.fromJson(temp));
-  //             } catch (e) {
-  //               print('Error parsing data: $e');
-  //             }
-  //           } else {
-  //             print('Invalid data type: $temp');
-  //           }
-  //         }
-  //       } else if (responseData is Map<String, dynamic>) {
-  //         try {
-  //           data.add(AttendanceData.fromJson(responseData));
-  //         } catch (e) {
-  //           print('Error parsing data: $e');
-  //         }
-  //       } else {
-  //         print('Unexpected data type: $responseData');
-  //       }
-  //       print('Data $data');
-  //       return data;
-  //     } else if (response.statusCode == 498 || response.statusCode == 401) {
-  //       var refreshToken = await SecureStorage().readSecureData('refreshToken');
-  //       var newAccessToken = await refreshAccessToken(refreshToken);
-  //       if (newAccessToken.isNotEmpty) {
-  //         headers['authorization'] = newAccessToken;
-  //         final retryResponse =
-  //             await http.get(Uri.parse(URL), headers: headers);
-  //         if (retryResponse.statusCode == 200) {
-  //           // print('-- RetryResponse.body ${retryResponse.body}');
-  //           // print('-- Retry JsonDecode:${jsonDecode(retryResponse.body)}');
-  //           dynamic responseData = jsonDecode(retryResponse.body);
-  //           List<AttendanceData> data = [];
-
-  //           if (responseData is List) {
-  //             for (var temp in responseData) {
-  //               if (temp is Map<String, dynamic>) {
-  //                 try {
-  //                   data.add(AttendanceData.fromJson(temp));
-  //                 } catch (e) {
-  //                   print('Error parsing data: $e');
-  //                 }
-  //               } else {
-  //                 print('Invalid data type: $temp');
-  //               }
-  //             }
-  //           } else if (responseData is Map<String, dynamic>) {
-  //             try {
-  //               data.add(AttendanceData.fromJson(responseData));
-  //             } catch (e) {
-  //               print('Error parsing data: $e');
-  //             }
-  //           } else {
-  //             print('Unexpected data type: $responseData');
-  //           }
-
-  //           // print('Data $data');
-  //           return data;
-  //         } else {
-  //           return [];
-  //         }
-  //       } else {
-  //         print('New Access Token is empty');
-  //         return [];
-  //       }
-  //     } else {
-  //       print('Failed to load data. Status code: ${response.statusCode}');
-  //       return [];
-  //     }
-  //   } catch (e) {
-  //     print('Error: $e');
-  //     return [];
-  //   }
-  // }
-
   Future<List<ReportModel>> getReportDataForStudent() async {
-    final URL = 'http://10.0.2.2:8080/api/student/reports'; //10.0.2.2
+    final URL = 'http://$baseURL:8080/api/student/reports'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -363,7 +277,7 @@ class API {
   Future<List<AttendanceDetailDataForDetailPage>>
       getAttendanceDetailForDetailPage(String classID) async {
     final URL =
-        'http://10.0.2.2:8080/api/student/classes/detail/$classID'; //10.0.2.2
+        'http://$baseURL:8080/api/student/classes/detail/$classID'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -452,7 +366,7 @@ class API {
   }
 
   Future<bool> uploadMultipleImage(String studentID, List<XFile> images) async {
-    final url = 'http://10.0.2.2:8080/test/uploadMultipleFiles';
+    final url = 'http://$baseURL:8080/test/uploadMultipleFiles';
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.fields['studentID'] = studentID;
     for (var image in images) {
@@ -475,7 +389,7 @@ class API {
 
   Future<ReportData?> viewReport(int? reportID) async {
     final URL =
-        'http://10.0.2.2:8080/api/student/reports/detail/$reportID'; //10.0.2.2
+        'http://$baseURL:8080/api/student/reports/detail/$reportID'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -519,7 +433,7 @@ class API {
 
   Future<String> submitReport(String classID, String formID, String topic,
       String problem, String message, List<XFile?> listXFile) async {
-    final URL = 'http://10.0.2.2:8080/api/student/report/submit'; //10.0.2.2
+    final URL = 'http://$baseURL:8080/api/student/report/submit'; //$baseURL
     // var imageBytes = await fileImage.readAsBytes();
     // var imageFile =
     //     http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -617,7 +531,7 @@ class API {
   Future<String> editReport(int reportID, String topic, String problem,
       String message, List<XFile?> listXFile, List<String> listDelete) async {
     final URL =
-        'http://10.0.2.2:8080/api/student/report/edit/$reportID'; //10.0.2.2
+        'http://$baseURL:8080/api/student/report/edit/$reportID'; //$baseURL
     // var imageBytes = await fileImage.readAsBytes();
     // var imageFile =
     //     http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -725,7 +639,7 @@ class API {
       double latitude,
       double longitude,
       XFile fileImage) async {
-    const URL = 'http://10.0.2.2:8080/api/student/takeAttendance';
+    var URL = 'http://$baseURL:8080/api/student/takeAttendance';
     var imageBytes = await fileImage.readAsBytes();
     var imageFile =
         http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -784,7 +698,7 @@ class API {
       double latitude,
       double longitude,
       XFile fileImage) async {
-    const URL = 'http://10.0.2.2:8080/api/student/takeAttendanceOffline';
+    var URL = 'http://$baseURL:8080/api/student/takeAttendanceOffline';
     var imageBytes = await fileImage.readAsBytes();
     var imageFile =
         http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -825,7 +739,7 @@ class API {
   }
 
   Future<bool> testHello() async {
-    final url = 'http://10.0.2.2:8080/test/testHello';
+    final url = 'http://$baseURL:8080/test/testHello';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       dynamic resData = jsonDecode(response.body);

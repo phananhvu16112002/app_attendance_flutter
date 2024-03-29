@@ -1,5 +1,5 @@
-import 'package:attendance_system_nodejs/models/ClassesStudent.dart';
-import 'package:attendance_system_nodejs/models/ClassesStudent.dart';
+import 'package:attendance_system_nodejs/models/class_student.dart';
+import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:flutter/material.dart';
 
 class ClassesStudentProvider with ChangeNotifier {

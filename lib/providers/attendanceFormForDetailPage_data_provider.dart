@@ -1,7 +1,7 @@
-import 'package:attendance_system_nodejs/models/ModelForAPI/AttendanceFormForDetailPage.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ClassForDetailPage.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/CourseForDetailPage.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/AttendanceFormDataForDetailPage.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_form_for_detail_page.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/class_for_detail_page.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/course_for_detail_page.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_form_for_detail_page.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceFormDataForDetailPageProvider with ChangeNotifier {

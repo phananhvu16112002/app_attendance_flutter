@@ -1,4 +1,4 @@
-import 'package:attendance_system_nodejs/models/AttendanceDetail.dart';
+import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceDetailDataProvider with ChangeNotifier {
