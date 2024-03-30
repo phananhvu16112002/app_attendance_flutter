@@ -25,7 +25,7 @@ class _OTPPageState extends State<OTPPage> {
   OtpFieldController otpController = OtpFieldController();
   String description =
       "Please enter the verification code we just sent on your email address.";
-  int secondsRemaining = 10;
+  int secondsRemaining = 59;
   bool canResend = false;
   late Timer _timer;
   late ProgressDialog _progressDialog;

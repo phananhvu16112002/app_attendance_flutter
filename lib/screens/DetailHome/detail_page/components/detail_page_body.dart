@@ -87,9 +87,6 @@ class _DetailPageBodyState extends State<DetailPageBody> {
           child: Column(
             children: [
               customAppBar(socketServerDataProvider),
-              const SizedBox(
-                height: 5,
-              ),
               FutureBuilder(
                 future: API(context)
                     .getAttendanceDetailForDetailPage(classesStudent.classID),
@@ -316,6 +313,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                     height: 10,
                                   ),
                                   ListView.builder(
+                                      padding: EdgeInsets.all(0),
                                       itemCount: snapshot.data!.length,
                                       shrinkWrap: true,
                                       controller: _controller,
@@ -342,11 +340,10 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                                   ? data.location
                                                   : 'null',
                                               data.url, //image
-                                              data.attendanceForm
-                                                  .status, //status form
-                                              data.attendanceForm, //attendanceForm
+                                              data.attendanceForm.status,
+                                              data.attendanceForm,
                                               attendanceFormDataForDetailPageProvider,
-                                              data.report), //provider form
+                                              data.report),
                                         );
                                       }),
                                 ],
@@ -360,7 +357,9 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                   return const Text('Data Not Avalible');
                 },
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),
@@ -414,18 +413,15 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                   children: [
                     Container(
                         width: 300,
-                        child: customText(
-                            'Phát triển hệ thống thông tin doanh ngiệp',
-                            18,
-                            FontWeight.w600,
-                            Colors.white)),
+                        child: customText(classesStudent.courseName, 18,
+                            FontWeight.w600, Colors.white)),
                     const SizedBox(
                       height: 2,
                     ),
                     Row(
                       children: [
                         CustomText(
-                            message: 'CourseID: 520H0303 ',
+                            message: 'CourseID: ${classesStudent.courseID} ',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: Colors.white),
@@ -434,7 +430,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                         ),
                         Container(width: 1, height: 14, color: Colors.white),
                         CustomText(
-                            message: ' Room: A0505 ',
+                            message: ' Room: ${classesStudent.roomNumber} ',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: Colors.white),
@@ -443,7 +439,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                         ),
                         Container(width: 1, height: 14, color: Colors.white),
                         CustomText(
-                            message: ' Shift: 5 ',
+                            message: ' Shift: ${classesStudent.shiftNumber} ',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: Colors.white),
@@ -453,7 +449,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                       height: 2,
                     ),
                     CustomText(
-                        message: 'Lectuer: Mai Van Manh',
+                        message: 'Lectuer: ${classesStudent.teacherName}',
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: Colors.white)

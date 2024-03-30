@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:attendance_system_nodejs/utils/constraints.dart';
 import 'package:http/http.dart' as http;
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Authenticate {
   final String baseURl = Constrants().baseURlLocalhost;
@@ -48,6 +49,8 @@ class Authenticate {
 
   //<String, String> code (200, requireImage) => requireImage = false => chuyen trang Home, requiredImage = true => chuyen trang chup anh
   Future<String> login(String email, String password) async {
+    // final SharedPreferences sharedPreferences =
+    //     await SharedPreferences.getInstance();
     final URL = 'http://${baseURl}:8080/api/student/login';
     var request = {'email': email, 'password': password};
     var body = json.encode(request);
@@ -64,14 +67,18 @@ class Authenticate {
       var studentID = responseData['studentID'];
       var studentEmail = responseData['studentEmail'];
       var studentName = responseData['studentName'];
+      var requiredImage = responseData['requiredImage'];
 
       print('--Response Data: $responseData');
+      print('Required: ${requiredImage.toString()}');
 
       await SecureStorage().writeSecureData('accessToken', accessToken);
       await SecureStorage().writeSecureData('refreshToken', refreshToken);
       await SecureStorage().writeSecureData('studentID', studentID);
       await SecureStorage().writeSecureData('studentEmail', studentEmail);
       await SecureStorage().writeSecureData('studentName', studentName);
+      await SecureStorage().writeSecureData('requiredImage', requiredImage.toString());
+      // await sharedPreferences.setBool('requiredImage', requiredImage);
       return '';
     } else {
       // ignore: avoid_print

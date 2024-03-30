@@ -15,6 +15,7 @@ import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -225,6 +226,8 @@ class _SignInPageState extends State<SignInPage> {
                           borderColor: Colors.white,
                           textColor: Colors.white,
                           function: () async {
+                            // SharedPreferences sharedPreferences =
+                            //     await SharedPreferences.getInstance();
                             if (_formKey.currentState!.validate()) {
                               try {
                                 _progressDialog.show();
@@ -239,15 +242,10 @@ class _SignInPageState extends State<SignInPage> {
                                           .readSecureData('studentEmail');
                                   var studentName = await SecureStorage()
                                       .readSecureData('studentName');
-                                  var image1 = await SecureStorage()
-                                      .readSecureData('_image1');
-                                  var image2 = await SecureStorage()
-                                      .readSecureData('_image2');
-                                  var image3 = await SecureStorage()
-                                      .readSecureData('_image3');
-                                  print(image2);
-                                  print(image3);
-                                  print(image1);
+                                  var requiredImage = await SecureStorage().readSecureData('requiredImage');
+                                  print('RequiredImage: $requiredImage');
+                                  // var requiredImage = sharedPreferences
+                                  //     .getBool('requiredImage');
                                   studentDataProvider.setStudentID(studentID);
                                   studentDataProvider
                                       .setStudentEmail(studentEmail);
@@ -260,11 +258,9 @@ class _SignInPageState extends State<SignInPage> {
                                     PageRouteBuilder(
                                       pageBuilder: (context, animation,
                                               secondaryAnimation) =>
-                                          // image1 == 'No Data Found' &&
-                                          //         image2 == 'No Data Found' &&
-                                          //         image3 == 'No Data Found'
-                                          //     ? UploadImage()
-                                          HomePage(),
+                                          requiredImage == 'true'
+                                              ? UploadImage()
+                                           : HomePage(),
                                       transitionDuration:
                                           const Duration(milliseconds: 1000),
                                       transitionsBuilder: (context, animation,

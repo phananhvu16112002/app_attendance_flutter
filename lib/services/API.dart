@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:attendance_system_nodejs/models/ModelForAPI/api_view_image/student_model.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_form_data_for_detail_page.dart';
@@ -189,11 +190,11 @@ class API {
     var headers = {'authorization': accessToken};
     try {
       final response = await http.get(Uri.parse(URL), headers: headers);
-      print('Status: ${response.statusCode}');
-      print('message: ${jsonDecode(response.body)['message']}');
+      // print('Status: ${response.statusCode}');
+      // print('message: ${jsonDecode(response.body)['message']}');
       if (response.statusCode == 200) {
         dynamic responseData = jsonDecode(response.body);
-        print('data:${response.body}');
+        // print('data:${response.body}');
         List<ReportModel> data = [];
 
         if (responseData is List) {
@@ -226,7 +227,7 @@ class API {
           headers['authorization'] = newAccessToken;
           final retryResponse =
               await http.get(Uri.parse(URL), headers: headers);
-          print('Status: ${retryResponse.statusCode}');
+          // print('Status: ${retryResponse.statusCode}');
           if (retryResponse.statusCode == 200) {
             // print('-- RetryResponse.body ${retryResponse.body}');
             // print('-- Retry JsonDecode:${jsonDecode(retryResponse.body)}');
@@ -366,13 +367,16 @@ class API {
   }
 
   Future<bool> uploadMultipleImage(String studentID, List<XFile> images) async {
-    final url = 'http://$baseURL:8080/test/uploadMultipleFiles';
+    final url = 'http://$baseURL:8080/api/student/sendImages';
+    var accessToken = await getAccessToken();
+
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.fields['studentID'] = studentID;
+    request.headers['authorization'] = accessToken;
     for (var image in images) {
       var stream = http.ByteStream(image.openRead());
       var length = await image.length();
-      var multipartFile = http.MultipartFile('files', stream, length,
+      var multipartFile = http.MultipartFile('file', stream, length,
           filename: image.path.split('/').last);
       request.files.add(multipartFile);
     }
@@ -381,6 +385,30 @@ class API {
     if (response.statusCode == 200) {
       print('Uploaded successfully');
       return true;
+    } else if (response.statusCode == 498 || response.statusCode == 401) {
+      var refreshToken = await SecureStorage().readSecureData('refreshToken');
+      var newAccessToken = await refreshAccessToken(refreshToken);
+      if (newAccessToken.isNotEmpty) {
+        var retryRequest = http.MultipartRequest('POST', Uri.parse(url));
+        retryRequest.fields['studentID'] = studentID;
+        retryRequest.headers['authorization'] = newAccessToken;
+        for (var image in images) {
+          var stream = http.ByteStream(image.openRead());
+          var length = await image.length();
+          var multipartFile = http.MultipartFile('files', stream, length,
+              filename: image.path.split('/').last);
+          retryRequest.files.add(multipartFile);
+        }
+        var retryResponse = await retryRequest.send();
+        if (retryResponse.statusCode == 200) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        print('New access Token is empty');
+        return false;
+      }
     } else {
       print('Upload failed with status code: ${response.statusCode}');
       return false;
@@ -738,6 +766,43 @@ class API {
     }
   }
 
+  Future<StudentModel?> getImageFace() async {
+    var accessToken = await getAccessToken();
+    var url = 'http://$baseURL:8080/api/student/images';
+    var headers = {'authorization': accessToken};
+    try {
+      final response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        dynamic responseData = jsonDecode(response.body);
+        StudentModel studentModel = StudentModel.fromJson(responseData);
+        print('Data student model: $studentModel');
+        return studentModel;
+      } else if (response.statusCode == 498 || response.statusCode == 401) {
+        var refreshToken = await SecureStorage().readSecureData('refreshToken');
+        var newAccessToken = await refreshAccessToken(refreshToken);
+        if (newAccessToken.isNotEmpty) {
+          headers['authorization'] = newAccessToken;
+          final retryResponse =
+              await http.get(Uri.parse(url), headers: headers);
+          if (retryResponse.statusCode == 200) {
+            dynamic retryResponseData = jsonDecode(retryResponse.body);
+            StudentModel data = StudentModel.fromJson(retryResponseData);
+            return data;
+          }
+        } else {
+          print('Access token is empty');
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('err:$e');
+      return null;
+    }
+    return null;
+  }
+
   Future<bool> testHello() async {
     final url = 'http://$baseURL:8080/test/testHello';
     final response = await http.get(Uri.parse(url));
@@ -750,26 +815,3 @@ class API {
     return false;
   }
 }
-
-
-// else {
-//         dynamic data = jsonDecode(await response.stream.bytesToString());
-//         String message = data['message'];
-//         print('Message: $message');
-//         return false;
-//       }
-
-// if (response.statusCode == 200) {
-//   print('Take Attendance Successfully');
-//   return true;
-// } else if (response.statusCode == 403) {
-//   // Handle status 403 - Forbidden
-//   Map<String, dynamic> data = json.decode(response.body);
-//   String message = data['message'];
-//   print('Failed to take attendance: $message');
-//   return false;
-// } else {
-//   // Handle other status codes
-//   print('Failed to take attendance. Status code: ${response.statusCode}');
-//   return false;
-// }

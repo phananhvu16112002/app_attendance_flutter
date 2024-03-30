@@ -33,15 +33,20 @@ class _UploadImageState extends State<UploadImage> {
         switch (imageIndex) {
           case 1:
             _image1 = File(image.path);
+            // images.add(XFile(_image1!.path));
+            print('add data');
             secureStorage.writeSecureData('_image1', _image1!.path);
             break;
           case 2:
             _image2 = File(image.path);
+            // images.add(XFile(_image2!.path));
+
             secureStorage.writeSecureData('_image2', _image2!.path);
 
             break;
           case 3:
             _image3 = File(image.path);
+            // images.add(XFile(_image3!.path));
             secureStorage.writeSecureData('_image3', _image3!.path);
             break;
         }
@@ -53,7 +58,11 @@ class _UploadImageState extends State<UploadImage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _progressDialog = ProgressDialog(context,
+    _progressDialog = customDialogLoading();
+  }
+
+  ProgressDialog customDialogLoading() {
+    return ProgressDialog(context,
         customBody: Container(
           width: 200,
           height: 150,
@@ -89,6 +98,7 @@ class _UploadImageState extends State<UploadImage> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
+              images.clear();
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (builder) => const SignInPage()),
@@ -153,15 +163,19 @@ class _UploadImageState extends State<UploadImage> {
                 if (_image1 != null && _image2 != null && _image3 != null)
                   InkWell(
                     onTap: () async {
-                      var _image1 =
+                      var image1 =
                           await secureStorage.readSecureData('_image1');
-                      images.add(XFile(_image1));
-                      var _image2 =
+                      images.add(XFile(image1));
+                      var image2 =
                           await secureStorage.readSecureData('_image2');
-                      images.add(XFile(_image2));
-                      var _image3 =
+                      images.add(XFile(image2));
+                      var image3 =
                           await secureStorage.readSecureData('_image3');
-                      images.add(XFile(_image3));
+                      images.add(XFile(image3));
+                      // print(images.length);
+                      // for (int i = 0; i < images.length; i++) {
+                      //   print(images[i]);
+                      // }
                       String studentID =
                           await secureStorage.readSecureData('studentID');
                       _progressDialog.show();
@@ -169,58 +183,29 @@ class _UploadImageState extends State<UploadImage> {
                           .uploadMultipleImage(studentID, images);
                       if (check) {
                         await _progressDialog.hide();
-                        await showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Upload Sucessfully'),
-                            content: const Text(
-                                'You can check image face in settings'),
-                            actions: [
-                              TextButton(
-                                onPressed: () async {
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (builder) => HomePage()),
-                                      (route) => false); // Đóng hộp thoại
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
-                        );
+                        await dialogSuccess(context);
+                        // images.clear();
                       } else {
                         await _progressDialog.hide();
-                        await showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Failed Upload'),
-                            content: const Text('Please check required'),
-                            actions: [
-                              TextButton(
-                                onPressed: () async {
-                                  Navigator.pop(context); // Đóng hộp thoại
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
-                        );
+                        await dialogFailed(context);
                       }
                     },
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primaryButton,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                      child: const Center(
-                        child: CustomText(
-                          message: 'Upload Image',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                      child: Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primaryButton,
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: const Center(
+                          child: CustomText(
+                            message: 'Upload Image',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -236,7 +221,7 @@ class _UploadImageState extends State<UploadImage> {
                     child: const Center(
                       child: CustomText(
                         message: 'Required 3 image Face',
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -246,6 +231,45 @@ class _UploadImageState extends State<UploadImage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Future<dynamic> dialogFailed(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Failed Upload'),
+        content: const Text('Please check required'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context); // Đóng hộp thoại
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<dynamic> dialogSuccess(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Upload Sucessfully'),
+        content: const Text('You can check image face in settings'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (builder) => HomePage()),
+                  (route) => false); // Đóng hộp thoại
+            },
+            child: const Text('OK'),
+          ),
+        ],
       ),
     );
   }
@@ -283,3 +307,205 @@ class _UploadImageState extends State<UploadImage> {
     );
   }
 }
+
+//  Container carousel() {
+//     return Container(
+//       width: double.infinity,
+//       color: Colors.white,
+//       child: Column(
+//         children: [
+//           const SizedBox(
+//             height: 8,
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 24.0),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 const Text('Hot Camp',
+//                     style: TextStyle(
+//                         color: AppColors.primary3,
+//                         fontSize: 20,
+//                         fontWeight: FontWeight.w700)),
+//                 Row(
+//                   children: [
+//                     const Text('See more',
+//                         style: TextStyle(
+//                             color: AppColors.primary3,
+//                             fontSize: 12,
+//                             fontWeight: FontWeight.w400)),
+//                     const SizedBox(
+//                       width: 4,
+//                     ),
+//                     SvgPicture.asset('assets/icons/more.svg')
+//                   ],
+//                 )
+//               ],
+//             ),
+//           ),
+//           const SizedBox(
+//             height: 16,
+//           ),
+//           CarouselSlider(
+//             carouselController: carouselController,
+//             options: CarouselOptions(
+//               aspectRatio: 14.2 / 10.3,
+//               viewportFraction: 0.55,
+//               initialPage: 0,
+//               enableInfiniteScroll: true,
+//               reverse: false,
+//               // autoPlay: true,
+//               autoPlayInterval: const Duration(seconds: 3),
+//               autoPlayAnimationDuration: const Duration(milliseconds: 800),
+//               autoPlayCurve: Curves.fastOutSlowIn,
+//               enlargeCenterPage: true,
+//               scrollDirection: Axis.horizontal,
+//               onPageChanged: (index, reason) {
+//                 setState(() {
+//                   currentIndex = index;
+//                 });
+//               },
+//             ),
+//             items: imageUrls.map((e) {
+//               return Builder(
+//                 builder: (BuildContext context) {
+//                   return currentIndex == imageUrls.indexOf(e)
+//                       ? Container(
+//                           decoration: const BoxDecoration(
+//                             color: AppColors.primary3,
+//                             borderRadius: BorderRadius.all(Radius.circular(16)),
+//                           ),
+//                           child: Padding(
+//                             padding: const EdgeInsets.all(15),
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 ClipRRect(
+//                                   borderRadius: const BorderRadius.only(
+//                                       topLeft: Radius.circular(8),
+//                                       topRight: Radius.circular(8),
+//                                       bottomLeft: Radius.circular(8)),
+//                                   child: Image.asset(
+//                                     e,
+//                                     width: 230,
+//                                     height: 200,
+//                                     fit: BoxFit.cover,
+//                                   ),
+//                                 ),
+//                                 const SizedBox(height: 16),
+//                                 const Text(
+//                                   'Himalayaa mountain peak',
+//                                   style: TextStyle(
+//                                       fontSize: 16,
+//                                       color: AppColors.colorText,
+//                                       fontWeight: FontWeight.w600),
+//                                 ),
+//                                 const SizedBox(height: 2),
+//                                 Row(
+//                                   children: [
+//                                     SvgPicture.asset(
+//                                         'assets/icons/location.svg'),
+//                                     const SizedBox(width: 2),
+//                                     const Text(
+//                                       'Himalayan',
+//                                       style: TextStyle(
+//                                           fontSize: 10,
+//                                           color: AppColors.colorText,
+//                                           fontWeight: FontWeight.w400),
+//                                     ),
+//                                   ],
+//                                 ),
+//                                 const SizedBox(height: 2),
+//                                 Row(
+//                                   children: [
+//                                     SvgPicture.asset('assets/icons/star.svg'),
+//                                     const SizedBox(width: 2),
+//                                     const Text(
+//                                       '4.5  ',
+//                                       style: TextStyle(
+//                                           fontSize: 16,
+//                                           color: AppColors.colorText,
+//                                           fontWeight: FontWeight.w700),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         )
+//                       : Stack(
+//                           children: [
+//                             Container(
+//                               width: 180,
+//                               height: 250,
+//                               decoration: const BoxDecoration(
+//                                 color: AppColors.primary3,
+//                                 borderRadius:
+//                                     BorderRadius.all(Radius.circular(8)),
+//                               ),
+//                               child: Padding(
+//                                 padding: const EdgeInsets.all(0),
+//                                 child: Column(
+//                                   crossAxisAlignment: CrossAxisAlignment.start,
+//                                   children: [
+//                                     Container(
+//                                       width: 180,
+//                                       height: 150,
+//                                       child: Image.asset(
+//                                         e,
+//                                         fit: BoxFit.cover,
+//                                       ),
+//                                     ),
+//                                     const SizedBox(height: 16),
+//                                     const Padding(
+//                                       padding: EdgeInsets.symmetric(
+//                                           horizontal: 16.0),
+//                                       child: Text(
+//                                         'Himalayaa mountain peak',
+//                                         style: TextStyle(
+//                                             fontSize: 16,
+//                                             color: AppColors.colorText,
+//                                             fontWeight: FontWeight.w600),
+//                                       ),
+//                                     ),
+//                                     const SizedBox(height: 2),
+//                                     Padding(
+//                                       padding: const EdgeInsets.symmetric(
+//                                           horizontal: 16.0),
+//                                       child: Row(
+//                                         children: [
+//                                           SvgPicture.asset(
+//                                               'assets/icons/location.svg'),
+//                                           const SizedBox(width: 2),
+//                                           const Text(
+//                                             'Himalayan',
+//                                             style: TextStyle(
+//                                                 fontSize: 10,
+//                                                 color: AppColors.colorText,
+//                                                 fontWeight: FontWeight.w400),
+//                                           ),
+//                                         ],
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                             Container(
+//                               height: 250,
+//                               width: 180,
+//                               color: Colors.white.withOpacity(0.5),
+//                             )
+//                           ],
+//                         );
+//                 },
+//               );
+//             }).toList(),
+//           ),
+//           const SizedBox(
+//             height: 16,
+//           ),
+//         ],
+//       ),
+//     );
+//   }

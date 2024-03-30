@@ -2,19 +2,40 @@
 import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
+import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends StatefulWidget {
   const CustomAppBar({super.key, required this.context, required this.address});
 
   final BuildContext context;
   final String address;
 
   @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  String studentName = '';
+  String studentID = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getInfor();
+  }
+
+  void getInfor() async {
+    studentName = await SecureStorage().readSecureData('studentName');
+    studentID = await SecureStorage().readSecureData('studentID');
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final studentDataProvider = Provider.of<StudentDataProvider>(context);
+    // final studentDataProvider = Provider.of<StudentDataProvider>(context);
+
     return Container(
       height: 320,
       width: MediaQuery.of(context).size.width,
@@ -42,7 +63,7 @@ class CustomAppBar extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: AppColors.thirdText),
                         CustomText(
-                            message: studentDataProvider.userData.studentName,
+                            message: studentName,
                             fontSize: 23,
                             fontWeight: FontWeight.w600,
                             color: Colors.white),
@@ -64,8 +85,7 @@ class CustomAppBar extends StatelessWidget {
                             const Icon(Icons.person_3_outlined,
                                 size: 11, color: AppColors.thirdText),
                             CustomText(
-                                message:
-                                    '${studentDataProvider.userData.studentID} | ',
+                                message: '$studentID | ',
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.thirdText),
@@ -90,7 +110,7 @@ class CustomAppBar extends StatelessWidget {
                               size: 11, color: Colors.white),
                           Expanded(
                             child: Text(
-                              address,
+                              widget.address,
                               style: const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,

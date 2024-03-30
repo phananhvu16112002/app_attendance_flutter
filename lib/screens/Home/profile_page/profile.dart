@@ -3,6 +3,7 @@ import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 // import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart'
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
+import 'package:attendance_system_nodejs/screens/Home/profile_page/view_image_face/view_image_face.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             //AppBar
             Container(
-              height: 170,
+              height: 150,
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                   color: AppColors.colorAppbar,
@@ -50,19 +51,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           const CustomText(
                               message: 'Phan Anh Vu',
-                              fontSize: 30,
+                              fontSize: 25,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                           const SizedBox(
                             height: 5,
                           ),
                           customRichText('StudentID: ', '520H0696',
-                              FontWeight.w600, FontWeight.w500, Colors.white),
+                              FontWeight.w600, FontWeight.w400, Colors.white),
                           const SizedBox(
                             height: 5,
                           ),
                           customRichText('Class: ', '20H05031', FontWeight.w600,
-                              FontWeight.w500, Colors.white)
+                              FontWeight.w400, Colors.white)
                         ],
                       ),
                     )
@@ -113,7 +114,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   fontWeight: FontWeight.bold,
                   color: AppColors.primaryText),
             ),
-            customOptions(context, 'assets/icons/face_camera.png', 'View Face'),
+            InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => ViewImageFacePage()));
+                },
+                child: customOptions(
+                    context, 'assets/icons/face_camera.png', 'View Face')),
 
             customOptions(context, 'assets/icons/information.png', 'About us'),
             InkWell(

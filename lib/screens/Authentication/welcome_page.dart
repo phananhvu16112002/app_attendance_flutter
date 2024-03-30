@@ -33,7 +33,7 @@ class _WelcomePageState extends State<WelcomePage> {
               const ImageSlider(),
               Container(
                 color: Colors.white,
-                height: MediaQuery.of(context).size.height,
+                // height: MediaQuery.of(context).size.height,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
                   child: Column(
@@ -155,7 +155,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                     },
                                   ),
                                 )),
-                      )
+                      ),
+                      const SizedBox(height: 20,),
                     ],
                   ),
                 ),

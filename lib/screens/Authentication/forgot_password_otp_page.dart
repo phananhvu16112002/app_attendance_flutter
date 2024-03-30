@@ -25,7 +25,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
   OtpFieldController otpController = OtpFieldController();
   String description =
       "Please enter the verification code we just sent on your email address.";
-  int secondsRemaining = 10; // Initial value for 1 minute
+  int secondsRemaining = 59; // Initial value for 1 minute
   bool canResend = false;
   late ProgressDialog _progressDialog;
   late Timer _timer;

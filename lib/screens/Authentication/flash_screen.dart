@@ -2,6 +2,7 @@
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
+import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,7 @@ class _FlashScreenState extends State<FlashScreen> {
       }
       //Should call api to get location in flash
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (builder) => WelcomePage()));
+          context, MaterialPageRoute(builder: (builder) => HomePage()));
     });
   }
 

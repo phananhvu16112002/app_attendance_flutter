@@ -51,14 +51,14 @@ class _ReportPageState extends State<ReportPage> {
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasData) {
-                if (snapshot.data != null) {
+                if (snapshot.data != null ) {
                   List<ReportModel>? data = snapshot.data;
                   return ListView.builder(
                       scrollDirection: Axis.vertical,
                       itemCount: data!.length,
                       itemBuilder: ((context, index) {
                         ReportModel reportModel = data[index];
-                        
+
                         print(DateTime.parse(reportModel.createdAt).toLocal());
                         print(reportModel.feedbackCreatedAt);
 

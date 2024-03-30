@@ -186,7 +186,7 @@ class _EditReportPageState extends State<EditReportPage> {
                     Container(
                         width: 300,
                         child: customText(
-                            'Phát triển hệ thống thông tin doanh ngiệp',
+                            classesStudent.courseName,
                             18,
                             FontWeight.w600,
                             Colors.white)),
@@ -196,7 +196,7 @@ class _EditReportPageState extends State<EditReportPage> {
                     Row(
                       children: [
                         CustomText(
-                            message: 'CourseID: 520H0303 ',
+                            message: 'CourseID: ${classesStudent.courseID} ',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: Colors.white),
@@ -205,7 +205,7 @@ class _EditReportPageState extends State<EditReportPage> {
                         ),
                         Container(width: 1, height: 14, color: Colors.white),
                         CustomText(
-                            message: ' Room: A0505 ',
+                            message: ' Room: ${classesStudent.roomNumber} ',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: Colors.white),
@@ -214,7 +214,7 @@ class _EditReportPageState extends State<EditReportPage> {
                         ),
                         Container(width: 1, height: 14, color: Colors.white),
                         CustomText(
-                            message: ' Shift: 5 ',
+                            message: ' Shift: ${classesStudent.shiftNumber} ',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: Colors.white),
@@ -224,7 +224,7 @@ class _EditReportPageState extends State<EditReportPage> {
                       height: 2,
                     ),
                     CustomText(
-                        message: 'Lectuer: Mai Van Manh',
+                        message: 'Lectuer: ${classesStudent.teacherName}',
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: Colors.white)
