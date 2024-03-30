@@ -1,12 +1,14 @@
 // import 'package:attendance_system_nodejs/common/bases/CustomText.dart';
 import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
+import 'package:attendance_system_nodejs/models/class_student.dart';
 // import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart'
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
 import 'package:attendance_system_nodejs/screens/Home/profile_page/view_image_face/view_image_face.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -132,6 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   await SecureStorage().deleteSecureData('_image1');
                   await SecureStorage().deleteSecureData('_image2');
                   await SecureStorage().deleteSecureData('_image3');
+                  // await classesStudentBox.deleteFromDisk();
                   await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (builder) => SignInPage()),

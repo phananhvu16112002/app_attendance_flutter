@@ -33,13 +33,13 @@ class _ViewImageFacePageState extends State<ViewImageFacePage> {
     print(' alo alo');
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.primaryButton,
         shadowColor: Colors.transparent,
         title: const CustomText(
             message: 'View Image',
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: AppColors.primaryText),
+            color: Colors.white),
         centerTitle: true,
         leading: InkWell(
           onTap: () {
@@ -48,9 +48,8 @@ class _ViewImageFacePageState extends State<ViewImageFacePage> {
           child: Container(
               width: 14,
               height: 14,
-              child: const Icon(
-                Icons.arrow_back_ios_new_outlined,
-              )),
+              child: const Icon(Icons.arrow_back_ios_new_outlined,
+                  color: Colors.white)),
         ),
       ),
       backgroundColor: Colors.white,

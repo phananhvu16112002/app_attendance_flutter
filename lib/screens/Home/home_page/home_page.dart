@@ -27,8 +27,6 @@ class _HomePageState extends State<HomePage> {
   int _bottomNavIndex = 0;
   bool activeFormAttendance = false;
 
-
-
   @override
   void dispose() {
     // controller.dispose(); controller QRCODE
@@ -59,7 +57,8 @@ class _HomePageState extends State<HomePage> {
   List<BottomNavModel> listBottomNav = [
     BottomNavModel(title: 'Home', svgPath: 'assets/icons/home.svg'),
     BottomNavModel(title: 'Report', svgPath: 'assets/icons/report.svg'),
-    BottomNavModel(title: 'Notifications', svgPath: 'assets/icons/notification.svg'),
+    BottomNavModel(
+        title: 'Notifications', svgPath: 'assets/icons/notification.svg'),
     BottomNavModel(title: 'Profile', svgPath: 'assets/icons/user.svg'),
   ];
   @override

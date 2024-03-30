@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:attendance_system_nodejs/utils/constraints.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketServer {
+  final String baseURL = Constrants().baseURlLocalhost;
   late IO.Socket socket;
 
   connectToSocketServer(data) {
-    socket = IO.io('http://192.168.1.15:9000', <String, dynamic>{
+    socket = IO.io('http://$baseURL:9000', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
       'headers': {'Content-Type': 'application/json'},
@@ -15,7 +17,6 @@ class SocketServer {
     socket.connect();
     joinClassRoom(data);
     getAttendanceForm(data);
-    
   }
 
   void joinClassRoom(data) {
@@ -37,7 +38,7 @@ class SocketServer {
     });
   }
 
-  void disconnectSocketServer(){
+  void disconnectSocketServer() {
     socket.disconnect();
   }
 }

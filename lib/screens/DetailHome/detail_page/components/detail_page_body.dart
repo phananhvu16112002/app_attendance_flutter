@@ -17,6 +17,7 @@ import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/DetailHome/edit_report_page/edit_report_page.dart';
 import 'package:attendance_system_nodejs/screens/DetailHome/report_attendance/report_attendance.dart';
 import 'package:attendance_system_nodejs/screens/Home/attendanceform_page/attendance_form_page.dart';
+import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -320,6 +321,8 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         var data = snapshot.data![index];
+                                        print(
+                                            'Time Attendanced: ${data.dateAttendanced}');
                                         return Padding(
                                           padding: const EdgeInsets.only(
                                               bottom: 15, left: 10, right: 10),
@@ -477,7 +480,19 @@ class _DetailPageBodyState extends State<DetailPageBody> {
           attendanceFormDataForDetailPageProvider,
       ReportData? reportData) {
     DateTime endTimeParse = DateTime.parse(attendanceFormForDetailPage.endTime);
+    DateTime dateParse = DateTime.parse(attendanceFormForDetailPage.dateOpen);
     var now = DateTime.now();
+    var temp = DateTime(dateParse.year, dateParse.month, dateParse.day);
+    var temp2 = DateTime(now.year, now.month, now.day);
+    // var tempEndTime =
+    //     DateTime(,endTimeParse.hour, endTimeParse.minute, endTimeParse.second);
+    // var tempNow = DateTime(now.hour, now.minute, now.second);
+    // print('Date Open: $temp');
+    // print('Date now: $temp2');
+    // print('EndTime: $endTimeParse');
+    // print('now: $now');
+    // // print('check: ${temp.isAtSameMomentAs(temp2)}');
+    // print('Check endtime: ${endTimeParse.isBefore(now)}');
     return Container(
       width: MediaQuery.of(context).size.width * 0.5,
       height: location.isNotEmpty && location.length >= 50
@@ -597,8 +612,9 @@ class _DetailPageBodyState extends State<DetailPageBody> {
             height: 15,
           ),
           if (statusForm == true &&
-              endTimeParse.isBefore(now) &&
-              timeAttendance == "")
+              now.isBefore(endTimeParse) &&
+              temp.isAtSameMomentAs(temp2) &&
+              timeAttendance == "null")
             InkWell(
               onTap: () {
                 attendanceFormDataForDetailPageProvider
@@ -632,7 +648,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                   fontWeight: FontWeight.bold,
                   color: AppColors.primaryButton),
             )
-          else if (reportData == null)
+          else if (reportData == null || reportData.checkNew == false)
             InkWell(
               onTap: () {
                 Navigator.push(

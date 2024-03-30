@@ -49,8 +49,8 @@ class Authenticate {
 
   //<String, String> code (200, requireImage) => requireImage = false => chuyen trang Home, requiredImage = true => chuyen trang chup anh
   Future<String> login(String email, String password) async {
-    // final SharedPreferences sharedPreferences =
-    //     await SharedPreferences.getInstance();
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
     final URL = 'http://${baseURl}:8080/api/student/login';
     var request = {'email': email, 'password': password};
     var body = json.encode(request);
@@ -78,6 +78,7 @@ class Authenticate {
       await SecureStorage().writeSecureData('studentEmail', studentEmail);
       await SecureStorage().writeSecureData('studentName', studentName);
       await SecureStorage().writeSecureData('requiredImage', requiredImage.toString());
+      // await sharedPreferences.setString('studentName', studentName);
       // await sharedPreferences.setBool('requiredImage', requiredImage);
       return '';
     } else {

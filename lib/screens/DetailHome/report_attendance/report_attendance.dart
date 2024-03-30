@@ -7,6 +7,7 @@ import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_detail_for_detail_page.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_form_for_detail_page.dart';
 import 'package:attendance_system_nodejs/providers/attendanceFormForDetailPage_data_provider.dart';
+import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/detail_page.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -340,46 +341,56 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                               padding: const EdgeInsets.only(right: 0),
                               child: CustomButton(
                                   buttonName: 'Send',
-                                  backgroundColorButton:
-                                      AppColors.primaryButton,
+                                  backgroundColorButton: _imageFiles.isNotEmpty
+                                      ? AppColors.primaryButton
+                                      : Colors.grey.withOpacity(0.3),
                                   colorShadow: AppColors.colorShadow,
                                   borderColor: Colors.transparent,
-                                  textColor: Colors.white,
-                                  function: () async {
-                                    try {
-                                      if (_formKey.currentState!.validate()) {
-                                        _progressDialog.show();
-                                        String check = await API(context)
-                                            .submitReport(
-                                                classesStudent.classID,
-                                                attendanceFormDataForDetailPage
-                                                    .formID,
-                                                _topicController.text.isNotEmpty
-                                                    ? _topicController.text
-                                                    // : 'Attendance Form',
-                                                    : 'Attendance Form ${formatDate(attendanceFormDataForDetailPage.dateOpen)}',
-                                                dropdownvalue,
-                                                _message.text,
-                                                _imageFiles);
-                                        if (check == '') {
-                                          print('Success');
-                                          await _progressDialog.hide();
-                                          await _showDialog(context,
-                                              "Send successfully report to lectuer");
-                                        } else {
-                                          print('failed');
+                                  textColor: _imageFiles.isNotEmpty
+                                      ? Colors.white
+                                      : Colors.black,
+                                  function: _imageFiles.isNotEmpty
+                                      ? () async {
+                                          try {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              _progressDialog.show();
+                                              String check = await API(context)
+                                                  .submitReport(
+                                                      classesStudent.classID,
+                                                      attendanceFormDataForDetailPage
+                                                          .formID,
+                                                      _topicController
+                                                              .text.isNotEmpty
+                                                          ? _topicController
+                                                              .text
+                                                          // : 'Attendance Form',
+                                                          : 'Attendance Form ${formatDate(attendanceFormDataForDetailPage.dateOpen)}',
+                                                      dropdownvalue,
+                                                      _message.text,
+                                                      _imageFiles);
+                                              if (check == '') {
+                                                print('Success');
+                                                await _progressDialog.hide();
+                                                await _showDialog(context,
+                                                    "Send successfully report to lectuer");
+                                              } else {
+                                                print('failed');
 
-                                          await _progressDialog.hide();
-                                          await _showDialog(context, check);
+                                                await _progressDialog.hide();
+                                                await _showDialog(
+                                                    context, check);
+                                              }
+                                            }
+                                          } catch (e) {
+                                            print('Error send report: $e');
+                                            await _showDialog(
+                                                context, e.toString());
+                                          } finally {
+                                            await _progressDialog.hide();
+                                          }
                                         }
-                                      }
-                                    } catch (e) {
-                                      print('Error send report: $e');
-                                      await _showDialog(context, e.toString());
-                                    } finally {
-                                      await _progressDialog.hide();
-                                    }
-                                  },
+                                      : null,
                                   height: 50,
                                   width: 370,
                                   fontSize: 20),
@@ -420,14 +431,19 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                 GestureDetector(
                   onTap: () {
                     // socketServerProvider.disconnectSocketServer();
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (builder) =>
+                                DetailPage(classesStudent: classesStudent)));
                   },
                   child: Container(
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
                     child: Center(
                       child: Icon(
@@ -596,6 +612,9 @@ class _ReportAttendanceState extends State<ReportAttendance> {
       width: width,
       height: height,
       child: TextFormField(
+        onTapOutside: (event) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         validator: validator,
         maxLines: maxLines,
         readOnly: readOnly,

@@ -9,6 +9,7 @@ import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/report_data_for_detail_page.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/report_image.dart';
 import 'package:attendance_system_nodejs/providers/attendanceFormForDetailPage_data_provider.dart';
+import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/detail_page.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -160,14 +161,19 @@ class _EditReportPageState extends State<EditReportPage> {
                 GestureDetector(
                   onTap: () {
                     // socketServerProvider.disconnectSocketServer();
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (builder) =>
+                                DetailPage(classesStudent: classesStudent)));
                   },
                   child: Container(
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
                     child: Center(
                       child: Icon(
@@ -185,11 +191,8 @@ class _EditReportPageState extends State<EditReportPage> {
                   children: [
                     Container(
                         width: 300,
-                        child: customText(
-                            classesStudent.courseName,
-                            18,
-                            FontWeight.w600,
-                            Colors.white)),
+                        child: customText(classesStudent.courseName, 18,
+                            FontWeight.w600, Colors.white)),
                     const SizedBox(
                       height: 2,
                     ),
@@ -664,6 +667,9 @@ class _EditReportPageState extends State<EditReportPage> {
       width: width,
       height: height,
       child: TextFormField(
+        onTapOutside: (event) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         validator: validator,
         maxLines: maxLines,
         readOnly: readOnly,

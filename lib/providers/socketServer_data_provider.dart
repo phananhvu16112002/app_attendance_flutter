@@ -4,6 +4,7 @@ import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/attendance_form.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_form_for_detail_page.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_form_for_detail_page.dart';
+import 'package:attendance_system_nodejs/utils/constraints.dart';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:async';
@@ -11,6 +12,7 @@ import 'dart:async';
 class SocketServerProvider with ChangeNotifier {
   late IO.Socket _socket;
   bool _isConnected = false;
+  final String baseURL = Constrants().baseURlLocalhost;
 
   IO.Socket get socket => _socket;
   bool get isConnected => _isConnected;
@@ -30,7 +32,7 @@ class SocketServerProvider with ChangeNotifier {
   }
 
   void connectToSocketServer(data) {
-    _socket = IO.io('http://192.168.1.13:9000', <String, dynamic>{
+    _socket = IO.io('http://$baseURL:9000', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
       'headers': {'Content-Type': 'application/json'},

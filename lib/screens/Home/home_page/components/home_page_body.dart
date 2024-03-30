@@ -19,6 +19,7 @@ import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_QR/at
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:attendance_system_nodejs/services/get_location/get_location_services.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -29,6 +30,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 // import 'secure_storage'
 
@@ -40,6 +42,8 @@ class HomePageBody extends StatefulWidget {
 }
 
 class _HomePageBodyState extends State<HomePageBody> {
+  String studentName = '';
+  String studentID = '';
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   late QRViewController controller;
   TextEditingController searchController = TextEditingController();
@@ -59,7 +63,14 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   @override
   void initState() {
+    print('initSate');
     super.initState();
+    getInfor().then((value) {
+      setState(() {
+        studentName = value[0];
+        studentID = value[1];
+      });
+    });
     studentClassesBox = Hive.box<StudentClasses>('student_classes');
     dataOfflineBox = Hive.box<DataOffline>('DataOfflineBoxes');
     classesStudentBox = Hive.box<ClassesStudent>('classes_student_box');
@@ -68,7 +79,12 @@ class _HomePageBodyState extends State<HomePageBody> {
         .listen((ConnectivityResult result) {
       if (mounted) {
         setState(() {
+          print('Isconectted in setState: $isConnected');
           isConnected = result != ConnectivityResult.none;
+          // if (result != ConnectivityResult.none){
+          //   isConnected = result;
+          // }
+          print('After Isconectted in setState: $isConnected');
           if (isConnected) {
             sendDataToServer();
           } else {
@@ -86,7 +102,7 @@ class _HomePageBodyState extends State<HomePageBody> {
       String? location = await GetLocation()
           .getAddressFromLatLongWithoutInternet(
               dataOffline.latitude, dataOffline.longitude);
-      print('location: $location');
+      // print('location: $location');
       bool check = await API(context).takeAttendanceOffline(
           dataOffline.studentID,
           dataOffline.classID,
@@ -203,16 +219,27 @@ class _HomePageBodyState extends State<HomePageBody> {
     });
   }
 
+  Future<List> getInfor() async {
+    var temp1 = await SecureStorage().readSecureData('studentName');
+    var temp2 = await SecureStorage().readSecureData('studentID');
+    var tempArray = [];
+    tempArray.add(temp1);
+    tempArray.add(temp2);
+    return tempArray;
+  }
+
   @override
   void dispose() {
     super.dispose();
-    _connectivitySubscription.cancel();
+    // _connectivitySubscription.cancel();
   }
 
   void saveListClassesStudent(List<ClassesStudent> listData) async {
     if (classesStudentBox.isOpen) {
       for (var temp in listData) {
-        await classesStudentBox.put(temp.classID, temp);
+        if (checkClassExist(temp.classID) == false) {
+          await classesStudentBox.put(temp.classID, temp);
+        }
       }
       print('Successfully Save List ClassesStudent');
     } else {
@@ -220,13 +247,23 @@ class _HomePageBodyState extends State<HomePageBody> {
     }
   }
 
+  bool checkClassExist(String classID) {
+    if (classesStudentBox.isOpen) {
+      var temp = classesStudentBox.get(classID);
+      if (temp != null) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final classDataProvider =
-    //     Provider.of<StudentClassesDataProvider>(context, listen: false);
     final studentDataProvider = Provider.of<StudentDataProvider>(context);
     final classesStudentDataProvider =
         Provider.of<ClassesStudentProvider>(context, listen: false);
+    print('Name: $studentName');
+    print('ID: $studentID');
     return SingleChildScrollView(
         // controller: _controller,
         //Column Tổng body
@@ -234,9 +271,201 @@ class _HomePageBodyState extends State<HomePageBody> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Stack(children: [
-          CustomAppBar(
-            context: context,
-            address: 'Address: ${studentDataProvider.userData.location}',
+          Container(
+            height: 320,
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+                color: AppColors.colorAppbar,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15))),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15, top: 25, right: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const CustomText(
+                                  message: 'Hi, ',
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.thirdText),
+                              CustomText(
+                                  message: studentName,
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white),
+                            ],
+                          ),
+                          Container(
+                            height: 1,
+                            color: const Color.fromARGB(106, 255, 255, 255),
+                            width: 140,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.person_3_outlined,
+                                      size: 11, color: AppColors.thirdText),
+                                  CustomText(
+                                      message: '$studentID | ',
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.thirdText),
+                                  const CustomText(
+                                      message: 'Student',
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.thirdText),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Container(
+                            width: 290,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.location_on_outlined,
+                                    size: 11, color: Colors.white),
+                                Expanded(
+                                  child: Text(
+                                    studentDataProvider.userData.location,
+                                    style: const TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 30, right: 5),
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: AssetImage('assets/images/logo.png'),
+                          backgroundColor: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                    height: 1,
+                    width: MediaQuery.of(context).size.width,
+                    color: const Color.fromARGB(106, 255, 255, 255)),
+                const SizedBox(
+                  height: 5,
+                ),
+                EasyDateTimeLine(
+                  initialDate: DateTime.now(),
+                  onDateChange: (selectedDate) {
+                    //`selectedDate` the new date selected.
+                  },
+                  headerProps: const EasyHeaderProps(
+                      selectedDateFormat:
+                          SelectedDateFormat.fullDateMonthAsStrDY,
+                      selectedDateStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                      showMonthPicker: false,
+                      monthPickerType: MonthPickerType.dropDown,
+                      monthStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                      padding: EdgeInsets.only(top: 5, bottom: 15, left: 10)),
+                  dayProps: const EasyDayProps(
+                    dayStructure: DayStructure.dayStrDayNumMonth,
+                    width: 65,
+                    height: 85,
+                    borderColor: Color.fromARGB(61, 207, 204, 204),
+                    //activeDay
+                    activeDayStyle: DayStyle(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        dayNumStyle: TextStyle(
+                            color: AppColors.primaryButton,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                        dayStrStyle: TextStyle(
+                            color: AppColors.primaryButton,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600),
+                        monthStrStyle: TextStyle(
+                            color: AppColors.primaryButton,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600)),
+                    //inactiveDay
+                    inactiveDayStyle: DayStyle(
+                        dayNumStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                        dayStrStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
+                        monthStrStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400)),
+                    //TodayStyle
+                    todayStyle: DayStyle(
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(78, 219, 217, 217),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        dayNumStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                        dayStrStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600),
+                        monthStrStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600)),
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Container(
+                    height: 1,
+                    width: MediaQuery.of(context).size.width,
+                    color: const Color.fromARGB(106, 255, 255, 255)),
+              ],
+            ),
           ),
           //Search Bar
           Positioned(
@@ -258,22 +487,25 @@ class _HomePageBodyState extends State<HomePageBody> {
                     ConnectivityResult? result = snapshot.data;
                     if (result == ConnectivityResult.wifi ||
                         result == ConnectivityResult.mobile) {
-                      print('----------------------------asdsadsad');
+                      print('Have Internet');
                       return callAPI(context, classesStudentDataProvider);
                     } else if (result == ConnectivityResult.none ||
                         isConnected == false) {
-                      print(
-                          '----------------------------asdsadasdasdsadasdassad');
+                      print('No Internet');
 
                       return noInternetWithHive();
                     }
                   }
+                  print('Check connected: $isConnected');
+                  // if (isConnected) {
+                  //   return callAPI(context, classesStudentDataProvider);
+                  // } else {
+                  //   return noInternetWithHive();
+                  // }
+                  // setState(() {
 
-                  if (isConnected) {
-                    return callAPI(context, classesStudentDataProvider);
-                  } else {
-                    return noInternetWithHive();
-                  }
+                  // });
+                  return callAPI(context, classesStudentDataProvider);
                 }),
           )
         else
@@ -448,19 +680,19 @@ class _HomePageBodyState extends State<HomePageBody> {
             fontWeight: FontWeight.normal,
             fontSize: 15),
         obscureText: false,
-        decoration: InputDecoration(
-            border: const OutlineInputBorder(
+        decoration: const InputDecoration(
+            border: OutlineInputBorder(
                 borderSide:
                     BorderSide(width: 1, color: AppColors.primaryButton),
                 borderRadius: BorderRadius.all(Radius.circular(15.0))),
-            contentPadding: const EdgeInsets.all(20),
+            contentPadding: EdgeInsets.all(20),
             suffixIcon: Icon(Icons.search, color: AppColors.secondaryText),
             hintText: 'Search class', // change here hinttext
-            enabledBorder: const OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 borderSide:
                     BorderSide(width: 1, color: AppColors.secondaryText)),
-            focusedBorder: const OutlineInputBorder(
+            focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(15.0)),
               borderSide: BorderSide(width: 1, color: AppColors.primaryButton),
             )),
@@ -525,10 +757,8 @@ class _HomePageBodyState extends State<HomePageBody> {
               ),
             );
           } else if (snapshot.data != null || snapshot.data != []) {
-            print('snapshot is null or []: ${snapshot.data}');
+            // print('snapshot is null or []: ${snapshot.data}');
             List<ClassesStudent> studentClasses = snapshot.data!;
-            // Cập nhật dữ liệu vào Provider
-            // saveListStudentClasses(studentClasses); //Hive
             saveListClassesStudent(studentClasses);
             Future.delayed(Duration.zero, () {
               classDataProvider.setClassesStudentList(studentClasses);
@@ -596,6 +826,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                         );
                       },
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),
@@ -607,226 +840,6 @@ class _HomePageBodyState extends State<HomePageBody> {
     );
   }
 
-  // FutureBuilder<List<StudentClasses>> callAPI(
-  //     BuildContext context, StudentClassesDataProvider classDataProvider) {
-  //   return FutureBuilder(
-  //     future: API(context).getStudentClass(), //Chinh parameter
-  //     builder: (context, snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.waiting) {
-  //         return Padding(
-  //             padding:
-  //                 const EdgeInsets.only(left: 5, right: 5, bottom: 10, top: 10),
-  //             child: Column(
-  //               children: [
-  //                 customLoading(),
-  //                 const SizedBox(
-  //                   height: 10,
-  //                 ),
-  //                 customLoading(),
-  //                 const SizedBox(
-  //                   height: 10,
-  //                 ),
-  //                 customLoading(),
-  //               ],
-  //             ));
-  //       } else if (snapshot.hasError) {
-  //         print('Error');
-  //         return Center(child: Text('Error: ${snapshot.error}'));
-  //       } else if (snapshot.hasData) {
-  //         if (snapshot.data == [] ||
-  //             snapshot.data!.isEmpty ||
-  //             snapshot.data == null) {
-  //           return Center(
-  //             child: Container(
-  //               width: 200,
-  //               height: 350,
-  //               child: Center(
-  //                 child: Column(
-  //                   children: [
-  //                     const SizedBox(
-  //                       height: 100,
-  //                     ),
-  //                     Opacity(
-  //                       opacity: 0.3,
-  //                       child: Image.asset('assets/images/nodata.png'),
-  //                     ),
-  //                     const SizedBox(
-  //                       height: 5,
-  //                     ),
-  //                     CustomText(
-  //                         message: "You haven't joint any classes yet!",
-  //                         fontSize: 11,
-  //                         fontWeight: FontWeight.w500,
-  //                         color: AppColors.primaryText.withOpacity(0.5))
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           );
-  //         } else if (snapshot.data != null || snapshot.data != []) {
-  //           print('snapshot is null or []: ${snapshot.data}');
-  //           List<StudentClasses> studentClasses = snapshot.data!;
-  //           // Cập nhật dữ liệu vào Provider
-  //           saveListStudentClasses(studentClasses); //Hive
-  //           Future.delayed(Duration.zero, () {
-  //             classDataProvider.setStudentClassesList(studentClasses);
-  //           });
-  //           return SizedBox(
-  //             height: 500,
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 ListView.builder(
-  //                   padding: const EdgeInsets.only(top: 20),
-  //                   shrinkWrap: true,
-  //                   itemCount: studentClasses.length,
-  //                   itemBuilder: (BuildContext context, int index) {
-  //                     var data = studentClasses[index];
-  //                     return Padding(
-  //                       padding: const EdgeInsets.only(
-  //                           left: 5, right: 5, bottom: 10),
-  //                       child: GestureDetector(
-  //                         onTap: () {
-  //                           // Navigator.pushNamed(context,'/DetailPage',arguments: {'studentClasses': data});
-  //                           Navigator.push(
-  //                             context,
-  //                             PageRouteBuilder(
-  //                               pageBuilder:
-  //                                   (context, animation, secondaryAnimation) =>
-  //                                       DetailPage(
-  //                                 studentClasses: data,
-  //                               ),
-  //                               transitionDuration:
-  //                                   const Duration(milliseconds: 200),
-  //                               transitionsBuilder: (context, animation,
-  //                                   secondaryAnimation, child) {
-  //                                 return ScaleTransition(
-  //                                   scale: animation,
-  //                                   child: child,
-  //                                 );
-  //                               },
-  //                             ),
-  //                           );
-  //                         },
-  //                         child: Padding(
-  //                           padding: const EdgeInsets.only(
-  //                             left: 5,
-  //                             right: 5,
-  //                           ),
-  //                           child: classInformation(
-  //                             data.classes.course.totalWeeks,
-  //                             data.classes.course.courseName,
-  //                             data.classes.teacher.teacherName,
-  //                             data.classes.course.courseID,
-  //                             data.classes.classType,
-  //                             data.classes.group,
-  //                             data.classes.subGroup,
-  //                             data.classes.shiftNumber,
-  //                             data.classes.roomNumber,
-  //                             data.totalPresence,
-  //                             data.totalLate,
-  //                             data.totalAbsence,
-  //                             data.progress,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     );
-  //                   },
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-  //         }
-  //       }
-  //       return const Text('null');
-  //     },
-  //   );
-  // }
-
-  // Widget noInternet() {
-  //   return Stack(
-  //     children: [
-  //       Center(
-  //         child: Container(
-  //           width: 200,
-  //           height: 350,
-  //           child: Center(
-  //             child: Column(
-  //               children: [
-  //                 const SizedBox(
-  //                   height: 100,
-  //                 ),
-  //                 Opacity(
-  //                   opacity: 0.5,
-  //                   child: Image.asset('assets/images/nointernet.png'),
-  //                 ),
-  //                 const SizedBox(
-  //                   height: 5,
-  //                 ),
-  //                 Text(
-  //                   "Please check your internet!",
-  //                   style: TextStyle(
-  //                     fontSize: 12,
-  //                     fontWeight: FontWeight.w500,
-  //                     color: Colors.grey.withOpacity(0.5),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //       if (_showDialog)
-  //         Center(
-  //           child: Container(
-  //             width: MediaQuery.of(context).size.width * 0.9, // test width
-  //             height: MediaQuery.of(context).size.height * 0.25, // test height
-  //             child: Stack(
-  //               children: [
-  //                 BackdropFilter(
-  //                   filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-  //                   child: AlertDialog(
-  //                     backgroundColor: AppColors.primaryButton.withOpacity(0.2),
-  //                     title: const Text(
-  //                       'No Internet',
-  //                       style: TextStyle(
-  //                           color: Colors.black,
-  //                           fontSize: 20,
-  //                           fontWeight: FontWeight.bold),
-  //                     ),
-  //                     content: const Text(
-  //                       'You can scan QR to take attendance offline',
-  //                       style: TextStyle(
-  //                           color: Colors.black,
-  //                           fontSize: 14,
-  //                           fontWeight: FontWeight.normal),
-  //                     ),
-  //                     actions: [
-  //                       ElevatedButton(
-  //                         onPressed: () {
-  //                           setState(() {
-  //                             _showDialog = false;
-  //                             // activeQR = true;
-  //                           });
-  //                         },
-  //                         child: const Text(
-  //                           'OK',
-  //                           style: TextStyle(
-  //                               color: Colors.black,
-  //                               fontSize: 14,
-  //                               fontWeight: FontWeight.normal),
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //     ],
-  //   );
-  // }
   Widget noInternet() {
     return Center(
       child: Container(
@@ -925,6 +938,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                   );
                 },
               ),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),
@@ -933,56 +949,6 @@ class _HomePageBodyState extends State<HomePageBody> {
       return noInternet();
     }
   }
-
-  // Widget noInternetWithHive() {
-  //   if (studentClassesBox.isOpen || studentClassesBox.isNotEmpty) {
-  //     return SizedBox(
-  //       height: 500,
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           ListView.builder(
-  //             padding: const EdgeInsets.only(top: 20),
-  //             shrinkWrap: true,
-  //             itemCount: studentClassesBox.values.length,
-  //             itemBuilder: (BuildContext context, int index) {
-  //               var data = studentClassesBox.getAt(index);
-  //               return Padding(
-  //                 padding: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
-  //                 child: GestureDetector(
-  //                   onTap: () {},
-  //                   child: Padding(
-  //                     padding: const EdgeInsets.only(
-  //                       left: 5,
-  //                       right: 5,
-  //                     ),
-  //                     child: classInformation(
-  //                       data!.classes.course.totalWeeks,
-  //                       data.classes.course.courseName,
-  //                       data.classes.teacher.teacherName,
-  //                       data.classes.course.courseID,
-  //                       data.classes.classType,
-  //                       data.classes.group,
-  //                       data.classes.subGroup,
-  //                       data.classes.shiftNumber,
-  //                       data.classes.roomNumber,
-  //                       data.totalPresence,
-  //                       data.totalLate,
-  //                       data.totalAbsence,
-  //                       data.progress,
-  //                     ),
-  //                   ),
-  //                 ),
-  //               );
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //   } else {
-  //     return noInternet();
-  //   }
-  // }
 
   Widget loading() {
     return const Center(

@@ -6,11 +6,6 @@ import 'package:attendance_system_nodejs/adapter/student_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/student_classes_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/teacher_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/class_adapter.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_form_for_detail_page.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/feedback.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/report_data_for_detail_page.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/report_image.dart';
-import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/attendance_form.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/data_offline.dart';
@@ -29,22 +24,12 @@ import 'package:attendance_system_nodejs/screens/Authentication/forgot_password_
 import 'package:attendance_system_nodejs/screens/Authentication/otp_page.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/register_page.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/upload_image.dart';
 // import 'package:attendance_system_nodejs/screens/Authentication/SplashScreen.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
-import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/detail_page.dart';
-import 'package:attendance_system_nodejs/screens/DetailHome/edit_report_page/edit_report_page.dart';
-import 'package:attendance_system_nodejs/screens/DetailHome/report_attendance/report_attendance.dart';
-import 'package:attendance_system_nodejs/screens/DetailHome/report_class/report_class.dart';
-import 'package:attendance_system_nodejs/screens/Home/after_attendance_form/after_attendance_form.dart';
-import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_QR/attendance_form_page_qr.dart';
-import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_offline/attendance_form_page_offline.dart';
-import 'package:attendance_system_nodejs/screens/Home/attendanceform_page/attendance_form_page.dart';
 // import 'package:attendance_system_nodejs/screens/DetailHome/ReportAttendance.dart';
 // import 'package:attendance_system_nodejs/screens/Home/AfterAttendance.dart';
 // import 'package:attendance_system_nodejs/screens/Home/AttendanceFormPage.dart';
-import 'package:attendance_system_nodejs/screens/Home/detail_report/detail_report.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:attendance_system_nodejs/screens/Home/profile_page/profile.dart';
 // import 'package:attendance_system_nodejs/TestApp/Test.dart';
@@ -57,7 +42,7 @@ import 'package:face_camera/face_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,7 +56,6 @@ void main() async {
   Hive.registerAdapter(AttendanceFormAdapter());
   Hive.registerAdapter(DataOfflineAdatper());
   Hive.registerAdapter(ClassesStudentAdapter());
-
   await Hive.openBox<StudentClasses>('student_classes');
   await Hive.openBox<DataOffline>('DataOfflineBoxes');
   await Hive.openBox<AttendanceForm>('AttendanceFormBoxes');
