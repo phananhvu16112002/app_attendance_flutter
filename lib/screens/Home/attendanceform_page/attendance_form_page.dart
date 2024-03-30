@@ -308,7 +308,8 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       width: 400,
                       fontSize: 20)
                   : Container(),
-            )
+            ),
+            const SizedBox(height: 20,)
           ],
         ),
       ),
