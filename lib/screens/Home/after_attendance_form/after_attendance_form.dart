@@ -112,7 +112,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
                     message: getResult(data.result),
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textApproved)
+                    color: getColorBasedOnStatus(getResult(data.result)))
               ],
             ),
           ),
@@ -275,11 +275,11 @@ Color getColorBasedOnStatus(String status) {
 }
 
 String getResult(double result) {
-  if (result.ceil() == 1) {
+  if (result.toString() == "1.0") {
     return 'Present';
-  } else if (result == 0.5) {
+  } else if (result.toString() == "0.5") {
     return 'Late';
-  } else if (result.ceil() == 0) {
+  } else if (result.toString() == "0.0") {
     return 'Absence';
   } else {
     return 'Absence';
