@@ -94,38 +94,26 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
-                        child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          customLoading(),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          customLoading(),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          customLoading()
-                        ],
-                      ),
+                        child: Column(
+                      children: [
+                        customLoading(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        customLoading(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        customLoading()
+                      ],
                     ));
                   } else if (snapshot.hasError) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      color: AppColors.cardAttendance,
-                      child: Text('Error: ${snapshot.error}'),
-                    );
+                    return Text('Error: ${snapshot.error}');
                   } else if (snapshot.hasData) {
                     if (snapshot.data != null) {
-                      // List<AttendanceDetail> attendanceDetail = snapshot.data!;
-                      // Future.delayed(Duration.zero, () {
-                      //   attendanceDetailDataProvider
-                      //       .setAttendanceDetailList(attendanceDetail);
-                      // }); // khong can thiet
                       return Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
+                        // height: MediaQuery.of(context).size.height,
                         color: AppColors.cardAttendance,
                         child: SingleChildScrollView(
                           child: Column(
@@ -360,9 +348,9 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                   return const Text('Data Not Avalible');
                 },
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              // const SizedBox(
+              //   height: 50,
+              // ),
             ],
           ),
         ),
