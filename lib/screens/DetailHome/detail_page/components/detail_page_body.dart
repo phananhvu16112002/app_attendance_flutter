@@ -479,20 +479,34 @@ class _DetailPageBodyState extends State<DetailPageBody> {
       AttendanceFormDataForDetailPageProvider
           attendanceFormDataForDetailPageProvider,
       ReportData? reportData) {
-    DateTime endTimeParse = DateTime.parse(attendanceFormForDetailPage.endTime);
-    DateTime dateParse = DateTime.parse(attendanceFormForDetailPage.dateOpen);
+    // print('**************');
+    // print('EndTime before parse: ${attendanceFormForDetailPage.endTime}');
+    // print('Date before parse: ${attendanceFormForDetailPage.dateOpen}');
+    // print(
+    //     'Endtime no local:${DateTime.parse(attendanceFormForDetailPage.endTime)}');
+    // print(
+    //     'date no local:${DateTime.parse(attendanceFormForDetailPage.dateOpen)}');
+    // print('**************');
+
+    DateTime endTimeParse =
+        DateTime.parse(attendanceFormForDetailPage.endTime).toLocal();
+    DateTime dateParse =
+        DateTime.parse(attendanceFormForDetailPage.dateOpen).toLocal();
     var now = DateTime.now();
-    var temp = DateTime(dateParse.year, dateParse.month, dateParse.day);
-    var temp2 = DateTime(now.year, now.month, now.day);
-    // var tempEndTime =
-    //     DateTime(,endTimeParse.hour, endTimeParse.minute, endTimeParse.second);
-    // var tempNow = DateTime(now.hour, now.minute, now.second);
-    // print('Date Open: $temp');
-    // print('Date now: $temp2');
-    // print('EndTime: $endTimeParse');
-    // print('now: $now');
-    // // print('check: ${temp.isAtSameMomentAs(temp2)}');
-    // print('Check endtime: ${endTimeParse.isBefore(now)}');
+    var tempDateParse =
+        DateTime(dateParse.year, dateParse.month, dateParse.day);
+    var tempNowParse = DateTime(now.year, now.month, now.day);
+    // print('-------------------------');
+    // print('status Form: ${attendanceFormForDetailPage.status}');
+    // print('Time Attendance: ${timeAttendance}');
+    // print('End Time: ${endTimeParse}');
+    // print('Date Open: $dateParse');
+    // print('dateOpen parse: $tempDateParse');
+    // print('now parse: $tempNowParse');
+    // print('So sanh endTIme: ${now.isBefore(endTimeParse)}');
+    // print('So sanh date: ${tempDateParse.isAtSameMomentAs(tempNowParse)}');
+    // print('-------------------------');
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.5,
       height: location.isNotEmpty && location.length >= 50
@@ -613,7 +627,8 @@ class _DetailPageBodyState extends State<DetailPageBody> {
           ),
           if (statusForm == true &&
               now.isBefore(endTimeParse) &&
-              temp.isAtSameMomentAs(temp2) &&
+              tempDateParse
+                  .isAtSameMomentAs(tempNowParse) && //dateOpen chỉ so sánh date
               timeAttendance == "null")
             InkWell(
               onTap: () {

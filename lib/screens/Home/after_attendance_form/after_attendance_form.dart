@@ -185,7 +185,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
                 Image.network(
                   data.url,
                   //'https://i.imgur.com/8JhlwPy_d.webp?maxwidth=520&shape=thumb&fidelity=high',
-                  fit: BoxFit.cover,
+                  // fit: BoxFit.cover,
                   width: 600,
                   height: 400,
                 ),

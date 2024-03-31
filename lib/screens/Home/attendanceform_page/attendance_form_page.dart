@@ -245,10 +245,14 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       borderColor: Colors.transparent,
                       textColor: Colors.white,
                       function: () async {
+                        print(studentDataProvider.userData.latitude);
+                        print(studentDataProvider.userData.longtitude);
+                        var studentID =
+                            await SecureStorage().readSecureData('studentID');
                         _progressDialog.show();
                         AttendanceDetail? data = await API(context)
                             .takeAttendance(
-                                studentDataProvider.userData.studentID,
+                                studentID,
                                 classesStudent.classID,
                                 attendanceFormDataForDetailPageProvider
                                     .attendanceFormData.formID,
@@ -309,7 +313,9 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       fontSize: 20)
                   : Container(),
             ),
-            const SizedBox(height: 20,)
+            const SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),
@@ -454,9 +460,9 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       ),
                       customRichText(
                           'End Time: ',
-                          '',
-                          // formatTime(attendanceFormDataForDetailPageProvider
-                          //     .attendanceFormData.endTime),
+                          // '',
+                          formatTime(attendanceFormDataForDetailPageProvider
+                              .attendanceFormData.endTime),
                           FontWeight.bold,
                           FontWeight.w500,
                           AppColors.primaryText,

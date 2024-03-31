@@ -161,12 +161,18 @@ class _EditReportPageState extends State<EditReportPage> {
                 GestureDetector(
                   onTap: () {
                     // socketServerProvider.disconnectSocketServer();
-                    // Navigator.pop(context);
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) =>
-                                DetailPage(classesStudent: classesStudent)));
+                    Navigator.pop(context);
+                    // Navigator.pushReplacement(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (builder) =>
+                    //             DetailPage(classesStudent: classesStudent)));
+                    // Navigator.pushAndRemoveUntil(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (builder) =>
+                    //             DetailPage(classesStudent: classesStudent)),
+                    //     (route) => true);
                   },
                   child: Container(
                     width: 50,
