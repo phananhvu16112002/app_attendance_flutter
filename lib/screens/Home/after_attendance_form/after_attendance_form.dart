@@ -3,6 +3,7 @@ import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
+import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
     final studentClasses =
         Provider.of<StudentClassesDataProvider>(context, listen: false);
     var temp = studentClasses.getDataForClass(data.classDetail);
+    final socketProvider = Provider.of<SocketServerProvider>(context, listen: false);
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -218,6 +220,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
                     borderColor: Colors.transparent,
                     textColor: Colors.white,
                     function: () {
+                      socketProvider.disconnectSocketServer();
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (builder) => HomePage()));
                     },
