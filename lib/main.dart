@@ -24,28 +24,44 @@ import 'package:attendance_system_nodejs/screens/Authentication/forgot_password_
 import 'package:attendance_system_nodejs/screens/Authentication/otp_page.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/register_page.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
-// import 'package:attendance_system_nodejs/screens/Authentication/SplashScreen.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
-// import 'package:attendance_system_nodejs/screens/DetailHome/ReportAttendance.dart';
-// import 'package:attendance_system_nodejs/screens/Home/AfterAttendance.dart';
-// import 'package:attendance_system_nodejs/screens/Home/AttendanceFormPage.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:attendance_system_nodejs/screens/Home/profile_page/profile.dart';
-// import 'package:attendance_system_nodejs/TestApp/Test.dart';
-// import 'package:attendance_system_nodejs/TestApp/TestAvatar.dart';
-// import 'package:attendance_system_nodejs/TestApp/TestConnection.dart';
-// import 'package:attendance_system_nodejs/TestApp/TestCustomLoading.dart';
-// import 'package:attendance_system_nodejs/TestApp/TestTakeAttendance.dart';
+import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:face_camera/face_camera.dart';
-// import 'package:attendance_system_nodejs/screens/Home/ReportPage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'firebase_options.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  print("Handling a background message: ${message.messageId}");
+}
 
 void main() async {
+  SecureStorage secureStorage = SecureStorage();
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true);
+  final token = await messaging.getToken();
+  await secureStorage.writeSecureData('tokenFirebase', token!);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await FaceCamera.initialize(); //Add this
   await Hive.initFlutter();
   Hive.registerAdapter(ClassAdapter());
@@ -107,7 +123,7 @@ class _MyAppState extends State<MyApp> {
         '/ProfilePage': (context) => const ProfilePage(),
         // '/DetailReport': (context) => const DetailReport(),
       },
-      home: FlashScreen(),
+      home: const FlashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -194,7 +210,7 @@ class _MyAppState extends State<MyApp> {
 //             classID: 'classID',
 //             total: 10,
 //             totalPresence: 10,
-//             totalAbsence: 10,
+//             totalAbsence: 10,/
 //             totalLate: 10,
 //             roomNumber: 'roomNumber',
 //             shiftNumber: 5,

@@ -37,32 +37,66 @@ class _FlashScreenState extends State<FlashScreen> {
   }
 
   Future<void> checkLocationService() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      showSettingsAlert();
+    while (true) {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await showSettingsAlert(context);
+      } else {
+        break; 
+      }
     }
   }
 
-  void showSettingsAlert() {
-    showDialog(
+  // void showSettingsAlert() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: const Text('Location Permission'),
+  //       content: const Text('Please grant permission to get your location.'),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () async {
+  //             Navigator.pop(context);
+  //           },
+  //           child: const Text('Cancel'),
+  //         ),
+  //         TextButton(
+  //           onPressed: () async {
+  //             await Geolocator.openLocationSettings();
+  //           },
+  //           child: const Text(
+  //             'Open Settings',
+  //             style: TextStyle(color: AppColors.primaryButton),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+  Future<void> showSettingsAlert(BuildContext context) async {
+    return showDialog(
       context: context,
+      barrierDismissible:
+          false, 
       builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
         title: const Text('Location Permission'),
         content: const Text('Please grant permission to get your location.'),
         actions: [
           TextButton(
             onPressed: () async {
-              Navigator.pop(context); // Đóng hộp thoại
+              Navigator.pop(context);
             },
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
               await Geolocator.openLocationSettings();
+              Navigator.pop(context); 
             },
             child: const Text(
               'Open Settings',
-              style: TextStyle(color: AppColors.primaryButton),
+              style: TextStyle(color: Colors.blue),
             ),
           ),
         ],

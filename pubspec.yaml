@@ -79,6 +79,9 @@ dependencies:
   camera: ^0.10.5+9
   shared_preferences: ^2.2.2
   carousel_slider: ^4.2.1
+  firebase_core: ^2.28.0
+  firebase_messaging: ^14.8.0
+  flutter_screenutil: ^5.9.0
 
 
 dev_dependencies:
@@ -110,6 +113,8 @@ flutter:
     - assets/
     - assets/images/
     - assets/icons/
+    - assets/gifs/
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

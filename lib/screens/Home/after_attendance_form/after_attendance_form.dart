@@ -49,7 +49,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
             child: Column(
               children: [
                 GifView.asset(
-                  'assets/images/success1.gif',
+                  'assets/gifs/success.gif',
                   color: AppColors.backgroundColor,
                   colorBlendMode: BlendMode.overlay,
                   width: 150,

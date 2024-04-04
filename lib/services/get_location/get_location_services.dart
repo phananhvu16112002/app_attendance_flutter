@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
@@ -16,31 +19,73 @@ class GetLocation {
     return connectivityResult != ConnectivityResult.none;
   }
 
+  // Future<Position> determinePosition() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     // exit(0);
+  //     return Future.error('Location service are disabled');
+  //   }
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       exit(0);
+  //       return Future.error("Location permission denied");
+  //     }
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     exit(0);
+  //     return Future.error("Location permission are permanently denied");
+  //   }
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high,
+  //       timeLimit: const Duration(hours: 2),
+  //       forceAndroidLocationManager: true);
+  //   latitude = position.latitude;
+  //   longtitude = position.longitude;
+  //   positionMain = position;
+  //   return position;
+  // }
+
   Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location service are disabled');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+
+    while (true) {
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        print('Location service are disabled');
+        await Future.delayed(
+            Duration(seconds: 1));
+        continue; 
+      }
+      permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error("Location permission denied");
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print("Location permission denied");
+          return Future.error("Location permission denied");
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        print("Location permission are permanently denied");
+        return Future.error("Location permission are permanently denied");
+      }
+
+      try {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high,
+            timeLimit: const Duration(hours: 2),
+            forceAndroidLocationManager: true);
+        return position;
+      } catch (e) {
+        print('Error: $e');
+        await Future.delayed(Duration(seconds: 1));
       }
     }
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error("Location permission are permanently denied");
-    }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-        timeLimit: const Duration(hours: 2),
-        forceAndroidLocationManager: true);
-    latitude = position.latitude;
-    longtitude = position.longitude;
-    positionMain = position;
-    return position;
   }
 
   Future<String?> getAddressFromLatLong(Position position) async {
@@ -73,25 +118,6 @@ class GetLocation {
     String processedAddress = filteredComponents.join(',');
     return processedAddress;
   }
-
-  // Future<bool> updateLocation(StudentDataProvider provider) async {
-  //   Position position = await determinePosition();
-  //   String? address = await getAddressFromLatLong(position);
-  //   provider.setLatitude(position.latitude);
-  //   provider.setLongtitude(position.longitude);
-  //   provider.setLocation(address!);
-
-  //   if (provider.userData.latitude != 0 &&
-  //       provider.userData.longtitude != 0 &&
-  //       provider.userData.location.isNotEmpty) {
-  //     // print('------ latitude: ${provider.userData.latitude}');
-  //     // print('------ longitude: ${provider.userData.longtitude}');
-  //     // print('------ location: ${provider.userData.location}');
-
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   Future<bool> updateLocation(StudentDataProvider provider) async {
     Position position = await determinePosition();

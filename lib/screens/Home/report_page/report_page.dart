@@ -63,7 +63,7 @@ class _ReportPageState extends State<ReportPage> {
                         print(reportModel.feedbackCreatedAt);
 
                         return Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(10.0),
                           child: InkWell(
                             onTap: () {
                               Navigator.push(
@@ -97,7 +97,7 @@ class _ReportPageState extends State<ReportPage> {
             }));
   }
 
-  Container cardReport(
+  Widget cardReport(
       String pathStatus,
       String className,
       String lectuerName,
@@ -108,158 +108,160 @@ class _ReportPageState extends State<ReportPage> {
       String week,
       String returnDate,
       String timeReport) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.1,
-      height: MediaQuery.of(context).size.height * 0.26,
-      decoration: const BoxDecoration(
-          color: AppColors.cardReport,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-                color: AppColors.secondaryText,
-                blurRadius: 5.0,
-                offset: Offset(0.0, 0.0))
-          ]),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Image.asset(
-              pathStatus,
-              width: 35,
-              height: 35,
+    return Expanded(
+      child: Container(
+        width: double.infinity,
+        // height: MediaQuery.of(context).size.height * 0.26,
+        decoration: const BoxDecoration(
+            color: AppColors.cardReport,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            boxShadow: [
+              BoxShadow(
+                  color: AppColors.secondaryText,
+                  blurRadius: 5.0,
+                  offset: Offset(0.0, 0.0))
+            ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 10,bottom: 10,left: 10, right: 10),
+              child: Image.asset(
+                pathStatus,
+                width: 35,
+                height: 35,
+              ),
             ),
-          ),
-          Container(
-            width: 220,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Container(
+              width: 220,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
+                  customRichText(
+                      'Class: ',
+                      className,
+                      FontWeight.bold,
+                      FontWeight.w500,
+                      AppColors.primaryText,
+                      AppColors.primaryText),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  customRichText(
+                      'Lectuer: ',
+                      lectuerName,
+                      FontWeight.bold,
+                      FontWeight.w500,
+                      AppColors.primaryText,
+                      AppColors.primaryText),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      customRichText(
+                          'Room: ',
+                          room,
+                          FontWeight.bold,
+                          FontWeight.w500,
+                          AppColors.primaryText,
+                          AppColors.primaryText),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      customRichText(
+                          'Shift: ',
+                          shift,
+                          FontWeight.bold,
+                          FontWeight.w500,
+                          AppColors.primaryText,
+                          AppColors.primaryText),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  customRichText(
+                      'Status: ',
+                      status,
+                      FontWeight.bold,
+                      FontWeight.w500,
+                      AppColors.primaryText,
+                      getColorBasedOnStatus(status)),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      customRichText(
+                          'Date: ',
+                          dateReport,
+                          FontWeight.bold,
+                          FontWeight.w500,
+                          AppColors.primaryText,
+                          AppColors.primaryText),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      customRichText(
+                          'Week: ',
+                          week,
+                          FontWeight.bold,
+                          FontWeight.w500,
+                          AppColors.primaryText,
+                          AppColors.primaryText),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  customRichText(
+                      'Return Date: ',
+                      returnDate,
+                      FontWeight.bold,
+                      FontWeight.w500,
+                      AppColors.primaryText,
+                      AppColors.primaryText),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  customRichText(
+                      'Time: ',
+                      timeReport,
+                      FontWeight.bold,
+                      FontWeight.w500,
+                      AppColors.primaryText,
+                      AppColors.primaryText),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                customRichText(
-                    'Class: ',
-                    className,
-                    FontWeight.bold,
-                    FontWeight.w500,
-                    AppColors.primaryText,
-                    AppColors.primaryText),
-                const SizedBox(
-                  height: 10,
-                ),
-                customRichText(
-                    'Lectuer: ',
-                    lectuerName,
-                    FontWeight.bold,
-                    FontWeight.w500,
-                    AppColors.primaryText,
-                    AppColors.primaryText),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    customRichText(
-                        'Room: ',
-                        room,
-                        FontWeight.bold,
-                        FontWeight.w500,
-                        AppColors.primaryText,
-                        AppColors.primaryText),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    customRichText(
-                        'Shift: ',
-                        shift,
-                        FontWeight.bold,
-                        FontWeight.w500,
-                        AppColors.primaryText,
-                        AppColors.primaryText),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                customRichText(
-                    'Status: ',
-                    status,
-                    FontWeight.bold,
-                    FontWeight.w500,
-                    AppColors.primaryText,
-                    getColorBasedOnStatus(status)),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    customRichText(
-                        'Date: ',
-                        dateReport,
-                        FontWeight.bold,
-                        FontWeight.w500,
-                        AppColors.primaryText,
-                        AppColors.primaryText),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    customRichText(
-                        'Week: ',
-                        week,
-                        FontWeight.bold,
-                        FontWeight.w500,
-                        AppColors.primaryText,
-                        AppColors.primaryText),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                customRichText(
-                    'Return Date: ',
-                    returnDate,
-                    FontWeight.bold,
-                    FontWeight.w500,
-                    AppColors.primaryText,
-                    AppColors.primaryText),
-                const SizedBox(
-                  height: 10,
-                ),
-                customRichText(
-                    'Time: ',
-                    timeReport,
-                    FontWeight.bold,
-                    FontWeight.w500,
-                    AppColors.primaryText,
-                    AppColors.primaryText),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                          height: 180, width: 2, color: AppColors.primaryText),
+                      const CustomText(
+                          message: 'Detail',
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryButton)
+                    ],
+                  ),
+                )
               ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.2,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                        height: 180, width: 2, color: AppColors.primaryText),
-                    const CustomText(
-                        message: 'Detail',
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryButton)
-                  ],
-                ),
-              )
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

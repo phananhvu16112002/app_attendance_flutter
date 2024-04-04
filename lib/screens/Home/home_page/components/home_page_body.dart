@@ -16,6 +16,7 @@ import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/detail_p
 import 'package:attendance_system_nodejs/screens/DetailHome/detail_page_offline/detail_page_offline.dart';
 import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_offline/attendance_form_page_offline.dart';
 import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_QR/attendance_form_page_qr.dart';
+import 'package:attendance_system_nodejs/screens/Home/home_page/widget/custom_calendar.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:attendance_system_nodejs/services/get_location/get_location_services.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
@@ -79,12 +80,7 @@ class _HomePageBodyState extends State<HomePageBody> {
         .listen((ConnectivityResult result) {
       if (mounted) {
         setState(() {
-          print('Isconectted in setState: $isConnected');
           isConnected = result != ConnectivityResult.none;
-          // if (result != ConnectivityResult.none){
-          //   isConnected = result;
-          // }
-          print('After Isconectted in setState: $isConnected');
           if (isConnected) {
             sendDataToServer();
           } else {
@@ -162,8 +158,6 @@ class _HomePageBodyState extends State<HomePageBody> {
               'JSON: ${jsonDecode(result!.code.toString())}'); // modify and get value here.
           var temp = jsonDecode(result!.code.toString());
           if (isConnected) {
-            // check connection(internet)
-            print('isConnected QR: $isConnected');
             if (temp['typeAttendanced'] == 0 || temp['typeAttendanced'] == 1) {
               controller.pauseCamera();
               Navigator.push(
@@ -190,7 +184,6 @@ class _HomePageBodyState extends State<HomePageBody> {
               print('Send Request---------');
             }
           } else {
-            print('isConnected offline: $isConnected');
             controller.pauseCamera();
             Navigator.push(
               context,
@@ -231,7 +224,6 @@ class _HomePageBodyState extends State<HomePageBody> {
   @override
   void dispose() {
     super.dispose();
-    // _connectivitySubscription.cancel();
   }
 
   void saveListClassesStudent(List<ClassesStudent> listData) async {
@@ -262,11 +254,7 @@ class _HomePageBodyState extends State<HomePageBody> {
     final studentDataProvider = Provider.of<StudentDataProvider>(context);
     final classesStudentDataProvider =
         Provider.of<ClassesStudentProvider>(context, listen: false);
-    print('Name: $studentName');
-    print('ID: $studentID');
     return SingleChildScrollView(
-        // controller: _controller,
-        //Column Tổng body
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -381,82 +369,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                 const SizedBox(
                   height: 5,
                 ),
-                EasyDateTimeLine(
-                  initialDate: DateTime.now(),
-                  onDateChange: (selectedDate) {
-                    //`selectedDate` the new date selected.
-                  },
-                  headerProps: const EasyHeaderProps(
-                      selectedDateFormat:
-                          SelectedDateFormat.fullDateMonthAsStrDY,
-                      selectedDateStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                      showMonthPicker: false,
-                      monthPickerType: MonthPickerType.dropDown,
-                      monthStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                      padding: EdgeInsets.only(top: 5, bottom: 15, left: 10)),
-                  dayProps: const EasyDayProps(
-                    dayStructure: DayStructure.dayStrDayNumMonth,
-                    width: 65,
-                    height: 85,
-                    borderColor: Color.fromARGB(61, 207, 204, 204),
-                    //activeDay
-                    activeDayStyle: DayStyle(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        dayNumStyle: TextStyle(
-                            color: AppColors.primaryButton,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                        dayStrStyle: TextStyle(
-                            color: AppColors.primaryButton,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600),
-                        monthStrStyle: TextStyle(
-                            color: AppColors.primaryButton,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600)),
-                    //inactiveDay
-                    inactiveDayStyle: DayStyle(
-                        dayNumStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                        dayStrStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                        monthStrStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400)),
-                    //TodayStyle
-                    todayStyle: DayStyle(
-                        decoration: BoxDecoration(
-                            color: Color.fromARGB(78, 219, 217, 217),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        dayNumStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                        dayStrStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600),
-                        monthStrStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600)),
-                  ),
-                ),
+                const CustomCalendar(),
                 const SizedBox(
                   height: 5,
                 ),
@@ -467,7 +380,6 @@ class _HomePageBodyState extends State<HomePageBody> {
               ],
             ),
           ),
-          //Search Bar
           Positioned(
             top: 285,
             left: 25,
@@ -478,36 +390,26 @@ class _HomePageBodyState extends State<HomePageBody> {
           checkQR()
         ]),
         if (!activeQR)
-          Container(
-            child: StreamBuilder(
-                stream: Connectivity().onConnectivityChanged,
-                builder: (context, snapshot) {
-                  print(snapshot.toString());
-                  if (snapshot.hasData) {
-                    ConnectivityResult? result = snapshot.data;
-                    if (result == ConnectivityResult.wifi ||
-                        result == ConnectivityResult.mobile) {
-                      print('Have Internet');
-                      return callAPI(context, classesStudentDataProvider);
-                    } else if (result == ConnectivityResult.none ||
-                        isConnected == false) {
-                      print('No Internet');
+          StreamBuilder(
+              stream: Connectivity().onConnectivityChanged,
+              builder: (context, snapshot) {
+                print(snapshot.toString());
+                if (snapshot.hasData) {
+                  ConnectivityResult? result = snapshot.data;
+                  if (result == ConnectivityResult.wifi ||
+                      result == ConnectivityResult.mobile) {
+                    print('Have Internet');
+                    return callAPI(context, classesStudentDataProvider);
+                  } else if (result == ConnectivityResult.none ||
+                      isConnected == false) {
+                    print('No Internet');
 
-                      return noInternetWithHive();
-                    }
+                    return noInternetWithHive();
                   }
-                  print('Check connected: $isConnected');
-                  // if (isConnected) {
-                  //   return callAPI(context, classesStudentDataProvider);
-                  // } else {
-                  //   return noInternetWithHive();
-                  // }
-                  // setState(() {
-
-                  // });
-                  return callAPI(context, classesStudentDataProvider);
-                }),
-          )
+                }
+                print('Check connected: $isConnected');
+                return callAPI(context, classesStudentDataProvider);
+              })
         else
           scanQR(context),
       ],

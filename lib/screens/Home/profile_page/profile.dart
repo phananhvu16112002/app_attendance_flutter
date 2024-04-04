@@ -128,17 +128,41 @@ class _ProfilePageState extends State<ProfilePage> {
 
             customOptions(context, 'assets/icons/information.png', 'About us'),
             InkWell(
-                onTap: () async {
-                  await SecureStorage().deleteSecureData('refreshToken');
-                  await SecureStorage().deleteSecureData('accessToken');
-                  await SecureStorage().deleteSecureData('_image1');
-                  await SecureStorage().deleteSecureData('_image2');
-                  await SecureStorage().deleteSecureData('_image3');
-                  // await classesStudentBox.deleteFromDisk();
-                  await Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (builder) => SignInPage()),
-                      (route) => false);
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (builder) => AlertDialog(
+                        backgroundColor: Colors.white,
+                            title: Text('Sign out'),
+                            content: Text('Are you sure ?'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Cancel')),
+                              TextButton(
+                                  onPressed: () async {
+                                    await SecureStorage()
+                                        .deleteSecureData('refreshToken');
+                                    await SecureStorage()
+                                        .deleteSecureData('accessToken');
+                                    await SecureStorage()
+                                        .deleteSecureData('_image1');
+                                    await SecureStorage()
+                                        .deleteSecureData('_image2');
+                                    await SecureStorage()
+                                        .deleteSecureData('_image3');
+
+                                    await Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (builder) => SignInPage()),
+                                        (route) => false);
+                                  },
+                                  child: Text('OK'))
+                            ],
+                          ));
                 },
                 child: customOptions(
                     context, 'assets/icons/signout.png', 'Sign out')),

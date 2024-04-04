@@ -9,6 +9,15 @@ buildscript {
         // AGP version is set in settings.gradle.
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.android.tools.build:gradle:4.2.0'
+        // AGP version is set in settings.gradle.
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // START: FlutterFire Configuration
+        // AGP version is set in settings.gradle.
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.10'
+        // AGP version is set in settings.gradle.
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // END: FlutterFire Configuration
     }
 }
 
