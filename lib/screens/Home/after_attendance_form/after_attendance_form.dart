@@ -3,6 +3,7 @@ import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
+import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
     final studentClasses =
         Provider.of<StudentClassesDataProvider>(context, listen: false);
     var temp = studentClasses.getDataForClass(data.classDetail);
+    final socketProvider = Provider.of<SocketServerProvider>(context, listen: false);
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -112,7 +114,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
                     message: getResult(data.result),
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textApproved)
+                    color: getColorBasedOnStatus(getResult(data.result)))
               ],
             ),
           ),
@@ -218,6 +220,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
                     borderColor: Colors.transparent,
                     textColor: Colors.white,
                     function: () {
+                      socketProvider.disconnectSocketServer();
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (builder) => HomePage()));
                     },
@@ -275,11 +278,11 @@ Color getColorBasedOnStatus(String status) {
 }
 
 String getResult(double result) {
-  if (result.ceil() == 1) {
+  if (result.toString() == "1.0") {
     return 'Present';
-  } else if (result == 0.5) {
+  } else if (result.toString() == "0.5") {
     return 'Late';
-  } else if (result.ceil() == 0) {
+  } else if (result.toString() == "0.0") {
     return 'Absence';
   } else {
     return 'Absence';
