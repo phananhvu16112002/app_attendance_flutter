@@ -36,7 +36,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 color: Colors.white,
                 // height: MediaQuery.of(context).size.height,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+                  padding: EdgeInsets.only(top: 10.h, left: 15.w, right: 15.w),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [

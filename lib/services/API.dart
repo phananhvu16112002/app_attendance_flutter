@@ -381,7 +381,7 @@ class API {
       request.files.add(multipartFile);
     }
     var response = await request.send();
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       print('Uploaded successfully');
       return true;

@@ -8,6 +8,7 @@ import 'package:attendance_system_nodejs/providers/studentClass_data_provider.da
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gif_view/gif_view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
             child: Column(
               children: [
                 GifView.asset(
-                  'assets/gifs/success.gif',
+                  'assets/images/success1.gif',
                   color: AppColors.backgroundColor,
                   colorBlendMode: BlendMode.overlay,
                   width: 150,
@@ -213,20 +214,23 @@ class _AfterAttendanceState extends State<AfterAttendance> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomButton(
-                    buttonName: 'Back to home',
-                    colorShadow: AppColors.colorShadow,
-                    backgroundColorButton: AppColors.primaryButton,
-                    borderColor: Colors.transparent,
-                    textColor: Colors.white,
-                    function: () {
-                      socketProvider.disconnectSocketServer();
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (builder) => HomePage()));
-                    },
-                    height: 60,
-                    width: 350,
-                    fontSize: 20),
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: 14.w),
+                  child: CustomButton(
+                      buttonName: 'Back to home',
+                      colorShadow: AppColors.colorShadow,
+                      backgroundColorButton: AppColors.primaryButton,
+                      borderColor: Colors.transparent,
+                      textColor: Colors.white,
+                      function: () {
+                        socketProvider.disconnectSocketServer();
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (builder) => HomePage()));
+                      },
+                      height: 60,
+                      width: 350,
+                      fontSize: 20),
+                ),
                 const SizedBox(
                   height: 15,
                 ),

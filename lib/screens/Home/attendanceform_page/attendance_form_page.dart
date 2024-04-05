@@ -333,7 +333,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               boxShadow: [
                 BoxShadow(
-                    color: AppColors.secondaryText,
+                    color: Colors.transparent,
                     blurRadius: 5.0,
                     offset: Offset(0.0, 0.0))
               ]),
@@ -366,7 +366,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
           boxShadow: [
             BoxShadow(
-                color: AppColors.secondaryText,
+                color: Colors.transparent,
                 blurRadius: 5.0,
                 offset: Offset(0.0, 0.0))
           ]),
@@ -558,31 +558,38 @@ class _AttendancePageState extends State<AttendanceFormPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               attendanceFormDataProvider.attendanceFormData.type == 0
+                  // ? ElevatedButton.icon(
+                  //     onPressed: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         PageRouteBuilder(
+                  //           pageBuilder:
+                  //               (context, animation, secondaryAnimation) =>
+                  //                   SmartCamera(
+                  //             page: 'AttendanceNormal',
+                  //             classesStudent: classesStudent,
+                  //           ),
+                  //           transitionDuration:
+                  //               const Duration(milliseconds: 300),
+                  //           transitionsBuilder: (context, animation,
+                  //               secondaryAnimation, child) {
+                  //             return ScaleTransition(
+                  //               scale: animation,
+                  //               child: child,
+                  //             );
+                  //           },
+                  //         ),
+                  //       );
+                  //     },
+                  //     icon: const Icon(Icons.camera),
+                  //     label: const Text('Camera'),
+                  //   )
                   ? ElevatedButton.icon(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    SmartCamera(
-                              page: 'AttendanceNormal',
-                              classesStudent: classesStudent,
-                            ),
-                            transitionDuration:
-                                const Duration(milliseconds: 300),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              return ScaleTransition(
-                                scale: animation,
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
+                        takePhoto(ImageSource.gallery);
                       },
                       icon: const Icon(Icons.camera),
-                      label: const Text('Camera'),
+                      label: const Text('Gallery'),
                     )
                   : ElevatedButton.icon(
                       onPressed: () {

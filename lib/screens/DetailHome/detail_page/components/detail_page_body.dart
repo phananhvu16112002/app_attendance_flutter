@@ -22,6 +22,7 @@ import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -499,10 +500,8 @@ class _DetailPageBodyState extends State<DetailPageBody> {
     // print('-------------------------');
 
     return Container(
-      width: MediaQuery.of(context).size.width * 0.5,
-      height: location.isNotEmpty && location.length >= 50
-          ? MediaQuery.of(context).size.height * 0.30
-          : MediaQuery.of(context).size.height * 0.25,
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 15.h),
       decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(10)),

@@ -27,7 +27,7 @@ class _UploadImageState extends State<UploadImage> {
   late ProgressDialog _progressDialog;
 
   Future<void> _getImageFromCamera(int imageIndex) async {
-    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery); //upload camera 
     if (image != null) {
       setState(() {
         switch (imageIndex) {

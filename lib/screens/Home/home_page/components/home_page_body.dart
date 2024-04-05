@@ -966,7 +966,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                               colorText: AppColors.primaryText,
                               fontSize: 11.sp,
                             ),
-                            10.verticalSpace,
+                            // 10.verticalSpace,
+                             SizedBox(width: 10.w
+                          ),
                             customRichText(
                               title: 'Class: ',
                               message: roomNumber,
