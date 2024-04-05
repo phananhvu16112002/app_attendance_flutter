@@ -32,6 +32,7 @@ import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:face_camera/face_camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -104,11 +105,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      builder: (context, child) {
+        return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.backgroundColor),
-        useMaterial3: true,
+        useMaterial3: false,
       ),
       initialRoute: '/',
       routes: {
@@ -123,8 +128,11 @@ class _MyAppState extends State<MyApp> {
         '/ProfilePage': (context) => const ProfilePage(),
         // '/DetailReport': (context) => const DetailReport(),
       },
-      home: const FlashScreen(),
+      home: child,
       debugShowCheckedModeBanner: false,
+    );
+      },
+      child:  FlashScreen(),
     );
   }
 }

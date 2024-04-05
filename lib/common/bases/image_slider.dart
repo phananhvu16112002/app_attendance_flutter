@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ImageSlider extends StatefulWidget {
   const ImageSlider({super.key});
@@ -41,7 +42,7 @@ class _ImageSliderState extends State<ImageSlider> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 250.h,
       child: Stack(children: <Widget>[
         PageView(
           controller: _pageController,
@@ -63,7 +64,7 @@ class _ImageSliderState extends State<ImageSlider> {
 
   ClipRRect ImageWelcome(BuildContext context, String imgPath) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(15.r),
       child: Image.asset(
         imgPath,
         width: MediaQuery.of(context).size.width,

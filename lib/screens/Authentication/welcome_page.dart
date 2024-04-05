@@ -5,6 +5,7 @@ import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/register_page.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -43,8 +44,8 @@ class _WelcomePageState extends State<WelcomePage> {
                         children: [
                           Image.asset(
                             'assets/images/logo.png',
-                            width: 70,
-                            height: 70,
+                            width: 70.w,
+                            height: 70.h,
                           ),
                           const SizedBox(
                             width: 20,
@@ -63,7 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                   'THANG ',
                                   'UNIVERISTY',
                                   FontWeight.w700,
-                                  30,
+                                  30.sp,
                                   const Color(0xff0364A9),
                                   const Color(0xff0364A9),
                                   const Color(0xff0364A9),
@@ -75,18 +76,19 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                       CustomText(
                           message: descriptionSchool,
-                          fontSize: 15,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      20.verticalSpace,
                       Padding(
-                          padding: const EdgeInsets.only(right: 0),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: CustomButton(
-                              fontSize: 20,
-                              height: 60,
-                              width: 400,
+                              fontSize: 20.sp,
+                              height: 60.h,
+                              width: double.infinity,
                               buttonName: 'Login',
                               colorShadow: AppColors.colorShadow,
                               backgroundColorButton: AppColors.primaryButton,

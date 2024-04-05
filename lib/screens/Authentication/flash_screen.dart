@@ -87,7 +87,7 @@ class _FlashScreenState extends State<FlashScreen> {
             onPressed: () async {
               Navigator.pop(context);
             },
-            child: const Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: AppColors.importantText),),
           ),
           TextButton(
             onPressed: () async {
@@ -96,7 +96,7 @@ class _FlashScreenState extends State<FlashScreen> {
             },
             child: const Text(
               'Open Settings',
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(color:AppColors.primaryButton),
             ),
           ),
         ],

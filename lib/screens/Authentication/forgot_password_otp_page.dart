@@ -9,6 +9,7 @@ import 'package:attendance_system_nodejs/screens/Authentication/create_new_passw
 import 'package:attendance_system_nodejs/services/authentication_services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
@@ -92,28 +93,30 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
             Container(
               height: MediaQuery.of(context).size.height,
               child: Padding(
-                padding: const EdgeInsets.only(top: 15, left: 20),
+                padding:  EdgeInsets.only(top: 15.h, left: 20.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomText(
+                     CustomText(
                         message: "OTP Verification",
-                        fontSize: 40,
+                        fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    10.verticalSpace,
                     CustomText(
                         message: description,
-                        fontSize: 20,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.secondaryText),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
+                    20.verticalSpace,
                     Padding(
-                      padding: const EdgeInsets.only(right: 20),
+                      padding:  EdgeInsets.only(right: 20.w),
                       child: OTPTextField(
                         inputFormatter: [
                           FilteringTextInputFormatter.digitsOnly
@@ -122,91 +125,96 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                         textFieldAlignment: MainAxisAlignment.spaceEvenly,
                         length: 6,
                         width: MediaQuery.of(context).size.width,
-                        outlineBorderRadius: 10,
-                        fieldWidth: 50,
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w500),
+                        outlineBorderRadius: 10.r,
+                        fieldWidth: 45.w,
+                        style: TextStyle(
+                            fontSize: 13.sp, fontWeight: FontWeight.w500),
                         fieldStyle: FieldStyle.box,
                         onChanged: (pin) {
                           studentDataProvider.setHashedOTP(pin);
                         },
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    CustomButton(
-                        fontSize: 20,
-                        height: 60,
-                        width: 400,
-                        buttonName: "Verify",
-                        colorShadow: AppColors.colorShadow,
-                        backgroundColorButton: AppColors.primaryButton,
-                        borderColor: Colors.white,
-                        textColor: Colors.white,
-                        function: () async {
-                          try {
-                            _progressDialog.show();
-                            bool checkLogin = await Authenticate()
-                                .verifyForgotPassword(
-                                    studentDataProvider.userData.studentEmail,
-                                    studentDataProvider.userData.hashedOTP);
-                            if (checkLogin == true) {
-                              // ignore: use_build_context_synchronously
-                              await Navigator.pushAndRemoveUntil(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const CreateNewPassword(),
-                                  transitionDuration:
-                                      const Duration(milliseconds: 1000),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    var curve = Curves.easeInOutCubic;
-                                    var tween = Tween(
-                                            begin: const Offset(1.0, 0.0),
-                                            end: Offset.zero)
-                                        .chain(CurveTween(curve: curve));
-                                    var offsetAnimation =
-                                        animation.drive(tween);
-                                    return SlideTransition(
-                                      position: offsetAnimation,
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                                (route) => false,
-                              );
-                              await _progressDialog.hide();
-                              // ignore: use_build_context_synchronously
-                              await Flushbar(
-                                title: "Successfully",
-                                message: "Create new password",
-                                duration: const Duration(seconds: 5),
-                              ).show(context);
-                            } else {
-                              await _progressDialog.hide();
-                              // ignore: use_build_context_synchronously
-                              Flushbar(
-                                title: "Failed",
-                                message: "OTP is not valid",
-                                duration: const Duration(seconds: 5),
-                              ).show(context);
-                            }
-                          } catch (e) {
-                            // ignore: avoid_print
-                            await _progressDialog.hide();
-                            print(e);
-                          } finally {
-                            await _progressDialog.hide();
-                          }
-                        }),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
+                    20.verticalSpace,
                     Padding(
-                      padding: const EdgeInsets.only(right: 20),
+                      padding:  EdgeInsets.only(right: 18.0),
+                      child: CustomButton(
+                          fontSize: 20.sp,
+                          // height: 60,
+                          // width: 400,
+                          buttonName: "Verify",
+                          colorShadow: Colors.transparent,
+                          backgroundColorButton: AppColors.primaryButton,
+                          borderColor: Colors.white,
+                          textColor: Colors.white,
+                          function: () async {
+                            try {
+                              _progressDialog.show();
+                              bool checkLogin = await Authenticate()
+                                  .verifyForgotPassword(
+                                      studentDataProvider.userData.studentEmail,
+                                      studentDataProvider.userData.hashedOTP);
+                              if (checkLogin == true) {
+                                // ignore: use_build_context_synchronously
+                                await Navigator.pushAndRemoveUntil(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                         CreateNewPassword(),
+                                    transitionDuration:
+                                        const Duration(milliseconds: 1000),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      var curve = Curves.easeInOutCubic;
+                                      var tween = Tween(
+                                              begin: const Offset(1.0, 0.0),
+                                              end: Offset.zero)
+                                          .chain(CurveTween(curve: curve));
+                                      var offsetAnimation =
+                                          animation.drive(tween);
+                                      return SlideTransition(
+                                        position: offsetAnimation,
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                  (route) => false,
+                                );
+                                await _progressDialog.hide();
+                                // ignore: use_build_context_synchronously
+                                await Flushbar(
+                                  title: "Successfully",
+                                  message: "Create new password",
+                                  duration: const Duration(seconds: 5),
+                                ).show(context);
+                              } else {
+                                await _progressDialog.hide();
+                                // ignore: use_build_context_synchronously
+                                Flushbar(
+                                  title: "Failed",
+                                  message: "OTP is not valid",
+                                  duration: const Duration(seconds: 5),
+                                ).show(context);
+                              }
+                            } catch (e) {
+                              // ignore: avoid_print
+                              await _progressDialog.hide();
+                              print(e);
+                            } finally {
+                              await _progressDialog.hide();
+                            }
+                          }),
+                    ),
+                    // const SizedBox(
+                    //   height: 15,
+                    // ),
+                    15.verticalSpace,
+                    Padding(
+                      padding:  EdgeInsets.only(right: 20.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -242,7 +250,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                                 message: canResend // true
                                     ? "Re-send"
                                     : "Resend in $secondsRemaining seconds",
-                                fontSize: 15,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.importantText),
                           )

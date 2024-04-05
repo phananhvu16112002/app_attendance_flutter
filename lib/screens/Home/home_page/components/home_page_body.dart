@@ -23,6 +23,7 @@ import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -260,17 +261,17 @@ class _HomePageBodyState extends State<HomePageBody> {
       children: [
         Stack(children: [
           Container(
-            height: 320,
+            height: 310.h,
             width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
                 color: AppColors.colorAppbar,
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15))),
+                    bottomLeft: Radius.circular(10.r),
+                    bottomRight: Radius.circular(10.r))),
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 15, top: 25, right: 10),
+                  padding: EdgeInsets.only(left: 13.w, top: 25.h, right: 13.w),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -280,62 +281,53 @@ class _HomePageBodyState extends State<HomePageBody> {
                         children: [
                           Row(
                             children: [
-                              const CustomText(
+                              CustomText(
                                   message: 'Hi, ',
-                                  fontSize: 28,
+                                  fontSize: 24.sp,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.thirdText),
                               CustomText(
                                   message: studentName,
-                                  fontSize: 23,
+                                  fontSize: 20.sp,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white),
                             ],
                           ),
-                          Container(
-                            height: 1,
-                            color: const Color.fromARGB(106, 255, 255, 255),
-                            width: 140,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          5.verticalSpace,
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
-                                  const Icon(Icons.person_3_outlined,
-                                      size: 11, color: AppColors.thirdText),
+                                  Icon(Icons.person_3_outlined,
+                                      size: 11.sp, color: AppColors.thirdText),
                                   CustomText(
                                       message: '$studentID | ',
-                                      fontSize: 11,
+                                      fontSize: 11.sp,
                                       fontWeight: FontWeight.w500,
                                       color: AppColors.thirdText),
-                                  const CustomText(
+                                  CustomText(
                                       message: 'Student',
-                                      fontSize: 11,
+                                      fontSize: 11.sp,
                                       fontWeight: FontWeight.w500,
                                       color: AppColors.thirdText),
                                 ],
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 8,
-                          ),
+                          10.verticalSpace,
                           Container(
-                            width: 290,
+                            width: 290.w,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.location_on_outlined,
-                                    size: 11, color: Colors.white),
+                                Icon(Icons.location_on_outlined,
+                                    size: 11.sp, color: Colors.white),
                                 Expanded(
                                   child: Text(
                                     studentDataProvider.userData.location,
-                                    style: const TextStyle(
-                                      fontSize: 11,
+                                    style: TextStyle(
+                                      fontSize: 11.sp,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.white,
                                     ),
@@ -346,44 +338,42 @@ class _HomePageBodyState extends State<HomePageBody> {
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          20.verticalSpace,
                         ],
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 30, right: 5),
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: AssetImage('assets/images/logo.png'),
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              top: 10.h, right: 0.w, bottom: 10.h),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25.r),
+                            child: Image.asset(
+                              'assets/images/avatar.png',
+                              height: 55.h,
+                              width: 55.w,
+                              fit: BoxFit.cover,
+                            ),
+                          )),
                     ],
                   ),
                 ),
                 Container(
-                    height: 1,
+                    height: 1.h,
                     width: MediaQuery.of(context).size.width,
                     color: const Color.fromARGB(106, 255, 255, 255)),
-                const SizedBox(
-                  height: 5,
-                ),
-                const CustomCalendar(),
-                const SizedBox(
-                  height: 5,
-                ),
+                5.verticalSpace,
+                CustomCalendar(),
+                10.verticalSpace,
                 Container(
-                    height: 1,
+                    height: 1.h,
                     width: MediaQuery.of(context).size.width,
                     color: const Color.fromARGB(106, 255, 255, 255)),
               ],
             ),
           ),
           Positioned(
-            top: 285,
-            left: 25,
-            right: 25,
+            top: 275.h,
+            left: 25.w,
+            right: 25.w,
             child: searchClass(),
           ),
           //Body 2
@@ -400,6 +390,21 @@ class _HomePageBodyState extends State<HomePageBody> {
                       result == ConnectivityResult.mobile) {
                     print('Have Internet');
                     return callAPI(context, classesStudentDataProvider);
+                    // return classInformation(
+                    //     10,
+                    //     'Intro Programming',
+                    //     'Mai Van Manh',
+                    //     '5202020',
+                    //     'Laboratory',
+                    //     '10',
+                    //     '5',
+                    //     3,
+                    //     'A0303',
+                    //     2,
+                    //     3,
+                    //     4,
+                    //     0.5);
+                    // return customLoading();
                   } else if (result == ConnectivityResult.none ||
                       isConnected == false) {
                     print('No Internet');
@@ -418,67 +423,59 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   Container scanQR(BuildContext context) {
     return Container(
-      height: 500,
+      height: 500.h,
+      // padding: EdgeInsets.symmetric(vertical: 200),
       width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.only(),
-        child: Column(
-          children: [
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomText(
-                      message: 'SCAN QR CODE',
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryText),
-                  CustomText(
-                      message: 'Scanning will be started automatically',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.primaryText),
-                ],
-              ),
+      child: Column(
+        children: [
+          CustomText(
+              message: 'SCAN QR CODE',
+              fontSize: 23.sp,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primaryText),
+          CustomText(
+              message: 'Scanning will be started automatically',
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.primaryText),
+          // const SizedBox(
+          //   height: 5,
+          // ),
+          5.verticalSpace,
+          Stack(alignment: Alignment.center, children: [
+            SizedBox(
+              height: 400.h,
+              width: 500.w,
+              child: QRView(
+                  overlay: QrScannerOverlayShape(
+                    borderLength: 30.h,
+                    borderColor: AppColors.primaryButton,
+                    borderWidth: 10.w,
+                    borderRadius: 10.r,
+                  ),
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            Stack(children: [
-              SizedBox(
-                height: 400,
-                width: 500,
-                child: QRView(
-                    overlay: QrScannerOverlayShape(
-                      borderLength: 30,
-                      borderColor: AppColors.primaryButton,
-                      borderWidth: 10,
-                      borderRadius: 10,
-                    ),
-                    key: qrKey,
-                    onQRViewCreated: _onQRViewCreated),
-              ),
-              Positioned(
-                bottom: 30,
-                left: 160,
-                right: 160,
-                child: Container(
-                  width: 60,
-                  decoration: BoxDecoration(
-                      color: Colors.white24,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Center(
-                    child: Text(
-                      maxLines: 3,
-                      result != null ? '${result!.code}' : 'Scan QR Code',
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                    ),
+            Positioned(
+              bottom: 30.h,
+              // left: 150,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
+                decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(5.r)),
+                child: Center(
+                  child: Text(
+                    maxLines: 1,
+                    result != null ? '${result!.code}' : 'Scan QR Code',
+                    style: TextStyle(fontSize: 10.sp, color: Colors.white),
                   ),
                 ),
-              )
-            ]),
-          ],
-        ),
+              ),
+            )
+          ]),
+          30.verticalSpace,
+        ],
       ),
     );
   }
@@ -489,7 +486,7 @@ class _HomePageBodyState extends State<HomePageBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 350),
+            margin: EdgeInsets.only(top: 340.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -500,28 +497,27 @@ class _HomePageBodyState extends State<HomePageBody> {
                     });
                   },
                   child: Container(
-                    width: 142,
-                    height: 30,
-                    margin: const EdgeInsets.only(top: 10),
+                    width: 138.w,
+                    height: 30.h,
+                    margin: EdgeInsets.only(top: 10.h),
                     decoration: BoxDecoration(
                         color:
                             activeQR ? Colors.white : AppColors.primaryButton,
                         border: Border.all(
-                            color: AppColors.secondaryText, width: 1),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5))),
+                            color: AppColors.secondaryText, width: 1.w),
+                        borderRadius: BorderRadius.all(Radius.circular(5.r))),
                     child: Center(
                         child: CustomText(
                             message: 'Take Attendance',
-                            fontSize: 12,
+                            fontSize: 10.sp,
                             fontWeight: FontWeight.bold,
                             color: activeQR
                                 ? AppColors.primaryText
                                 : Colors.white)),
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
+                SizedBox(
+                  width: 10.w,
                 ),
                 GestureDetector(
                   onTap: () {
@@ -530,20 +526,19 @@ class _HomePageBodyState extends State<HomePageBody> {
                     });
                   },
                   child: Container(
-                    width: 142,
-                    height: 26,
-                    margin: const EdgeInsets.only(top: 10),
+                    width: 138.w,
+                    height: 30.h,
+                    margin: EdgeInsets.only(top: 10.h),
                     decoration: BoxDecoration(
                         color:
                             activeQR ? AppColors.primaryButton : Colors.white,
                         border: Border.all(
-                            color: AppColors.secondaryText, width: 1),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5))),
+                            color: AppColors.secondaryText, width: 1.w),
+                        borderRadius: BorderRadius.all(Radius.circular(5.r))),
                     child: Center(
                         child: CustomText(
                             message: 'Scan QR',
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.bold,
                             color: activeQR
                                 ? Colors.white
@@ -562,11 +557,11 @@ class _HomePageBodyState extends State<HomePageBody> {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
+          borderRadius: BorderRadius.circular(15.r),
+          boxShadow: [
             BoxShadow(
                 color: AppColors.secondaryText,
-                blurRadius: 15.0,
+                blurRadius: 15.r,
                 offset: Offset(0.0, 0.0))
           ]),
       //Fix PrefixIcon
@@ -577,26 +572,28 @@ class _HomePageBodyState extends State<HomePageBody> {
         readOnly: true,
         controller: searchController,
         keyboardType: TextInputType.text,
-        style: const TextStyle(
+        style: TextStyle(
             color: AppColors.primaryText,
             fontWeight: FontWeight.normal,
-            fontSize: 15),
+            fontSize: 13.sp),
         obscureText: false,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
             border: OutlineInputBorder(
                 borderSide:
-                    BorderSide(width: 1, color: AppColors.primaryButton),
-                borderRadius: BorderRadius.all(Radius.circular(15.0))),
-            contentPadding: EdgeInsets.all(20),
+                    BorderSide(width: 1.w, color: AppColors.primaryButton),
+                borderRadius: BorderRadius.all(Radius.circular(15.0.r))),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             suffixIcon: Icon(Icons.search, color: AppColors.secondaryText),
             hintText: 'Search class', // change here hinttext
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                borderRadius: BorderRadius.all(Radius.circular(15.0.r)),
                 borderSide:
-                    BorderSide(width: 1, color: AppColors.secondaryText)),
+                    BorderSide(width: 1.w, color: AppColors.secondaryText)),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-              borderSide: BorderSide(width: 1, color: AppColors.primaryButton),
+              borderRadius: BorderRadius.all(Radius.circular(15.0.r)),
+              borderSide:
+                  BorderSide(width: 1.w, color: AppColors.primaryButton),
             )),
       ),
     );
@@ -609,18 +606,14 @@ class _HomePageBodyState extends State<HomePageBody> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Padding(
-              padding:
-                  const EdgeInsets.only(left: 5, right: 5, bottom: 10, top: 10),
+              padding: EdgeInsets.only(
+                  left: 5.w, right: 5.w, bottom: 10.h, top: 10.h),
               child: Column(
                 children: [
                   customLoading(),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  10.verticalSpace,
                   customLoading(),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  10.verticalSpace,
                   customLoading(),
                 ],
               ));
@@ -633,26 +626,27 @@ class _HomePageBodyState extends State<HomePageBody> {
               snapshot.data == null) {
             return Center(
               child: Container(
-                width: 200,
-                height: 350,
-                child: Center(
+                width: 200.w,
+                height: 350.h,
+                child: SingleChildScrollView(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(
-                        height: 100,
-                      ),
+                      100.verticalSpace,
                       Opacity(
                         opacity: 0.3,
                         child: Image.asset('assets/images/nodata.png'),
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      // const SizedBox(
+                      //   height: 5,
+                      // ),
+                      5.verticalSpace,
                       CustomText(
                           message: "You haven't joint any classes yet!",
-                          fontSize: 11,
+                          fontSize: 9.sp,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.primaryText.withOpacity(0.5))
+                          color: AppColors.primaryText.withOpacity(0.5)),
+                      30.verticalSpace
                     ],
                   ),
                 ),
@@ -666,20 +660,20 @@ class _HomePageBodyState extends State<HomePageBody> {
               classDataProvider.setClassesStudentList(studentClasses);
             });
             return SizedBox(
-              height: 500,
+              height: 500.h,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListView.builder(
-                      padding: const EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.only(top: 20.h),
                       shrinkWrap: true,
                       itemCount: studentClasses.length,
                       itemBuilder: (BuildContext context, int index) {
                         var data = studentClasses[index];
                         return Padding(
-                          padding: const EdgeInsets.only(
-                              left: 5, right: 5, bottom: 10),
+                          padding: EdgeInsets.only(
+                              left: 5.w, right: 5.w, bottom: 10.h),
                           child: GestureDetector(
                             onTap: () {
                               // Navigator.pushNamed(context,'/DetailPage',arguments: {'studentClasses': data});
@@ -704,9 +698,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                               );
                             },
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: 5,
-                                right: 5,
+                              padding: EdgeInsets.only(
+                                left: 5.w,
+                                right: 5.w,
                               ),
                               child: classInformation(
                                 data.totalWeeks,
@@ -728,9 +722,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                         );
                       },
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    20.verticalSpace,
                   ],
                 ),
               ),
@@ -876,11 +868,12 @@ class _HomePageBodyState extends State<HomePageBody> {
     double progress,
   ) {
     return Container(
-        width: MediaQuery.of(context).size.width * 0.5,
-        height: MediaQuery.of(context).size.height * 0.18,
-        decoration: const BoxDecoration(
+        width: double.infinity,
+        // height: MediaQuery.of(context).size.height * 0.18,
+        padding: EdgeInsets.symmetric(vertical: 10.h),
+        decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: BorderRadius.all(Radius.circular(20.r)),
             boxShadow: [
               BoxShadow(
                   color: AppColors.secondaryText,
@@ -891,22 +884,22 @@ class _HomePageBodyState extends State<HomePageBody> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 10),
+              padding: EdgeInsets.only(left: 20.w, top: 10.h),
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 20, top: 20),
+                    padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
                     child: SizedBox(
-                      width: 55,
-                      height: 80,
+                      // width: 55.,
+                      // height: 80,
                       child: CircularPercentIndicator(
-                        radius: 40,
-                        lineWidth: 6,
+                        radius: 40.r,
+                        lineWidth: 6.w,
                         percent: progress, // Thay đổi giá trị tại đây
                         center: Text(
                           "$totalWeeks Weeks",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 11),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 11.sp),
                         ),
                         backgroundColor: AppColors.secondaryText,
                         progressColor: AppColors.primaryButton,
@@ -914,11 +907,11 @@ class _HomePageBodyState extends State<HomePageBody> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 24,
+                  SizedBox(
+                    width: 15.w,
                   ),
                   Container(
-                    width: 165,
+                    // width: 165,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -928,44 +921,41 @@ class _HomePageBodyState extends State<HomePageBody> {
                           fontWeightTitle: FontWeight.bold,
                           fontWeightMessage: FontWeight.w400,
                           colorText: AppColors.primaryText,
-                          fontSize: 13,
+                          fontSize: 11.sp,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        5.verticalSpace,
                         customRichText(
                           title: 'Type: ',
                           message: classType,
                           fontWeightTitle: FontWeight.bold,
                           fontWeightMessage: FontWeight.w400,
                           colorText: AppColors.primaryText,
-                          fontSize: 13,
+                          fontSize: 11.sp,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        // const SizedBox(
+                        //   height: 5,
+                        // ),
+                        5.verticalSpace,
                         customRichText(
                           title: 'Lectuer: ',
                           message: teacherName,
                           fontWeightTitle: FontWeight.bold,
                           fontWeightMessage: FontWeight.w400,
                           colorText: AppColors.primaryText,
-                          fontSize: 13,
+                          fontSize: 11.sp,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        5.verticalSpace,
+
                         customRichText(
                           title: 'CourseID: ',
                           message: courseID,
                           fontWeightTitle: FontWeight.bold,
                           fontWeightMessage: FontWeight.w400,
                           colorText: AppColors.primaryText,
-                          fontSize: 13,
+                          fontSize: 11.sp,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        5.verticalSpace,
+
                         Row(
                           children: [
                             customRichText(
@@ -974,24 +964,21 @@ class _HomePageBodyState extends State<HomePageBody> {
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
                               colorText: AppColors.primaryText,
-                              fontSize: 13,
+                              fontSize: 11.sp,
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
+                            10.verticalSpace,
                             customRichText(
                               title: 'Class: ',
                               message: roomNumber,
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
                               colorText: AppColors.primaryText,
-                              fontSize: 13,
+                              fontSize: 11.sp,
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        5.verticalSpace,
+
                         Row(
                           children: [
                             customRichText(
@@ -1000,10 +987,10 @@ class _HomePageBodyState extends State<HomePageBody> {
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
                               colorText: AppColors.primaryText,
-                              fontSize: 13,
+                              fontSize: 11.sp,
                             ),
-                            const SizedBox(
-                              width: 10,
+                            SizedBox(
+                              width: 10.w,
                             ),
                             customRichText(
                               title: 'SubGroup: ',
@@ -1011,25 +998,28 @@ class _HomePageBodyState extends State<HomePageBody> {
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
                               colorText: AppColors.primaryText,
-                              fontSize: 13,
+                              fontSize: 11.sp,
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
                   Container(
-                      margin: const EdgeInsets.only(bottom: 25),
-                      height: 90,
-                      width: 1.5,
+                      margin: EdgeInsets.only(bottom: 25.h),
+                      height: 90.h,
+                      width: 1.5.w,
                       color: Colors.black),
-                  const SizedBox(
-                    width: 5,
+                  SizedBox(
+                    width: 5.w,
                   ),
                   Padding(
                     padding: !activeForm
-                        ? const EdgeInsets.only(top: 20, bottom: 20)
-                        : const EdgeInsets.only(top: 20, bottom: 10),
+                        ? EdgeInsets.only(top: 20.h, bottom: 20.h)
+                        : EdgeInsets.only(top: 20.h, bottom: 10.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -1039,33 +1029,27 @@ class _HomePageBodyState extends State<HomePageBody> {
                           fontWeightTitle: FontWeight.bold,
                           fontWeightMessage: FontWeight.w400,
                           colorText: AppColors.primaryText,
-                          fontSize: 13,
+                          fontSize: 11.sp,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        5.verticalSpace,
                         customRichText(
                           title: 'Total Late: ',
                           message: '${totalLate}',
                           fontWeightTitle: FontWeight.bold,
                           fontWeightMessage: FontWeight.w400,
                           colorText: AppColors.primaryText,
-                          fontSize: 13,
+                          fontSize: 11.sp,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        5.verticalSpace,
                         customRichText(
                           title: 'Total Absent: ',
                           message: '${totalAbsence.ceil()}',
                           fontWeightTitle: FontWeight.bold,
                           fontWeightMessage: FontWeight.w400,
                           colorText: AppColors.primaryText,
-                          fontSize: 13,
+                          fontSize: 11.sp,
                         ),
-                        const SizedBox(
-                          height: 15,
-                        ),
+                        15.verticalSpace,
                       ],
                     ),
                   ),
@@ -1078,11 +1062,12 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   Widget customLoading() {
     return Container(
-        width: 410,
-        height: 150,
-        decoration: const BoxDecoration(
+        // width: 410,
+        // height: 150,
+        width: double.infinity,
+        decoration: BoxDecoration(
             color: Color.fromARGB(164, 245, 244, 244),
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: BorderRadius.all(Radius.circular(20.r)),
             boxShadow: [
               BoxShadow(
                   color: AppColors.secondaryText,
@@ -1090,24 +1075,24 @@ class _HomePageBodyState extends State<HomePageBody> {
                   offset: Offset(3.0, 2.0))
             ]),
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, top: 20, bottom: 15),
+          padding: EdgeInsets.only(left: 20.w, top: 20.h, bottom: 15.h),
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 20, top: 20),
+                padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
                 child: Shimmer.fromColors(
                   baseColor: const Color.fromARGB(78, 158, 158, 158),
                   highlightColor: const Color.fromARGB(146, 255, 255, 255),
                   child: Container(
-                    width: 80,
-                    height: 80,
+                    width: 60.w,
+                    height: 60.w,
                     decoration: const BoxDecoration(
                         color: Colors.white, shape: BoxShape.circle),
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 10,
+              SizedBox(
+                width: 10.w,
               ),
               Container(
                 width: 150,
@@ -1119,36 +1104,28 @@ class _HomePageBodyState extends State<HomePageBody> {
                         highlightColor:
                             const Color.fromARGB(146, 255, 255, 255),
                         child: Container(
-                            width: 200, height: 15, color: Colors.white)),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                            width: 200.w, height: 15.h, color: Colors.white)),
+                    10.verticalSpace,
                     Shimmer.fromColors(
                         baseColor: const Color.fromARGB(78, 158, 158, 158),
                         highlightColor: const Color.fromARGB(36, 255, 255, 255),
                         child: Container(
-                            width: 200, height: 15, color: Colors.white)),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                            width: 200.w, height: 15.h, color: Colors.white)),
+                    10.verticalSpace,
+                    Shimmer.fromColors(
+                        baseColor: const Color.fromARGB(78, 158, 158, 158),
+                        highlightColor:
+                            const Color.fromARGB(146, 255, 255, 255),
+                        child: Container(
+                            width: 200.w, height: 15.h, color: Colors.white)),
+                    10.verticalSpace,
                     Shimmer.fromColors(
                         baseColor: const Color.fromARGB(78, 158, 158, 158),
                         highlightColor:
                             const Color.fromARGB(146, 255, 255, 255),
                         child: Container(
                             width: 200, height: 15, color: Colors.white)),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Shimmer.fromColors(
-                        baseColor: const Color.fromARGB(78, 158, 158, 158),
-                        highlightColor:
-                            const Color.fromARGB(146, 255, 255, 255),
-                        child: Container(
-                            width: 200, height: 15, color: Colors.white)),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    10.verticalSpace,
                     Row(
                       children: [
                         Shimmer.fromColors(
@@ -1156,38 +1133,37 @@ class _HomePageBodyState extends State<HomePageBody> {
                             highlightColor:
                                 const Color.fromARGB(146, 255, 255, 255),
                             child: Container(
-                                width: 50, height: 5, color: Colors.white)),
-                        const SizedBox(
-                          width: 5,
+                                width: 50.w, height: 5.h, color: Colors.white)),
+                        SizedBox(
+                          width: 10.w,
                         ),
                         Shimmer.fromColors(
                             baseColor: const Color.fromARGB(78, 158, 158, 158),
                             highlightColor:
                                 const Color.fromARGB(146, 255, 255, 255),
                             child: Container(
-                                width: 50, height: 5, color: Colors.white)),
+                                width: 50.w, height: 5.h, color: Colors.white)),
                       ],
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
+                    5.verticalSpace,
                   ],
                 ),
               ),
-              const SizedBox(
-                width: 5,
+              SizedBox(
+                width: 5.w,
               ),
               Shimmer.fromColors(
                   baseColor: const Color.fromARGB(78, 158, 158, 158),
                   highlightColor: const Color.fromARGB(146, 255, 255, 255),
-                  child: Container(width: 2, height: 90, color: Colors.white)),
-              const SizedBox(
-                width: 5,
+                  child:
+                      Container(width: 2.w, height: 90.h, color: Colors.white)),
+              SizedBox(
+                width: 5.w,
               ),
               Padding(
                 padding: !activeForm
-                    ? const EdgeInsets.only(top: 20, bottom: 20)
-                    : const EdgeInsets.only(top: 20, bottom: 10),
+                    ? EdgeInsets.only(top: 20.h, bottom: 20.h)
+                    : EdgeInsets.only(top: 20.h, bottom: 10.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1196,28 +1172,22 @@ class _HomePageBodyState extends State<HomePageBody> {
                         highlightColor:
                             const Color.fromARGB(146, 255, 255, 255),
                         child: Container(
-                            width: 100, height: 15, color: Colors.white)),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                            width: 100.w, height: 15.h, color: Colors.white)),
+                    10.verticalSpace,
                     Shimmer.fromColors(
                         baseColor: const Color.fromARGB(78, 158, 158, 158),
                         highlightColor:
                             const Color.fromARGB(146, 255, 255, 255),
                         child: Container(
-                            width: 100, height: 15, color: Colors.white)),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                            width: 100.w, height: 15.h, color: Colors.white)),
+                    10.verticalSpace,
                     Shimmer.fromColors(
                         baseColor: const Color.fromARGB(78, 158, 158, 158),
                         highlightColor:
                             const Color.fromARGB(146, 255, 255, 255),
                         child: Container(
-                            width: 100, height: 15, color: Colors.white)),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                            width: 100.w, height: 15.h, color: Colors.white)),
+                    10.verticalSpace,
                   ],
                 ),
               ),

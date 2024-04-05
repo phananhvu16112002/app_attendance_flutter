@@ -7,6 +7,7 @@ import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/forgot_password_otp_page.dart';
 import 'package:attendance_system_nodejs/services/authentication_services/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 
@@ -69,36 +70,39 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           Image.asset('assets/images/forgot.png'),
           Container(
             child: Padding(
-              padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
+              padding:  EdgeInsets.only(top: 15.h, left: 20.w, right: 20.w),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomText(
+                     CustomText(
                         message: 'Forgot Your Password?',
-                        fontSize: 40,
+                        fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    10.verticalSpace,
                     CustomText(
                         message: description,
-                        fontSize: 20,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.secondaryText),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const CustomText(
+                    // const SizedBox(
+                    //   height: 15,
+                    // ),
+                    15.verticalSpace,
+                     CustomText(
                         message: "Email",
-                        fontSize: 20,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    10.verticalSpace,
                     CustomTextField(
                       controller: emailAddress,
                       readOnly: false,
@@ -124,17 +128,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         studentDataProvider.setStudentEmail(value);
                       },
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    // const SizedBox(
+                    //   height: 15,
+                    // ),
+                    15.verticalSpace,
                     Padding(
                       padding: const EdgeInsets.only(right: 0, left: 0),
                       child: CustomButton(
-                          fontSize: 20,
-                          height: 60,
-                          width: 400,
+                          fontSize: 18.sp,
+                          // height: 60,
+                          // width: 400,
                           buttonName: "Send OTP",
-                          colorShadow: AppColors.colorShadow,
+                          colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
                           borderColor: Colors.white,
                           textColor: Colors.white,
@@ -169,15 +174,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             }
                           }),
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    // const SizedBox(
+                    //   height: 15,
+                    // ),
+                    15.verticalSpace,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const CustomText(
+                         CustomText(
                             message: 'Already have an account ? ',
-                            fontSize: 15,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColors.primaryText),
                         GestureDetector(
@@ -185,9 +191,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             Navigator.pushNamedAndRemoveUntil(
                                 context, "/Login", (route) => false);
                           },
-                          child: const CustomText(
+                          child:  CustomText(
                               message: 'Log In',
-                              fontSize: 15,
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.importantText),
                         ),
@@ -198,7 +204,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ),
             ),
           ),
-          const SizedBox(height: 20,),
+          // const SizedBox(height: 20,),
+          20.verticalSpace
         ],
       ),
     ));
