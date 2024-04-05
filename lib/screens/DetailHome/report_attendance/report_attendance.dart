@@ -278,22 +278,44 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                               Row(
                                 children: [
                                   //Call bottom modal imagepicker gallery or camera
-                                  CustomButton(
-                                    buttonName: 'Upload File',
-                                    backgroundColorButton:
-                                        AppColors.cardAttendance,
-                                    borderColor: AppColors.secondaryText,
-                                    textColor: AppColors.primaryButton,
-                                    colorShadow: Colors.transparent,
-                                    function: () {
-                                      showModalBottomSheet(
-                                          context: context,
-                                          builder: (builder) => bottomSheet());
+                                  // CustomButton(
+                                  //   buttonName: 'Upload File',
+                                  //   backgroundColorButton:
+                                  //       AppColors.cardAttendance,
+                                  //   borderColor: AppColors.secondaryText,
+                                  //   textColor: AppColors.primaryButton,
+                                  //   colorShadow: Colors.transparent,
+                                  //   function: () {
+                                  //     showModalBottomSheet(
+                                  //         context: context,
+                                  //         builder: (builder) => bottomSheet());
+                                  //   },
+                                  //   // height: 35,
+                                  //   // width: 100,
+                                  //   fontSize: 12,
+                                  // ),
+                                  InkWell(
+                                    onTap: (){
+                                      showModalBottomSheet(context: context, builder: (builder) => bottomSheet());
                                     },
-                                    height: 35,
-                                    width: 100,
-                                    fontSize: 12,
-                                  ),
+                                    child: Container(
+                                      width: 100,
+                                      height: 35,
+                                      child: Center(
+                                        child: Text(
+                                          'Upload file',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.white),
+                                          borderRadius: BorderRadius.circular(8),
+                                          color: AppColors.primaryButton),
+                                    ),
+                                  )
                                 ],
                               )
                             ],

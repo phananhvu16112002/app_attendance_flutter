@@ -4,6 +4,7 @@ import 'package:attendance_system_nodejs/models/ModelForAPI/ModelForAPI_ReportPa
 import 'package:attendance_system_nodejs/screens/Home/detail_report/detail_report.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class ReportPage extends StatefulWidget {
@@ -114,6 +115,7 @@ class _ReportPageState extends State<ReportPage> {
       child: Container(
         width: double.infinity,
         // height: MediaQuery.of(context).size.height * 0.26,
+        padding: EdgeInsets.symmetric(vertical: 15.h),
         decoration: const BoxDecoration(
             color: AppColors.cardReport,
             borderRadius: BorderRadius.all(Radius.circular(20)),

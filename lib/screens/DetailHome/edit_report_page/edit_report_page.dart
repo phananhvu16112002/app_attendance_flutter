@@ -423,23 +423,28 @@ class _EditReportPageState extends State<EditReportPage> {
                                           listReportImage.length +
                                                   _imageFiles.length <
                                               3
-                                      ? CustomButton(
-                                          buttonName: 'Upload File',
-                                          backgroundColorButton:
-                                              AppColors.cardAttendance,
-                                          borderColor: AppColors.secondaryText,
-                                          textColor: AppColors.primaryButton,
-                                          colorShadow: Colors.transparent,
-                                          function: () {
-                                            showModalBottomSheet(
-                                                context: context,
-                                                builder: (builder) =>
-                                                    bottomSheet());
-                                          },
-                                          height: 35,
-                                          width: 100,
-                                          fontSize: 12,
-                                        )
+                                      ? InkWell(
+                                    onTap: (){
+                                      showModalBottomSheet(context: context, builder: (builder) => bottomSheet());
+                                    },
+                                    child: Container(
+                                      width: 100,
+                                      height: 35,
+                                      child: Center(
+                                        child: Text(
+                                          'Upload file',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.white),
+                                          borderRadius: BorderRadius.circular(8),
+                                          color: AppColors.primaryButton),
+                                    ),
+                                  )
                                       : Container(),
                                 ],
                               )
@@ -552,8 +557,8 @@ class _EditReportPageState extends State<EditReportPage> {
                                       await _progressDialog.hide();
                                     }
                                   },
-                                  height: 50,
-                                  width: 370,
+                                  // height: 50,
+                                  // width: 370,
                                   fontSize: 20),
                             ),
                           ),
