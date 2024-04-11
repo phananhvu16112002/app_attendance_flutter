@@ -6,6 +6,7 @@ import 'package:attendance_system_nodejs/screens/Authentication/register_page.da
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -89,7 +90,8 @@ class _WelcomePageState extends State<WelcomePage> {
                               fontSize: 20.sp,
                               height: 60.h,
                               width: double.infinity,
-                              buttonName: 'Login',
+                              buttonName:
+                                  'Login',
                               colorShadow: AppColors.colorShadow,
                               backgroundColorButton: AppColors.primaryButton,
                               borderColor: Colors.transparent,
@@ -158,7 +160,9 @@ class _WelcomePageState extends State<WelcomePage> {
                                   ),
                                 )),
                       ),
-                      const SizedBox(height: 20,),
+                      const SizedBox(
+                        height: 20,
+                      ),
                     ],
                   ),
                 ),
