@@ -24,6 +24,7 @@ import 'package:attendance_system_nodejs/screens/Authentication/forgot_password_
 import 'package:attendance_system_nodejs/screens/Authentication/otp_page.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/register_page.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/upload_image.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
@@ -132,7 +133,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
     );
       },
-      child:  FlashScreen(),
+      child:  UploadImage(),
     );
   }
 }

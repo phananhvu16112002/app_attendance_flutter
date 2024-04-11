@@ -129,6 +129,9 @@ class _UploadImageState extends State<UploadImage> {
               children: [
                 InkWell(
                   onTap: () => _getImageFromCamera(1),
+                  // onTap: (){
+                  //   showModalBottomSheet(context: context, builder: (builder) => show)
+                  // },
                   child: _image1 != null
                       ? Image.file(
                           _image1!,
@@ -273,6 +276,8 @@ class _UploadImageState extends State<UploadImage> {
       ),
     );
   }
+
+  
 
   Container selectImage(BuildContext context) {
     return Container(
