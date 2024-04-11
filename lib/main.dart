@@ -78,7 +78,7 @@ void main() async {
   await Hive.openBox<AttendanceForm>('AttendanceFormBoxes');
   await Hive.openBox<ClassesStudent>('classes_student_box');
 
-  runApp(
+  runApp( 
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => StudentDataProvider()),
@@ -94,9 +94,9 @@ void main() async {
     ),
   );
 }
-
+  
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({super.key});     
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -110,7 +110,7 @@ class _MyAppState extends State<MyApp> {
       minTextAdapt: true,
       builder: (context, child) {
         return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Attendance TDTU',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.backgroundColor),
         useMaterial3: false,

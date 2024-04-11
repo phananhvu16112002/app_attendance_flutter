@@ -17,6 +17,7 @@ import 'package:attendance_system_nodejs/services/smart_camera/smart_camera.dart
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,6 +43,8 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
   SecureStorage secureStorage = SecureStorage();
   late ClassesStudent classesStudent;
   // late Classes classes;
+  double latitude = 0.0;
+  double longitude = 0.0;
 
   @override
   void initState() {
@@ -52,6 +55,27 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
     saveValue(widget.attendanceForm);
     openBox();
     getImage(); //avoid rebuild
+    _getLocation().then((value) {
+      setState(() {
+        latitude = value!.latitude;
+        longitude = value.longitude;
+      });
+      print('init: $latitude');
+      print('init: $longitude');
+
+    });
+  }
+
+  Future<Position?> _getLocation() async {
+    print('asjdkashkdjad');
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      return position;
+    } catch (e) {
+      print('Error getting location: $e');
+      return null;
+    }
   }
 
   Future<void> getImage() async {
@@ -93,6 +117,8 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
   Widget build(BuildContext context) {
     print('-------------------');
     print('Rebuild-------');
+        print('bul: $latitude');
+      print('bul: $longitude');
 
     return Scaffold(
       appBar: AppBar(
@@ -369,10 +395,8 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
                           String dateTime = DateTime.now().toString();
                           String studentID =
                               await SecureStorage().readSecureData('studentID');
-                          String latitude =
-                              await SecureStorage().readSecureData('latitude');
-                          String longitude =
-                              await SecureStorage().readSecureData('longitude');
+                          print('latitude: $latitude');
+                          print('longitude: $longitude');
 
                           await boxDataOffline.put(
                               'dataOffline',
@@ -382,8 +406,8 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
                                 formID: attendanceForm.formID,
                                 dateAttendanced: dateTime,
                                 location: '',
-                                latitude: double.parse(latitude.toString()),
-                                longitude: double.parse(longitude.toString()),
+                                latitude: latitude,
+                                longitude: longitude,
                               ));
                           if (mounted) {
                             showDialog(

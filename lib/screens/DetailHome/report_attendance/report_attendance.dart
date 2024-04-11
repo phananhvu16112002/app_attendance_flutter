@@ -295,8 +295,10 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                                   //   fontSize: 12,
                                   // ),
                                   InkWell(
-                                    onTap: (){
-                                      showModalBottomSheet(context: context, builder: (builder) => bottomSheet());
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (builder) => bottomSheet());
                                     },
                                     child: Container(
                                       width: 100,
@@ -311,8 +313,10 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                                         ),
                                       ),
                                       decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.white),
-                                          borderRadius: BorderRadius.circular(8),
+                                          border:
+                                              Border.all(color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                           color: AppColors.primaryButton),
                                     ),
                                   )
@@ -365,12 +369,11 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                                   buttonName: 'Send',
                                   backgroundColorButton: _imageFiles.isNotEmpty
                                       ? AppColors.primaryButton
-                                      : Colors.grey.withOpacity(0.3),
+                                      : AppColors.primaryButton
+                                          .withOpacity(0.4),
                                   colorShadow: AppColors.colorShadow,
                                   borderColor: Colors.transparent,
-                                  textColor: _imageFiles.isNotEmpty
-                                      ? Colors.white
-                                      : Colors.black,
+                                  textColor: Colors.white,
                                   function: _imageFiles.isNotEmpty
                                       ? () async {
                                           try {

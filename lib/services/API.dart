@@ -15,6 +15,7 @@ import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as img;
 
 class API {
   BuildContext context;
@@ -658,20 +659,87 @@ class API {
     }
   }
 
+  // Future<AttendanceDetail?> takeAttendance(
+  //     String studentID,
+  //     String classID,
+  //     String formID,
+  //     String dateAttendance,
+  //     String location,
+  //     double latitude,
+  //     double longitude,
+  //     XFile fileImage) async {
+  //   var URL = 'http://$baseURL:8080/api/student/takeAttendance';
+  //   var imageBytes = await fileImage.readAsBytes();
+  //   var imageFile =
+  //       http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
+  //   // var imageFile = await http.MultipartFile.fromPath('image', fileImage.path);
+  //   var request = http.MultipartRequest('POST', Uri.parse(URL))
+  //     ..fields['studentID'] = studentID
+  //     ..fields['classID'] = classID
+  //     ..fields['formID'] = formID
+  //     ..fields['dateTimeAttendance'] = dateAttendance
+  //     ..fields['location'] = location
+  //     ..fields['latitude'] = latitude.toString()
+  //     ..fields['longitude'] = longitude.toString()
+  //     ..files.add(imageFile);
+  //   try {
+  //     var response = await request.send();
+  //     if (response.statusCode == 200) {
+  //       print('Take Attendance Successfully');
+  //       Map<String, dynamic> data =
+  //           json.decode(await response.stream.bytesToString());
+  //       AttendanceDetail attendanceDetail = AttendanceDetail.fromJson(data);
+  //       // print('data:$data');
+  //       return attendanceDetail;
+  //     } else if (response.statusCode == 403) {
+  //       Map<String, dynamic> data =
+  //           json.decode(await response.stream.bytesToString());
+  //       String message = data['message'];
+  //       print('data: $data');
+  //       print('message: ${data['message']}');
+
+  //       print('Failed to take attendance: $message');
+  //       return null;
+  //     } else {
+  //       Map<String, dynamic> data =
+  //           json.decode(await response.stream.bytesToString());
+  //       String message = data['message'];
+  //       print('data: $data');
+  //       print('message: ${data['message']}');
+  //       print('studentID: $studentID');
+  //       print('classID: $classID');
+  //       print('formID: $formID');
+  //       print('Failed to take attendance. Status code: ${response.statusCode}');
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     print('Error sending request: $e');
+  //     return null;
+  //   }
+  // }
+
   Future<AttendanceDetail?> takeAttendance(
-      String studentID,
-      String classID,
-      String formID,
-      String dateAttendance,
-      String location,
-      double latitude,
-      double longitude,
-      XFile fileImage) async {
+    String studentID,
+    String classID,
+    String formID,
+    String dateAttendance,
+    String location,
+    double latitude,
+    double longitude,
+    XFile fileImage,
+  ) async {
     var URL = 'http://$baseURL:8080/api/student/takeAttendance';
     var imageBytes = await fileImage.readAsBytes();
-    var imageFile =
-        http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
-    // var imageFile = await http.MultipartFile.fromPath('image', fileImage.path);
+
+    // Resize ảnh
+    var decodedImage = img.decodeImage(imageBytes);
+    var resizedImage = img.copyResize(decodedImage!,
+        width: 600, height: 600);
+    var resizedImageBytes = img.encodeJpg(resizedImage);
+
+    var imageFile = http.MultipartFile.fromBytes('file', resizedImageBytes,
+        filename: 'image.jpg');
+
     var request = http.MultipartRequest('POST', Uri.parse(URL))
       ..fields['studentID'] = studentID
       ..fields['classID'] = classID
@@ -681,6 +749,7 @@ class API {
       ..fields['latitude'] = latitude.toString()
       ..fields['longitude'] = longitude.toString()
       ..files.add(imageFile);
+
     try {
       var response = await request.send();
       if (response.statusCode == 200) {
@@ -688,27 +757,18 @@ class API {
         Map<String, dynamic> data =
             json.decode(await response.stream.bytesToString());
         AttendanceDetail attendanceDetail = AttendanceDetail.fromJson(data);
-        // print('data:$data');
         return attendanceDetail;
       } else if (response.statusCode == 403) {
         Map<String, dynamic> data =
             json.decode(await response.stream.bytesToString());
         String message = data['message'];
-        print('data: $data');
-        print('message: ${data['message']}');
-
         print('Failed to take attendance: $message');
         return null;
       } else {
         Map<String, dynamic> data =
             json.decode(await response.stream.bytesToString());
         String message = data['message'];
-        print('data: $data');
-        print('message: ${data['message']}');
-        print('studentID: $studentID');
-        print('classID: $classID');
-        print('formID: $formID');
-        print('Failed to take attendance. Status code: ${response.statusCode}');
+        print('Failed to take attendance. Status code: ${message}');
         return null;
       }
     } catch (e) {
@@ -728,8 +788,11 @@ class API {
       XFile fileImage) async {
     var URL = 'http://$baseURL:8080/api/student/takeAttendanceOffline';
     var imageBytes = await fileImage.readAsBytes();
+    var decodedImage = img.decodeImage(imageBytes);
+    var resizedImage = img.copyResize(decodedImage!,width: 600,height: 600);
+    var resizedImageBytes = img.encodeJpg(resizedImage);
     var imageFile =
-        http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
+        http.MultipartFile.fromBytes('file', resizedImageBytes, filename: 'image.jpg');
     // var imageFile = await http.MultipartFile.fromPath('image', fileImage.path);
     var request = http.MultipartRequest('POST', Uri.parse(URL))
       ..fields['studentID'] = studentID

@@ -72,31 +72,31 @@ class _SmartCameraState extends State<SmartCamera> {
 
             if (mounted) {
               if (widget.page.contains('AttendanceNormal')) {
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (builder) => AttendanceFormPage(
                               classesStudent: classStudents,
                             )),
-                    (route) => false);
+                   );
               } else if (widget.page.contains('AttendanceQR')) {
                 AttendanceForm? attendanceForm =
                     boxAttendanceForm.get('AttendanceQR');
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (builder) => AttendanceFormPageQR(
                             attendanceForm: attendanceForm!)),
-                    (route) => false);
-              } else {
+                   );
+              } else {     
                 AttendanceForm? attendanceForm =
                     boxAttendanceForm.get('AttendanceOffline');
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (builder) => AttendanceFormPageOffline(
                             attendanceForm: attendanceForm!)),
-                    (route) => false);
+                   );
               }
             }
           }

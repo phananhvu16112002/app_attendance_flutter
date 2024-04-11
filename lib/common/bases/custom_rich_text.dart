@@ -33,6 +33,7 @@ class customRichText extends StatelessWidget {
       TextSpan(
         text: message,
         style: TextStyle(
+          
           fontWeight: fontWeightMessage,
           fontSize: fontSize,
           color: colorText,

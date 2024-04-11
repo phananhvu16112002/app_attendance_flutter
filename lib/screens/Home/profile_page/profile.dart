@@ -8,6 +8,7 @@ import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -166,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         .deleteSecureData('_image2');
                                     await SecureStorage()
                                         .deleteSecureData('_image3');
-
+                                await Hive.deleteFromDisk();
                                     await Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(

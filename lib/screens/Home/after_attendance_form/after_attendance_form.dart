@@ -189,7 +189,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
                   data.url,
                   //'https://i.imgur.com/8JhlwPy_d.webp?maxwidth=520&shape=thumb&fidelity=high',
                   // fit: BoxFit.cover,
-                  width: 600,
+                  width: 400,
                   height: 400,
                 ),
               ],

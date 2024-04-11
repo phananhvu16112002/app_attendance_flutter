@@ -29,6 +29,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -62,6 +63,7 @@ class _HomePageBodyState extends State<HomePageBody> {
   bool isConnected = false;
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   final ScrollController _controller = ScrollController();
+  late ProgressDialog _progressDialog;
 
   @override
   void initState() {
@@ -82,6 +84,7 @@ class _HomePageBodyState extends State<HomePageBody> {
       if (mounted) {
         setState(() {
           isConnected = result != ConnectivityResult.none;
+          print('isConnected: $isConnected');
           if (isConnected) {
             sendDataToServer();
           } else {
@@ -90,36 +93,83 @@ class _HomePageBodyState extends State<HomePageBody> {
         });
       }
     });
+    // Future.delayed(Duration.zero,(){
+    //   var studentDataProvider = Provider.of<StudentDataProvider>(context);
+    //   studentDataProvider.
+    // });
+
+    _progressDialog = customLoadingSendData();
+  }
+
+  ProgressDialog customLoadingSendData() {
+    return ProgressDialog(context,
+        isDismissible: false,
+        customBody: Container(
+          width: 200,
+          height: 150,
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Colors.white),
+          child: const Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                color: AppColors.primaryButton,
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                'Loading take attendance offline',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.primaryText,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          )),
+        ));
   }
 
   void sendDataToServer() async {
     DataOffline? dataOffline = dataOfflineBox.get('dataOffline');
     String xFile = await SecureStorage().readSecureData('imageOffline');
     if (xFile.isNotEmpty && xFile != 'No Data Found' && dataOffline != null) {
-      String? location = await GetLocation()
-          .getAddressFromLatLongWithoutInternet(
-              dataOffline.latitude, dataOffline.longitude);
+      print('location: ${dataOffline.latitude}');
+      print('location: ${dataOffline.longitude}');
+
+      // String? location = await GetLocation()
+      //     .getAddressFromLatLongWithoutInternet(
+      //         dataOffline.latitude, dataOffline.longitude);
       // print('location: $location');
+      _progressDialog.show();
+
       bool check = await API(context).takeAttendanceOffline(
           dataOffline.studentID,
           dataOffline.classID,
           dataOffline.formID,
           dataOffline.dateAttendanced,
-          location ?? '',
+          '',
           dataOffline.latitude,
           dataOffline.longitude,
           XFile(xFile));
       if (check) {
         print('Successfully take attendance offline');
+        await _progressDialog.hide();
         await dataOfflineBox.delete('dataOffline');
-        customDialog('Successfully', 'Take attendance offline successfully!');
+        await SecureStorage().deleteSecureData('imageOffline');
+        await customDialog(
+            'Successfully', 'Take attendance offline successfully!');
         if (dataOfflineBox.isEmpty) {
           print('Delete ok');
         } else {
           print('No delele local storage');
         }
       } else {
-        customDialog('Failed', 'Take attendance offline failed!');
+        await _progressDialog.hide();
+
+        await customDialog('Failed', 'Take attendance offline failed!');
         print('Failed take attendance offline');
       }
     } else {
@@ -390,30 +440,16 @@ class _HomePageBodyState extends State<HomePageBody> {
                       result == ConnectivityResult.mobile) {
                     print('Have Internet');
                     return callAPI(context, classesStudentDataProvider);
-                    // return classInformation(
-                    //     10,
-                    //     'Intro Programming',
-                    //     'Mai Van Manh',
-                    //     '5202020',
-                    //     'Laboratory',
-                    //     '10',
-                    //     '5',
-                    //     3,
-                    //     'A0303',
-                    //     2,
-                    //     3,
-                    //     4,
-                    //     0.5);
-                    // return customLoading();
-                  } else if (result == ConnectivityResult.none ||
-                      isConnected == false) {
+                  } else if (result == ConnectivityResult.none) {
                     print('No Internet');
 
                     return noInternetWithHive();
                   }
                 }
                 print('Check connected: $isConnected');
-                return callAPI(context, classesStudentDataProvider);
+                return isConnected == false
+                    ?  callAPI(context, classesStudentDataProvider) : noInternetWithHive();
+                    
               })
         else
           scanQR(context),
@@ -890,8 +926,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                   Padding(
                     padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
                     child: SizedBox(
-                      // width: 55.,
-                      // height: 80,
+                      width: 55.w,
+                      height: 80.w,
                       child: CircularPercentIndicator(
                         radius: 40.r,
                         lineWidth: 6.w,
@@ -967,8 +1003,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                               fontSize: 11.sp,
                             ),
                             // 10.verticalSpace,
-                             SizedBox(width: 10.w
-                          ),
+                            SizedBox(width: 10.w),
                             customRichText(
                               title: 'Class: ',
                               message: roomNumber,
