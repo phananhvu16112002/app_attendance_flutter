@@ -11,11 +11,10 @@ import 'package:attendance_system_nodejs/screens/Authentication/upload_image.dar
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:attendance_system_nodejs/services/authentication_services/authentication.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
-// import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -36,25 +35,23 @@ class _SignInPageState extends State<SignInPage> {
     super.initState();
     _progressDialog = ProgressDialog(context,
         customBody: Container(
-          width: 200,
-          height: 150,
+          width: 200.w,
+          height: 150.h,
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.white),
-          child: const Center(
+          child: Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 color: AppColors.primaryButton,
               ),
-              SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -87,34 +84,31 @@ class _SignInPageState extends State<SignInPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomText(
+                     CustomText(
                       message: 'Login',
-                      fontSize: 30,
+                      fontSize: 28.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText,
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    const CustomText(
+                   5.verticalSpace,
+                     CustomText(
                       message: 'Login to continue using the app',
-                      fontSize: 15,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.secondaryText,
                     ),
 
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const CustomText(
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
+                    20.verticalSpace,
+                     CustomText(
                       message: 'Email',
-                      fontSize: 20,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    10.verticalSpace,
                     CustomTextField(
                       readOnly: false,
                       controller: emailAddress,
@@ -122,7 +116,7 @@ class _SignInPageState extends State<SignInPage> {
                       obscureText: false,
                       prefixIcon: const Icon(null),
                       suffixIcon:
-                          IconButton(onPressed: null, icon: const Icon(null)),
+                          const IconButton(onPressed: null, icon: Icon(null)),
                       hintText: "Enter your email",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -137,18 +131,14 @@ class _SignInPageState extends State<SignInPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const CustomText(
+                   15.verticalSpace,
+                     CustomText(
                       message: 'Password',
-                      fontSize: 20,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    10.verticalSpace,
                     CustomTextField(
                       readOnly: false,
                       controller: password,
@@ -172,9 +162,7 @@ class _SignInPageState extends State<SignInPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                   10.verticalSpace,
                     Padding(
                         padding: const EdgeInsets.only(left: 0),
                         child: GestureDetector(
@@ -199,29 +187,27 @@ class _SignInPageState extends State<SignInPage> {
                             },
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
-                              child: const Row(
+                              child:  Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   CustomText(
                                       message: 'Forgot Password?',
-                                      fontSize: 15,
+                                      fontSize: 13.sp,
                                       fontWeight: FontWeight.w600,
                                       color: AppColors.importantText),
                                 ],
                               ),
                             ))),
 
-                    const SizedBox(
-                      height: 20,
-                    ),
+                   20.verticalSpace,
                     Padding(
                       padding: const EdgeInsets.only(right: 0, left: 0),
                       child: CustomButton(
-                          fontSize: 20,
-                          height: 60,
-                          width: 400,
+                          fontSize: 18.sp,
+                          // height: 60,
+                          // width: 400,
                           buttonName: 'Login',
-                          colorShadow: AppColors.colorShadow,
+                          colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
                           borderColor: Colors.white,
                           textColor: Colors.white,
@@ -242,7 +228,8 @@ class _SignInPageState extends State<SignInPage> {
                                           .readSecureData('studentEmail');
                                   var studentName = await SecureStorage()
                                       .readSecureData('studentName');
-                                  var requiredImage = await SecureStorage().readSecureData('requiredImage');
+                                  var requiredImage = await SecureStorage()
+                                      .readSecureData('requiredImage');
                                   print('RequiredImage: $requiredImage');
                                   // var requiredImage = sharedPreferences
                                   //     .getBool('requiredImage');
@@ -259,8 +246,8 @@ class _SignInPageState extends State<SignInPage> {
                                       pageBuilder: (context, animation,
                                               secondaryAnimation) =>
                                           requiredImage == 'true'
-                                              ? UploadImage()
-                                           : HomePage(),
+                                              ? const UploadImage()
+                                              : const HomePage(),
                                       transitionDuration:
                                           const Duration(milliseconds: 1000),
                                       transitionsBuilder: (context, animation,
@@ -313,16 +300,17 @@ class _SignInPageState extends State<SignInPage> {
                             }
                           }),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    10.verticalSpace,
                     //Build third login
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const CustomText(
+                         CustomText(
                           message: "Don't you have an account ? ",
-                          fontSize: 15,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
                           color: AppColors.primaryText,
                         ),
@@ -352,9 +340,9 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                             );
                           },
-                          child: const CustomText(
+                          child:  CustomText(
                             message: 'Register',
-                            fontSize: 15,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.importantText,
                           ),
@@ -374,12 +362,12 @@ class _SignInPageState extends State<SignInPage> {
   Container buildIcon(String path) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          border: Border.all(width: 1, color: AppColors.secondaryText)),
+          borderRadius:  BorderRadius.all(Radius.circular(10.r)),
+          border: Border.all(width: 1.w, color: AppColors.secondaryText)),
       child: Image.asset(
         path,
-        height: 40,
-        width: 40,
+        height: 40.h,
+        width: 40.w,
       ),
     );
   }

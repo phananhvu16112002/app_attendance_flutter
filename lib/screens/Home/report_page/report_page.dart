@@ -29,6 +29,8 @@ class _ReportPageState extends State<ReportPage> {
     return Scaffold(
         backgroundColor: AppColors.cardAttendance,
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          shadowColor: Colors.transparent,
             title: const Text(
               'Reports',
               style: TextStyle(

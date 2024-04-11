@@ -6,6 +6,7 @@ import 'package:attendance_system_nodejs/adapter/student_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/student_classes_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/teacher_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/class_adapter.dart';
+import 'package:attendance_system_nodejs/l10n/l10n.dart';
 import 'package:attendance_system_nodejs/models/attendance_form.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/data_offline.dart';
@@ -24,6 +25,7 @@ import 'package:attendance_system_nodejs/screens/Authentication/forgot_password_
 import 'package:attendance_system_nodejs/screens/Authentication/otp_page.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/register_page.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/upload_image.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
@@ -32,10 +34,13 @@ import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:face_camera/face_camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -104,27 +109,44 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.backgroundColor),
-        useMaterial3: true,
-      ),
-      initialRoute: '/',
-      routes: {
-        '/Welcome': (context) => const WelcomePage(),
-        '/Login': (context) => const SignInPage(),
-        '/Register': (context) => const RegisterPage(),
-        '/ForgotPassword': (context) => const ForgotPassword(),
-        '/ForgotPasswordOTP': (context) => const ForgotPasswordOTPPage(),
-        '/CreateNewPassword': (context) => const CreateNewPassword(),
-        '/OTP': (context) => const OTPPage(),
-        '/HomePage': (context) => const HomePage(),
-        '/ProfilePage': (context) => const ProfilePage(),
-        // '/DetailReport': (context) => const DetailReport(),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      builder: (context, child) {
+        return MaterialApp(
+          supportedLocales: L10n.all,
+          locale: const Locale('vi'),
+          localizationsDelegates: [
+            AppLocalizations.delegate, // Add this line
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          title: 'Attendance TDTU',
+          theme: ThemeData(
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: AppColors.backgroundColor),
+            useMaterial3: false,
+          ),
+          
+          initialRoute: '/',
+          routes: {
+            '/Welcome': (context) => const WelcomePage(),
+            '/Login': (context) => const SignInPage(),
+            '/Register': (context) => const RegisterPage(),
+            '/ForgotPassword': (context) => const ForgotPassword(),
+            '/ForgotPasswordOTP': (context) => const ForgotPasswordOTPPage(),
+            '/CreateNewPassword': (context) => const CreateNewPassword(),
+            '/OTP': (context) => const OTPPage(),
+            '/HomePage': (context) => const HomePage(),
+            '/ProfilePage': (context) => const ProfilePage(),
+            // '/DetailReport': (context) => const DetailReport(),
+          },
+          home: child,
+          debugShowCheckedModeBanner: false,
+        );
       },
-      home: const FlashScreen(),
-      debugShowCheckedModeBanner: false,
+      child: WelcomePage(),
     );
   }
 }

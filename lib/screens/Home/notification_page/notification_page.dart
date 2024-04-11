@@ -13,6 +13,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Colors.white,
+          shadowColor: Colors.transparent,
           title: const Text(
             'Notifications',
             style: TextStyle(

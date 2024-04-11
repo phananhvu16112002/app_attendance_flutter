@@ -11,6 +11,7 @@ import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _loadToken();
+    // _loadToken();
   }
 
   Future<void> _loadToken() async {
@@ -86,32 +87,33 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           },
-          child: const Icon(
+          child: Icon(
             Icons.location_on_outlined,
-            size: 30,
+            size: 26.sp,
           ),
         ),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterDocked,
         bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-            height: 65,
+            // height: 74.h,
             itemCount: listBottomNav.length,
             tabBuilder: (index, isActive) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                      width: 24,
-                      height: 24,
+                      width: 22.w,
+                      height: 22.h,
                       child: SvgPicture.asset(listBottomNav[index].svgPath,
-                          width: 24,
-                          height: 24,
+                          width: 22.w,
+                          height: 22.h,
                           color: isActive
                               ? AppColors.primaryButton
                               : AppColors.secondaryText)),
                   Text(
                     listBottomNav[index].title,
                     style: TextStyle(
+                        fontSize: 12.sp,
                         color: isActive
                             ? AppColors.primaryButton
                             : AppColors.secondaryText),

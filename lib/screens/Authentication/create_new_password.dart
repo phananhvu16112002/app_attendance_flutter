@@ -7,11 +7,12 @@ import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
 import 'package:attendance_system_nodejs/services/authentication_services/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 
 class CreateNewPassword extends StatefulWidget {
-  const CreateNewPassword({super.key});
+   const CreateNewPassword({super.key});
 
   @override
   State<CreateNewPassword> createState() => _CreateNewPasswordState();
@@ -38,10 +39,10 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
         customBody: Container(
           width: 200,
           height: 150,
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.white),
-          child: const Center(
+          child:  Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -74,42 +75,45 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
             Image.asset('assets/images/forgot.png'),
             Container(
               child: Padding(
-                padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+                padding:  EdgeInsets.only(left: 15.w, top: 15.h, right: 15.w),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CustomText(
+                       CustomText(
                           message: "Create New Password",
-                          fontSize: 42,
+                          fontSize: 30.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      //  SizedBox(
+                      //   height: 10,
+                      // ),
+                      10.verticalSpace,
                       CustomText(
                           message: description,
-                          fontSize: 20,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.secondaryText),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const CustomText(
+                      //  SizedBox(
+                      //   height: 20,
+                      // ),
+                      20.verticalSpace,
+                       CustomText(
                           message: "New Password",
-                          fontSize: 20,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      //  SizedBox(
+                      //   height: 10,
+                      // ),
+                      10.verticalSpace,
                       CustomTextField(
                         readOnly: false,
                         controller: password,
                         textInputType: TextInputType.visiblePassword,
                         obscureText: isCheckNewPassword,
-                        prefixIcon: const Icon(null),
+                        prefixIcon:  Icon(null),
                         suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
@@ -117,8 +121,8 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                               });
                             },
                             icon: isCheckNewPassword
-                                ? const Icon(Icons.visibility)
-                                : const Icon(Icons.visibility_off)),
+                                ?  Icon(Icons.visibility)
+                                :  Icon(Icons.visibility_off)),
                         hintText: "New Password",
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -136,23 +140,25 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                           return null;
                         },
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const CustomText(
+                      //  SizedBox(
+                      //   height: 15,
+                      // ),
+                      15.verticalSpace,
+                       CustomText(
                           message: "Confirm Password",
-                          fontSize: 20,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      //  SizedBox(
+                      //   height: 10,
+                      // ),
+                      10.verticalSpace,
                       CustomTextField(
                         readOnly: false,
                         controller: confirmPassword,
                         textInputType: TextInputType.visiblePassword,
                         obscureText: isCheckConfirmPassword,
-                        prefixIcon: const Icon(null),
+                        prefixIcon:  Icon(null),
                         suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
@@ -161,8 +167,8 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                               });
                             },
                             icon: isCheckConfirmPassword
-                                ? const Icon(Icons.visibility)
-                                : const Icon(Icons.visibility_off)),
+                                ?  Icon(Icons.visibility)
+                                :  Icon(Icons.visibility_off)),
                         hintText: "Confirm Password",
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -173,18 +179,19 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                           return null;
                         },
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
+                      //  SizedBox(
+                      //   height: 15,
+                      // ),
+                      15.verticalSpace,
                       Padding(
-                        padding: const EdgeInsets.only(right: 0),
+                        padding:  EdgeInsets.only(right: 0),
                         child: CustomButton(
-                          fontSize: 20,
-                          height: 60,
-                          width: 400,
+                          fontSize: 18.sp,
+                          // height: 60,
+                          // width: 400,
                           buttonName: "Reset Password",
                           backgroundColorButton: AppColors.primaryButton,
-                          colorShadow: AppColors.colorShadow,
+                          colorShadow: Colors.transparent,
                           borderColor: Colors.white,
                           textColor: Colors.white,
                           function: () async {
@@ -205,14 +212,14 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                                     PageRouteBuilder(
                                       pageBuilder: (context, animation,
                                               secondaryAnimation) =>
-                                          const SignInPage(),
+                                           SignInPage(),
                                       transitionDuration:
-                                          const Duration(milliseconds: 1000),
+                                           Duration(milliseconds: 1000),
                                       transitionsBuilder: (context, animation,
                                           secondaryAnimation, child) {
                                         var curve = Curves.easeInOutCubic;
                                         var tween = Tween(
-                                                begin: const Offset(1.0, 0.0),
+                                                begin:  Offset(1.0, 0.0),
                                                 end: Offset.zero)
                                             .chain(CurveTween(curve: curve));
                                         var offsetAnimation =
@@ -248,7 +255,8 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                 ),
               ),
             ),
-            const SizedBox(height: 20,),
+            //  SizedBox(height: 20,),
+            20.verticalSpace,
           ],
         ),
       ),

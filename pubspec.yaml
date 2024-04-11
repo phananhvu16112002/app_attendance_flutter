@@ -82,6 +82,8 @@ dependencies:
   firebase_core: ^2.28.0
   firebase_messaging: ^14.8.0
   flutter_screenutil: ^5.9.0
+  flutter_localizations:
+    sdk: flutter
 
 
 dev_dependencies:
@@ -102,7 +104,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

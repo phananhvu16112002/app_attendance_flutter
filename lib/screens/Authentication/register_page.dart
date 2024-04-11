@@ -8,6 +8,7 @@ import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/otp_page.dart';
 import 'package:attendance_system_nodejs/services/authentication_services/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
@@ -49,7 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.white),
-          child: const Center(
+          child: Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -62,7 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
               Text(
                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -92,36 +93,39 @@ class _RegisterPageState extends State<RegisterPage> {
             const ImageSlider(),
             Container(
                 child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 15, right: 20),
+              padding: EdgeInsets.only(left: 20.w, top: 15.h, right: 20.w),
               child: Form(
                 key: _formKey,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CustomText(
+                      CustomText(
                           message: 'Register',
-                          fontSize: 30,
+                          fontSize: 28.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const CustomText(
+                      // const SizedBox(
+                      //   height: 5,
+                      // ),
+                      5.verticalSpace,
+                      CustomText(
                           message: 'Enter your personal information',
-                          fontSize: 15,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.secondaryText),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const CustomText(
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      20.verticalSpace,
+                      CustomText(
                           message: 'Student ID',
-                          fontSize: 20,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      10.verticalSpace,
                       CustomTextField(
                         readOnly: false,
                         controller: username,
@@ -143,17 +147,19 @@ class _RegisterPageState extends State<RegisterPage> {
                           return null;
                         },
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const CustomText(
+                      // const SizedBox(
+                      //   height: 15,
+                      // ),
+                      15.verticalSpace,
+                      CustomText(
                           message: 'Email',
-                          fontSize: 20,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      10.verticalSpace,
                       CustomTextField(
                         readOnly: false,
                         controller: emailAddress,
@@ -179,18 +185,20 @@ class _RegisterPageState extends State<RegisterPage> {
                           return null;
                         },
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const CustomText(
+                      // const SizedBox(
+                      //   height: 15,
+                      // ),
+                      15.verticalSpace,
+                      CustomText(
                         message: 'Password',
-                        fontSize: 20,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText,
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      10.verticalSpace,
                       CustomTextField(
                         readOnly: false,
                         controller: password,
@@ -229,14 +237,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      const CustomText(
+                      CustomText(
                           message: 'Confirm Password',
-                          fontSize: 20,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
                       CustomTextField(
                           readOnly: false,
                           controller: confirmPassword,
@@ -263,15 +271,16 @@ class _RegisterPageState extends State<RegisterPage> {
                             }
                             return null;
                           }),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      // const SizedBox(
+                      //   height: 18.sp,
+                      // ),
+                      18.verticalSpace,
                       CustomButton(
-                          fontSize: 20,
-                          height: 60,
-                          width: 400,
+                          fontSize: 18.sp,
+                          // height: 60,
+                          // width: 400,
                           buttonName: 'Register',
-                          colorShadow: AppColors.colorShadow,
+                          colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
                           borderColor: Colors.white,
                           textColor: Colors.white,
@@ -337,21 +346,21 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 10,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 20),
+                        padding: EdgeInsets.only(right: 20.w),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const CustomText(
+                            CustomText(
                                 message: 'Already have an account ? ',
-                                fontSize: 15,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.primaryText),
                             GestureDetector(
                               onTap: () =>
                                   Navigator.pushNamed(context, "/Login"),
-                              child: const CustomText(
+                              child: CustomText(
                                   message: 'Log In',
-                                  fontSize: 15,
+                                  fontSize: 13.sp,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.importantText),
                             )
@@ -361,8 +370,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     ]),
               ),
             )),
-            const SizedBox(height: 20,),
-            
+            // const SizedBox(
+            //   height: 20,
+            // ),
+            20.verticalSpace,
           ],
         ),
       ),

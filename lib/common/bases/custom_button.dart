@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomButton extends StatelessWidget {
@@ -9,8 +10,8 @@ class CustomButton extends StatelessWidget {
     required this.borderColor,
     required this.textColor,
     required this.function,
-    required this.height,
-    required this.width,
+    this.height,
+    this.width,
     required this.fontSize,
     required this.colorShadow,
   });
@@ -20,8 +21,8 @@ class CustomButton extends StatelessWidget {
   final Color borderColor;
   final Color textColor;
   final void Function()? function;
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
   final double fontSize;
   final Color colorShadow;
 
@@ -30,12 +31,13 @@ class CustomButton extends StatelessWidget {
     return GestureDetector(
       onTap: function,
       child: Container(
-        height: height,
-        width: width,
+        padding: EdgeInsets.symmetric(vertical: 15.h),
+        // height: height,
+        width: double.infinity,
         decoration: BoxDecoration(
             color: backgroundColorButton,
             borderRadius: const BorderRadius.all(Radius.circular(15)),
-            border: Border.all(width: 1, color: borderColor),
+            border: Border.all(width: 1.w, color: borderColor),
             boxShadow: [
               BoxShadow(
                   color: colorShadow, blurRadius: 4, offset: const Offset(0, 1))

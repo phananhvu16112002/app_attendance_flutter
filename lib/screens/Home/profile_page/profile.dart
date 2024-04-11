@@ -1,14 +1,13 @@
 // import 'package:attendance_system_nodejs/common/bases/CustomText.dart';
 import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
-import 'package:attendance_system_nodejs/models/class_student.dart';
 // import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart'
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
 import 'package:attendance_system_nodejs/screens/Home/profile_page/view_image_face/view_image_face.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -18,6 +17,29 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String studentName = '';
+  String studentID = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getInfor().then((value) {
+      setState(() {
+        studentName = value[0];
+        studentID = value[1];
+      });
+    });
+  }
+
+  Future<List> getInfor() async {
+    var temp1 = await SecureStorage().readSecureData('studentName');
+    var temp2 = await SecureStorage().readSecureData('studentID');
+    var tempArray = [];
+    tempArray.add(temp1);
+    tempArray.add(temp2);
+    return tempArray;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,37 +51,36 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             //AppBar
             Container(
-              height: 150,
+              // height: 150,
+              padding: EdgeInsets.symmetric(vertical: 25.h),
               width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   color: AppColors.colorAppbar,
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15))),
+                      bottomLeft: Radius.circular(15.r),
+                      bottomRight: Radius.circular(15.r))),
               child: Padding(
-                padding: const EdgeInsets.only(top: 0, left: 10, right: 10),
+                padding: EdgeInsets.only(top: 0, left: 10.w, right: 10.w),
                 child: Row(
                   children: [
                     Container(
-                        width: 90,
-                        height: 90,
+                        width: 60.w,
+                        height: 60.h,
                         decoration: const BoxDecoration(
                             color: Colors.white, shape: BoxShape.circle),
                         child: Image.asset('assets/images/logo.png')),
                     Padding(
-                      padding: const EdgeInsets.only(top: 40, left: 15),
+                      padding: EdgeInsets.only(top: 10.h, left: 15.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const CustomText(
-                              message: 'Phan Anh Vu',
-                              fontSize: 25,
+                          CustomText(
+                              message: studentName,
+                              fontSize: 23.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          customRichText('StudentID: ', '520H0696',
+                          5.verticalSpace,
+                          customRichText('StudentID: ', studentName,
                               FontWeight.w600, FontWeight.w400, Colors.white),
                           const SizedBox(
                             height: 5,
@@ -73,46 +94,38 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            20.verticalSpace,
 
-            const Padding(
-              padding: EdgeInsets.only(left: 10),
+            Padding(
+              padding: EdgeInsets.only(left: 10.w),
               child: CustomText(
                   message: 'Setting and Privacy',
-                  fontSize: 20,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primaryText),
             ),
-            const SizedBox(
-              height: 5,
-            ),
+            5.verticalSpace,
             customOptions(
                 context, 'assets/icons/changePassword.png', 'Password'),
             customOptions(
                 context, 'assets/icons/notification.png', 'Sound Notification'),
-            const SizedBox(
-              height: 10,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 10),
+            10.verticalSpace,
+            Padding(
+              padding: EdgeInsets.only(left: 10.w),
               child: CustomText(
                   message: 'Display',
-                  fontSize: 20,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primaryText),
             ),
             customOptions(context, 'assets/icons/modeTheme.png', 'Mode Theme'),
             customOptions(context, 'assets/icons/language.png', 'Language'),
-            const SizedBox(
-              height: 10,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 10),
+            10.verticalSpace,
+            Padding(
+              padding: EdgeInsets.only(left: 10.w),
               child: CustomText(
                   message: 'App',
-                  fontSize: 20,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primaryText),
             ),
@@ -132,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   showDialog(
                       context: context,
                       builder: (builder) => AlertDialog(
-                        backgroundColor: Colors.white,
+                            backgroundColor: Colors.white,
                             title: Text('Sign out'),
                             content: Text('Are you sure ?'),
                             actions: [
@@ -160,7 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             builder: (builder) => SignInPage()),
                                         (route) => false);
                                   },
-                                  child: Text('OK'))
+                                  child: const Text('OK'))
                             ],
                           ));
                 },
@@ -178,37 +191,37 @@ class _ProfilePageState extends State<ProfilePage> {
     String title,
   ) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8),
+      padding: EdgeInsets.only(right: 8.w),
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 50,
+        height: 50.h,
         color: Color.fromARGB(94, 237, 235, 235),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                const SizedBox(
-                  width: 20,
+                SizedBox(
+                  width: 20.w,
                 ),
                 Image.asset(
                   pathImage,
-                  width: 25,
-                  height: 25,
+                  width: 25.w,
+                  height: 25.h,
                 ),
-                const SizedBox(
-                  width: 10,
+                SizedBox(
+                  width: 10.w,
                 ),
                 CustomText(
                     message: title,
-                    fontSize: 15,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
                     color: AppColors.primaryText)
               ],
             ),
-            const Icon(
+            Icon(
               Icons.arrow_forward_ios_outlined,
-              size: 15,
+              size: 13.sp,
             )
           ],
         ),
@@ -228,7 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
         text: title,
         style: TextStyle(
           fontWeight: fontWeightTitle,
-          fontSize: 15,
+          fontSize: 13.sp,
           color: colorText,
         ),
       ),
@@ -236,7 +249,7 @@ class _ProfilePageState extends State<ProfilePage> {
         text: message,
         style: TextStyle(
           fontWeight: fontWeightMessage,
-          fontSize: 15,
+          fontSize: 13.sp,
           color: colorText,
         ),
       ),

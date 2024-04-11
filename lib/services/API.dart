@@ -43,11 +43,13 @@ class API {
         await SecureStorage().deleteSecureData('accessToken');
         // ignore: use_build_context_synchronously
         showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (BuildContext context) {
             return WillPopScope(
               onWillPop: () async {
                 // Navigate to WelcomePage when dialog is dismissed
+                
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
