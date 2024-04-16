@@ -5,10 +5,11 @@ import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatefulWidget {
-  const CustomAppBar({super.key, required this.context, required this.address});
+   CustomAppBar({super.key, required this.context, required this.address});
 
   final BuildContext context;
   final String address;
@@ -37,17 +38,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
     // final studentDataProvider = Provider.of<StudentDataProvider>(context);
 
     return Container(
-      height: 320,
+      // height: 320,
+      padding: EdgeInsets.symmetric(vertical: 20.h),
       width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
+      decoration:  BoxDecoration(
           color: AppColors.colorAppbar,
           borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15),
-              bottomRight: Radius.circular(15))),
+              bottomLeft: Radius.circular(15.r),
+              bottomRight: Radius.circular(15.r))),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 15, top: 25, right: 10),
+            padding:  EdgeInsets.only(left: 15.w, top: 25.h, right: 10.w),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,39 +59,37 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   children: [
                     Row(
                       children: [
-                        const CustomText(
+                         CustomText(
                             message: 'Hi, ',
-                            fontSize: 28,
+                            fontSize: 26.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.thirdText),
                         CustomText(
                             message: studentName,
-                            fontSize: 23,
+                            fontSize: 23.sp,
                             fontWeight: FontWeight.w600,
                             color: Colors.white),
                       ],
                     ),
                     Container(
                       height: 1,
-                      color: const Color.fromARGB(106, 255, 255, 255),
+                      color:  Color.fromARGB(106, 255, 255, 255),
                       width: 140,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                     10.verticalSpace,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.person_3_outlined,
+                             Icon(Icons.person_3_outlined,
                                 size: 11, color: AppColors.thirdText),
                             CustomText(
                                 message: '$studentID | ',
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.thirdText),
-                            const CustomText(
+                             CustomText(
                                 message: 'Student',
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
@@ -98,7 +98,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         ),
                       ],
                     ),
-                    const SizedBox(
+                     SizedBox(
                       height: 8,
                     ),
                     Container(
@@ -106,12 +106,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.location_on_outlined,
+                           Icon(Icons.location_on_outlined,
                               size: 11, color: Colors.white),
                           Expanded(
                             child: Text(
                               widget.address,
-                              style: const TextStyle(
+                              style:  TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.white,
@@ -123,12 +123,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         ],
                       ),
                     ),
-                    const SizedBox(
+                     SizedBox(
                       height: 10,
                     ),
                   ],
                 ),
-                const Padding(
+                 Padding(
                   padding: EdgeInsets.only(top: 30, right: 5),
                   child: CircleAvatar(
                     radius: 30,
@@ -142,8 +142,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
           Container(
               height: 1,
               width: MediaQuery.of(context).size.width,
-              color: const Color.fromARGB(106, 255, 255, 255)),
-          const SizedBox(
+              color:  Color.fromARGB(106, 255, 255, 255)),
+           SizedBox(
             height: 5,
           ),
           EasyDateTimeLine(
@@ -151,7 +151,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             onDateChange: (selectedDate) {
               //`selectedDate` the new date selected.
             },
-            headerProps: const EasyHeaderProps(
+            headerProps:  EasyHeaderProps(
                 selectedDateFormat: SelectedDateFormat.fullDateMonthAsStrDY,
                 selectedDateStyle: TextStyle(
                     color: Colors.white,
@@ -164,7 +164,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
                 padding: EdgeInsets.only(top: 5, bottom: 15, left: 10)),
-            dayProps: const EasyDayProps(
+            dayProps:  EasyDayProps(
               dayStructure: DayStructure.dayStrDayNumMonth,
               width: 65,
               height: 85,
@@ -219,13 +219,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       fontWeight: FontWeight.w600)),
             ),
           ),
-          const SizedBox(
+           SizedBox(
             height: 5,
           ),
           Container(
               height: 1,
               width: MediaQuery.of(context).size.width,
-              color: const Color.fromARGB(106, 255, 255, 255)),
+              color:  Color.fromARGB(106, 255, 255, 255)),
         ],
       ),
     );

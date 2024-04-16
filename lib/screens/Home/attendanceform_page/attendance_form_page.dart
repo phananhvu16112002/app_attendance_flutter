@@ -20,8 +20,11 @@ import 'package:attendance_system_nodejs/screens/Home/after_attendance_form/afte
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:attendance_system_nodejs/services/smart_camera/smart_camera.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
+import 'package:flutter/cupertino.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +32,7 @@ import 'package:provider/provider.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 class AttendanceFormPage extends StatefulWidget {
-  const AttendanceFormPage({super.key, required this.classesStudent});
+  AttendanceFormPage({super.key, required this.classesStudent});
   // final AttendanceForm attendanceForm;
   final ClassesStudent classesStudent;
 
@@ -39,39 +42,36 @@ class AttendanceFormPage extends StatefulWidget {
 
 class _AttendancePageState extends State<AttendanceFormPage> {
   XFile? file;
-  // late AttendanceForm attendanceForm;
   final ImagePicker _picker = ImagePicker();
-  // late StreamController<String> _durationController;
   late ProgressDialog _progressDialog;
   late ClassesStudent classesStudent;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // attendanceForm = widget.attendanceForm;
     getImage(); //avoid rebuild
     _progressDialog = ProgressDialog(context,
+        isDismissible: false,
         customBody: Container(
-          width: 200,
-          height: 150,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               color: Colors.white),
-          child: const Center(
+          child: Center(
               child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 color: AppColors.primaryButton,
               ),
-              SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -97,14 +97,8 @@ class _AttendancePageState extends State<AttendanceFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('-------------------');
-    print('Rebuild-------');
     final studentDataProvider =
         Provider.of<StudentDataProvider>(context, listen: true);
-    // final studentClassesDataProvider =
-    //     Provider.of<StudentClassesDataProvider>(context, listen: false);
-    // final attendanceFormDataProvider =
-    //     Provider.of<AttendanceFormDataProvider>(context, listen: false);
     final attendanceFormDataForDetailPageProvider =
         Provider.of<AttendanceFormDataForDetailPageProvider>(context,
             listen: false);
@@ -112,8 +106,6 @@ class _AttendancePageState extends State<AttendanceFormPage> {
         Provider.of<AttendanceDetailDataProvider>(context, listen: false);
     final socketServerDataProvider =
         Provider.of<SocketServerProvider>(context, listen: false);
-    // final classesStudentDataProvider =
-    //     Provider.of<ClassesStudentProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -126,18 +118,18 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                 color: Colors.white), // Thay đổi icon và màu sắc tùy ý
           ),
         ),
-        title: const Text(
+        title: Text(
           'Attendance Form',
           style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 18.sp),
         ),
         centerTitle: true,
         backgroundColor: AppColors.primaryButton,
       ),
       body: bodyAttendance(
           studentDataProvider,
-          // attendanceFormDataProvider,
-          // classesStudentDataProvider,
           attendanceFormDataForDetailPageProvider,
           classesStudent,
           attendanceDetailDataProvider,
@@ -147,9 +139,6 @@ class _AttendancePageState extends State<AttendanceFormPage> {
 
   SingleChildScrollView bodyAttendance(
       StudentDataProvider studentDataProvider,
-      // AttendanceFormDataProvider attendanceFormDataProvider,
-      // StudentClassesDataProvider studentClassesDataProvider,
-      // ClassesStudentProvider classesStudentProvider,
       AttendanceFormDataForDetailPageProvider
           attendanceFormDataForDetailPageProvider,
       ClassesStudent classesStudent,
@@ -157,32 +146,16 @@ class _AttendancePageState extends State<AttendanceFormPage> {
       SocketServerProvider socketServerProvider) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(left: 15, right: 15),
-        // Column Tổng
+        padding: EdgeInsets.symmetric(horizontal: 15.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 20,
-            ),
-            // Container(
-            //   height: 100,
-            //   width: 400,
-            //   child: Text(
-            //       'FormID: ${attendanceFormDataProvider.attendanceFormData.formID}'),
-            // ),
-            // const SizedBox(
-            //   height: 20,
-            // ),
+            20.verticalSpace,
             infoClass(classesStudent, attendanceFormDataForDetailPageProvider,
                 attendanceDetailDataProvider, studentDataProvider),
-            const SizedBox(
-              height: 15,
-            ),
+            15.verticalSpace,
             infoLocation(studentDataProvider.userData.location),
-            const SizedBox(
-              height: 15,
-            ),
+            15.verticalSpace,
             GestureDetector(
               onTap: () {
                 showModalBottomSheet(
@@ -192,12 +165,12 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                         classesStudent));
               },
               child: Container(
-                height: 40,
-                width: 150,
+                width: 130.w,
+                padding: EdgeInsets.symmetric(vertical: 10.h),
                 decoration: BoxDecoration(
                     color: AppColors.cardAttendance,
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    border: Border.all(width: 1, color: Colors.transparent),
+                    borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                    border: Border.all(width: 1.w, color: Colors.transparent),
                     boxShadow: [
                       BoxShadow(
                           color: AppColors.colorShadow.withOpacity(0.2),
@@ -208,22 +181,20 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                   child: Text(
                     'Scan your face',
                     style: GoogleFonts.inter(
-                        fontSize: 15,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryButton),
                   ),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 15,
-            ),
+            15.verticalSpace,
             Padding(
-              padding: const EdgeInsets.only(left: 15),
+              padding: EdgeInsets.only(left: 15.w),
               child: file != null
                   ? Container(
-                      width: 350,
-                      height: 320,
+                      width: 350.w,
+                      height: 320.h,
                       child: Center(
                         child: file != null
                             ? Image.file(File(file!.path))
@@ -232,9 +203,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                     )
                   : Container(),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            10.verticalSpace,
             Padding(
               padding: const EdgeInsets.only(left: 0),
               child: file != null
@@ -308,14 +277,10 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                         await SecureStorage().deleteSecureData('imageOffline');
                         await _progressDialog.hide();
                       },
-                      height: 55,
-                      width: 400,
-                      fontSize: 20)
+                      fontSize: 18.sp)
                   : Container(),
             ),
-            const SizedBox(
-              height: 20,
-            )
+            20.verticalSpace,
           ],
         ),
       ),
@@ -326,19 +291,20 @@ class _AttendancePageState extends State<AttendanceFormPage> {
     return Wrap(
       children: [
         Container(
-          width: 405,
-          height: 70,
-          decoration: const BoxDecoration(
+          width: double.infinity,
+          // height: 70,
+          padding: EdgeInsets.symmetric(vertical: 5.h),
+          decoration: BoxDecoration(
               color: AppColors.cardAttendance,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               boxShadow: [
-                BoxShadow(
+                const BoxShadow(
                     color: AppColors.secondaryText,
                     blurRadius: 5.0,
                     offset: Offset(0.0, 0.0))
               ]),
           child: Padding(
-            padding: const EdgeInsets.only(left: 12, top: 15, bottom: 15),
+            padding: EdgeInsets.only(left: 12.w, top: 15.h, bottom: 15.h),
             child: customRichText('Location: ', location, FontWeight.bold,
                 FontWeight.w500, AppColors.primaryText, AppColors.primaryText),
           ),
@@ -347,24 +313,19 @@ class _AttendancePageState extends State<AttendanceFormPage> {
     );
   }
 
-  Container infoClass(
-      // AttendanceFormDataProvider attendanceFormDataProvider,
-      // StudentClassesDataProvider studentClassesDataProvider,
-      // ClassesStudentProvider classesStudentDataProvider,
+  Widget infoClass(
       ClassesStudent classesStudent,
       AttendanceFormDataForDetailPageProvider
           attendanceFormDataForDetailPageProvider,
       AttendanceDetailDataProvider attendanceDetailDataProvider,
       StudentDataProvider studentDataProvider) {
-    // StudentClasses? studentClasses = studentClassesDataProvider
-    //     .getDataForClass(attendanceFormDataProvider.attendanceFormData.classes);
     return Container(
-      width: 405,
-      height: 210,
-      decoration: const BoxDecoration(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 18.h),
+      decoration: BoxDecoration(
           color: AppColors.cardAttendance,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          boxShadow: [
+          borderRadius: BorderRadius.all(Radius.circular(10.r)),
+          boxShadow: const [
             BoxShadow(
                 color: AppColors.secondaryText,
                 blurRadius: 5.0,
@@ -381,24 +342,21 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       .attendanceFormData.dateOpen)
                   // ? ''
                   : 'null',
-              fontSize: 16,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.primaryText),
-          const SizedBox(
-            height: 2,
-          ),
+          5.verticalSpace,
           Container(
-            height: 1,
-            width: 405,
+            height: 1.h,
+            width: double.infinity,
             color: const Color.fromARGB(105, 190, 188, 188),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: const EdgeInsets.only(left: 15, top: 10),
+              Expanded(
                 child: Container(
-                  width: 190,
+                  margin: EdgeInsets.only(left: 15.w, top: 10.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -409,9 +367,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                           FontWeight.w500,
                           AppColors.primaryText,
                           AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      10.verticalSpace,
                       customRichText(
                           'Status: ',
                           getResult(0),
@@ -419,9 +375,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                           FontWeight.w500,
                           AppColors.primaryText,
                           AppColors.importantText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      10.verticalSpace,
                       Row(
                         children: [
                           customRichText(
@@ -431,8 +385,8 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                               FontWeight.w500,
                               AppColors.primaryText,
                               AppColors.primaryText),
-                          const SizedBox(
-                            width: 10,
+                          SizedBox(
+                            width: 10.w,
                           ),
                           customRichText(
                               'Room: ',
@@ -443,9 +397,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                               AppColors.primaryText),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      10.verticalSpace,
                       customRichText(
                           'Start Time: ',
                           // '',
@@ -455,9 +407,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                           FontWeight.w500,
                           AppColors.primaryText,
                           AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      10.verticalSpace,
                       customRichText(
                           'End Time: ',
                           // '',
@@ -467,9 +417,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                           FontWeight.w500,
                           AppColors.primaryText,
                           AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      // 10.verticalSpace,
                       // customRichText(
                       //     'Duration: ',
                       //     '',
@@ -484,24 +432,23 @@ class _AttendancePageState extends State<AttendanceFormPage> {
               attendanceFormDataForDetailPageProvider.attendanceFormData.type ==
                       0
                   ? Container(
-                      margin: const EdgeInsets.only(right: 10, top: 10),
-                      height: 140,
-                      width: 140,
+                      // margin: EdgeInsets.only(right: 10.w, top: 10.h),
+                      height: 140.h,
+                      width: 140.w,
                       // color: Colors.amber,
                       child: Center(
                         child: Image.asset(
                           'assets/icons/face_camera.png',
-                          width: 100,
-                          height: 100,
+                          width: 100.w,
+                          height: 100.h,
                         ),
                       ),
                     )
                   : Container(
-                      margin: const EdgeInsets.only(right: 10, top: 10),
-                      height: 140,
-                      width: 140,
+                      height: 140.h,
+                      width: 140.w,
                       child: Image.asset('assets/images/checkinClass.png',
-                          width: 75, height: 75),
+                          width: 75.w, height: 75.h),
                     )
             ],
           )
@@ -523,7 +470,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
         text: title,
         style: TextStyle(
           fontWeight: fontWeightTitle,
-          fontSize: 15,
+          fontSize: 13.sp,
           color: colorTextTitle,
         ),
       ),
@@ -531,7 +478,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
         text: message,
         style: TextStyle(
           fontWeight: fontWeightMessage,
-          fontSize: 15,
+          fontSize: 13.sp,
           color: colorTextMessage,
         ),
       ),
@@ -542,18 +489,19 @@ class _AttendancePageState extends State<AttendanceFormPage> {
       AttendanceFormDataForDetailPageProvider attendanceFormDataProvider,
       ClassesStudent classesStudent) {
     return Container(
-      height: 100,
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      height: 80.h,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.r), topRight: Radius.circular(10.r))),
+      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Column(
         children: <Widget>[
-          const Text(
+          Text(
             'Choose Your Photo',
-            style: TextStyle(fontSize: 20.0),
+            style: TextStyle(fontSize: 18.0.sp),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          10.verticalSpace,
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -584,23 +532,28 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       icon: const Icon(Icons.camera),
                       label: const Text('Camera'),
                     )
-                  : ElevatedButton.icon(
-                      onPressed: () {
-                        takePhoto(ImageSource.gallery);
-                      },
-                      icon: const Icon(Icons.camera),
-                      label: const Text('Gallery'),
+                  : Row(
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            takePhoto(ImageSource.camera);
+                          },
+                          icon: const Icon(Icons.camera),
+                          label: const Text('Camera'),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            takePhoto(ImageSource.gallery);
+                          },
+                          icon: const Icon(
+                              Icons.photo_size_select_actual_rounded),
+                          label: const Text('Gallery'),
+                        ),
+                      ],
                     ),
-              // const SizedBox(
-              //   width: 10,
-              // ),
-              // ElevatedButton.icon(
-              //   onPressed: () {
-              //     takePhoto(ImageSource.gallery);
-              //   },
-              //   icon: const Icon(Icons.camera),
-              //   label: const Text('Gallery'),
-              // ),
             ],
           )
         ],

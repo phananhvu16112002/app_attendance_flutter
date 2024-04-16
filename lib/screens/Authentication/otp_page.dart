@@ -35,27 +35,27 @@ class _OTPPageState extends State<OTPPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _progressDialog = ProgressDialog(context,
+   _progressDialog = ProgressDialog(context,
+        isDismissible: false,
         customBody: Container(
-          width: 200,
-          height: 150,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               color: Colors.white),
-          child: const Center(
+          child: Center(
               child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 color: AppColors.primaryButton,
               ),
-              SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -67,7 +67,7 @@ class _OTPPageState extends State<OTPPage> {
 
   void restartTimer() {
     setState(() {
-      secondsRemaining = 10;
+      secondsRemaining = 60;
       canResend = false;
     });
     startTimer(); // Start the timer again
@@ -93,11 +93,11 @@ class _OTPPageState extends State<OTPPage> {
             Container(
               height: MediaQuery.of(context).size.height,
               child: Padding(
-                padding:  EdgeInsets.only(top: 15.h, left: 15.w, right: 15.w),
+                padding: EdgeInsets.only(top: 15.h, left: 15.w, right: 15.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     CustomText(
+                    CustomText(
                         message: "OTP Verification",
                         fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
@@ -118,14 +118,16 @@ class _OTPPageState extends State<OTPPage> {
                     Padding(
                       padding: const EdgeInsets.only(right: 0),
                       child: OTPTextField(
-                        inputFormatter: [FilteringTextInputFormatter.digitsOnly],
+                        inputFormatter: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         controller: otpController,
                         textFieldAlignment: MainAxisAlignment.spaceEvenly,
                         length: 6,
                         width: MediaQuery.of(context).size.width,
                         outlineBorderRadius: 10.r,
                         fieldWidth: 45.w,
-                        style:  TextStyle(
+                        style: TextStyle(
                             fontSize: 15.sp, fontWeight: FontWeight.w500),
                         fieldStyle: FieldStyle.box,
                         onChanged: (pin) {
@@ -182,7 +184,7 @@ class _OTPPageState extends State<OTPPage> {
                                 ),
                                 (route) => false,
                               );
-                            await _progressDialog.hide();
+                              await _progressDialog.hide();
                               await Flushbar(
                                 title: "Successfully",
                                 message: "Login to use the app",
@@ -198,8 +200,7 @@ class _OTPPageState extends State<OTPPage> {
                             }
                           } catch (e) {
                             print(e);
-                          }
-                          finally{
+                          } finally {
                             await _progressDialog.hide();
                           }
                         }),
@@ -212,7 +213,7 @@ class _OTPPageState extends State<OTPPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                           CustomText(
+                          CustomText(
                               message: "Didn't recieved code ? ",
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w500,
@@ -221,8 +222,9 @@ class _OTPPageState extends State<OTPPage> {
                             onTap: () async {
                               if (canResend) {
                                 _progressDialog.show();
-                                bool check = await Authenticate().resendOTPRegister(
-                                    studentDataProvider.userData.studentEmail);
+                                bool check = await Authenticate()
+                                    .resendOTPRegister(studentDataProvider
+                                        .userData.studentEmail);
                                 if (check) {
                                   // ignore: use_build_context_synchronously
                                   restartTimer();
@@ -237,7 +239,6 @@ class _OTPPageState extends State<OTPPage> {
                                   showFlushBarNotification(context,
                                       'Failed resend OTP', 'message', 3);
                                 }
-                               
                               }
                             },
                             child: CustomText(

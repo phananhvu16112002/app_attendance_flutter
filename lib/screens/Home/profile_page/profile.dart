@@ -1,6 +1,9 @@
 // import 'package:attendance_system_nodejs/common/bases/CustomText.dart';
+import 'package:attendance_system_nodejs/common/bases/custom_button.dart';
 import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
+import 'package:attendance_system_nodejs/main.dart';
+import 'package:attendance_system_nodejs/providers/language_provider.dart';
 // import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart'
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
 import 'package:attendance_system_nodejs/screens/Home/profile_page/view_image_face/view_image_face.dart';
@@ -8,9 +11,13 @@ import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({
+    super.key,
+  });
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -38,6 +45,18 @@ class _ProfilePageState extends State<ProfilePage> {
     tempArray.add(temp1);
     tempArray.add(temp2);
     return tempArray;
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  void updateIsEngland(bool newValue) {
+    setState(() {
+      isEngland = newValue;
+    });
   }
 
   @override
@@ -119,7 +138,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: AppColors.primaryText),
             ),
             customOptions(context, 'assets/icons/modeTheme.png', 'Mode Theme'),
-            customOptions(context, 'assets/icons/language.png', 'Language'),
+            InkWell(
+                onTap: () {
+                  _showBottomSheet(context);
+                },
+                child: customOptions(
+                    context,
+                    'assets/icons/language.png',
+                    AppLocalizations.of(context)?.title_profile_language ??
+                        'Language')),
             10.verticalSpace,
             Padding(
               padding: EdgeInsets.only(left: 10.w),
@@ -134,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (builder) => ViewImageFacePage()));
+                          builder: (builder) => const ViewImageFacePage()));
                 },
                 child: customOptions(
                     context, 'assets/icons/face_camera.png', 'View Face')),
@@ -146,14 +173,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       context: context,
                       builder: (builder) => AlertDialog(
                             backgroundColor: Colors.white,
-                            title: Text('Sign out'),
-                            content: Text('Are you sure ?'),
+                            title: const Text('Sign out'),
+                            content: const Text('Are you sure ?'),
                             actions: [
                               TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('Cancel')),
+                                  child: const Text('Cancel')),
                               TextButton(
                                   onPressed: () async {
                                     await SecureStorage()
@@ -170,7 +197,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     await Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (builder) => SignInPage()),
+                                            builder: (builder) =>
+                                                const SignInPage()),
                                         (route) => false);
                                   },
                                   child: const Text('OK'))
@@ -195,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 50.h,
-        color: Color.fromARGB(94, 237, 235, 235),
+        color: const Color.fromARGB(94, 237, 235, 235),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -254,5 +282,253 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     ]));
+  }
+
+  // void _showBottomSheet(BuildContext context) {
+  //   showModalBottomSheet(
+  //     isDismissible: true,
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+  //     ),
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return StatefulBuilder(builder: (context, setState) {
+  //         return Container(
+  //           // height: 330,
+  //           padding: EdgeInsets.symmetric(vertical: 5.h),
+  //           child: Padding(
+  //             padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Center(
+  //                   child: CustomText(
+  //                     message: 'Chọn ngôn ngữ',
+  //                     fontSize: 20.sp,
+  //                     fontWeight: FontWeight.w700,
+  //                     color: AppColors.primaryButton,
+  //                   ),
+  //                 ),
+  //                 10.verticalSpace,
+  //                 vietnamOption(() {
+  //                   setState(() {
+  //                     isEngland = false;
+  //                   });
+  //                 }),
+  //                 englandOption(() {
+  //                   setState(() {
+  //                     isEngland = true;
+  //                   });
+  //                 }),
+  //                 const SizedBox(
+  //                   height: 110,
+  //                 ),
+  //                 CustomButton(
+  //                   buttonName: 'Xác nhận',
+  //                   backgroundColorButton: AppColors.primaryButton,
+  //                   borderColor: Colors.transparent,
+  //                   textColor: Colors.white,
+  //                   function: () {
+  //                     Navigator.pop(context);
+  //                   },
+  //                   fontSize: 16.sp,
+  //                   colorShadow: Colors.transparent,
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       });
+  //     },
+  //   );
+  // }
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      isDismissible: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 5.h),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: CustomText(
+                      message: 'Chọn ngôn ngữ',
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primaryButton,
+                    ),
+                  ),
+                  10.verticalSpace,
+                  vietnamOption(() {
+                    setState(() {
+                      isEngland = false;
+                    });
+                  }),
+                  englandOption(() {
+                    setState(() {
+                      isEngland = true;
+                    });
+                  }),
+                  const SizedBox(
+                    height: 110,
+                  ),
+                  CustomButton(
+                    buttonName: 'Xác nhận',
+                    backgroundColorButton: AppColors.primaryButton,
+                    borderColor: Colors.transparent,
+                    textColor: Colors.white,
+                    function: () {
+                      Provider.of<LanguageProvider>(context, listen: false)
+                          .toggleLanguage(isEngland);
+
+                      Navigator.pop(context);
+                    },
+                    fontSize: 16.sp,
+                    colorShadow: Colors.transparent,
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  Padding englandOption(Function() onTap) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 14.w),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          // height: 56.h,
+          padding: EdgeInsets.symmetric(vertical: 15.h),
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: AppColors.secondaryText)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset('assets/images/england.png'),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  CustomText(
+                    message: 'Tiếng Anh',
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.primaryText,
+                  ),
+                ],
+              ),
+              Container(
+                width: 20.w,
+                height: 20.h,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 2,
+                    color: isEngland
+                        ? AppColors.primaryButton
+                        : AppColors.secondaryText,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Container(
+                    width: 12,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: isEngland
+                          ? AppColors.primaryButton
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding vietnamOption(Function() onTap) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 14.w),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          // height: 56,
+          padding: EdgeInsets.symmetric(vertical: 15.h),
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: AppColors.secondaryText)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: Image.asset('assets/images/vietnam.png'),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  CustomText(
+                    message: 'Tiếng Việt',
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.primaryText,
+                  ),
+                ],
+              ),
+              Container(
+                width: 20.w,
+                height: 20.h,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 2.w,
+                    color: !isEngland
+                        ? AppColors.primaryButton
+                        : AppColors.secondaryText,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Container(
+                    width: 12.w,
+                    height: 12.h,
+                    decoration: BoxDecoration(
+                      color: !isEngland
+                          ? AppColors.primaryButton
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

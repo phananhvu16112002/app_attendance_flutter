@@ -7,12 +7,8 @@ import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/attendance_form.dart';
-import 'package:attendance_system_nodejs/models/class.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
-import 'package:attendance_system_nodejs/models/data_offline.dart';
-import 'package:attendance_system_nodejs/models/student_classes.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
-import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Home/after_attendance_form/after_attendance_form.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
@@ -20,6 +16,8 @@ import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:attendance_system_nodejs/services/smart_camera/smart_camera.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,7 +26,7 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 
 class AttendanceFormPageQR extends StatefulWidget {
-  const AttendanceFormPageQR({super.key, required this.attendanceForm});
+  AttendanceFormPageQR({super.key, required this.attendanceForm});
   final AttendanceForm attendanceForm;
 
   @override
@@ -54,29 +52,29 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
     // studentClassesBox = Hive.box<StudentClasses>('student_classes');
     attendanceFormBox = Hive.box<AttendanceForm>('AttendanceFormBoxes');
     saveValue(widget.attendanceForm);
-    openBox();
+    // openBox();
     getImage(); //avoid rebuild
     _progressDialog = ProgressDialog(context,
+        isDismissible: false,
         customBody: Container(
-          width: 200,
-          height: 150,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               color: Colors.white),
-          child: const Center(
+          child: Center(
               child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(
                 color: AppColors.primaryButton,
               ),
-              SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -135,41 +133,40 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
           onTap: () {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (builder) => const HomePage()),
+                MaterialPageRoute(builder: (builder) => HomePage()),
                 (route) => false);
             SecureStorage().deleteSecureData('image');
           },
           child: Container(
-            padding: const EdgeInsets.all(8.0),
-            child: const Icon(Icons.arrow_back,
+            padding: EdgeInsets.all(8.0),
+            child: Icon(Icons.arrow_back,
                 color: Colors.white), // Thay đổi icon và màu sắc tùy ý
           ),
         ),
-        title: const Text(
+        title: Text(
           'Attendance Form QR',
           style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.sp),
         ),
         centerTitle: true,
         backgroundColor: AppColors.primaryButton,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: EdgeInsets.only(left: 15.w, right: 15.w),
           // Column Tổng
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 20,
-              ),
+              20.verticalSpace,
               Container(
-                width: 405,
-                height: 220,
-                decoration: const BoxDecoration(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 18.h),
+                // height: 220,
+                decoration: BoxDecoration(
                     color: AppColors.cardAttendance,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
+                    borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                    boxShadow: const [
                       BoxShadow(
                           color: AppColors.secondaryText,
                           blurRadius: 5.0,
@@ -180,38 +177,35 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                     CustomText(
                         message: attendanceForm.dateOpen != ''
                             ? formatDate(attendanceForm.dateOpen)
+                            // ? ""
                             : 'null',
-                        fontSize: 16,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.primaryText),
-                    const SizedBox(
-                      height: 2,
-                    ),
+                    5.verticalSpace,
                     Container(
-                      height: 1,
-                      width: 405,
-                      color: const Color.fromARGB(105, 190, 188, 188),
+                      height: 1.h,
+                      width: double.infinity,
+                      color: Color.fromARGB(105, 190, 188, 188),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 15, top: 10),
+                        Expanded(
                           child: Container(
-                            width: 190,
+                            margin: EdgeInsets.only(left: 15.w, top: 10.h),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 customRichText(
                                     'Class: ',
                                     classesStudent.courseName,
+                                    // "",
                                     FontWeight.bold,
                                     FontWeight.w500,
                                     AppColors.primaryText,
                                     AppColors.primaryText),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                10.verticalSpace,
                                 customRichText(
                                     'Status: ',
                                     getResult(0),
@@ -219,90 +213,86 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                                     FontWeight.w500,
                                     AppColors.primaryText,
                                     AppColors.importantText),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                10.verticalSpace,
                                 Row(
                                   children: [
                                     customRichText(
                                         'Shift: ',
                                         '${classesStudent.shiftNumber}',
+                                        // "",
                                         FontWeight.bold,
                                         FontWeight.w500,
                                         AppColors.primaryText,
                                         AppColors.primaryText),
-                                    const SizedBox(
-                                      width: 10,
+                                    SizedBox(
+                                      width: 10.w,
                                     ),
                                     customRichText(
                                         'Room: ',
                                         classesStudent.roomNumber,
+                                        // "",
                                         FontWeight.bold,
                                         FontWeight.w500,
                                         AppColors.primaryText,
                                         AppColors.primaryText),
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                10.verticalSpace,
                                 customRichText(
                                     'Start Time: ',
                                     formatTime(attendanceForm.startTime),
+                                    // "",
                                     FontWeight.bold,
                                     FontWeight.w500,
                                     AppColors.primaryText,
                                     AppColors.primaryText),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                10.verticalSpace,
                                 customRichText(
                                     'End Time: ',
                                     formatTime(attendanceForm.endTime),
+                                    // "",
                                     FontWeight.bold,
                                     FontWeight.w500,
                                     AppColors.primaryText,
                                     AppColors.primaryText),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                customRichText(
-                                    'Duration: ',
-                                    '',
-                                    FontWeight.bold,
-                                    FontWeight.w500,
-                                    AppColors.primaryText,
-                                    AppColors.primaryText),
+                                //  10.verticalSpace,
+                                // customRichText(
+                                //     'Duration: ',
+                                //     '',
+                                //     FontWeight.bold,
+                                //     FontWeight.w500,
+                                //     AppColors.primaryText,
+                                //     AppColors.primaryText),
                               ],
                             ),
                           ),
                         ),
                         attendanceForm.typeAttendance == 0
                             ? Container(
-                                margin:
-                                    const EdgeInsets.only(right: 10, top: 10),
-                                height: 140,
-                                width: 140,
+                                // margin:
+                                //      EdgeInsets.only(right: 10.w, top: 10),
+                                height: 140.h,
+                                width: 140.w,
                                 color: Colors.transparent,
                                 child: Center(
                                   child: Image.asset(
                                     'assets/icons/face_camera.png',
-                                    width: 75,
-                                    height: 75,
+                                    width: 75.w,
+                                    height: 75.h,
                                   ),
                                 ),
                               )
                             : Container(
-                                margin:
-                                    const EdgeInsets.only(right: 10, top: 10),
-                                height: 140,
-                                width: 140,
+                                // margin:
+                                //      EdgeInsets.only(right: 10.w, top: 10),
+                                height: 140.h,
+                                width: 140.w,
                                 color: Colors.transparent,
                                 child: Center(
                                   child: Image.asset(
                                     'assets/images/checkinClass.png',
-                                    width: 75,
-                                    height: 75,
+                                    width: 75.w,
+                                    height: 75.h,
                                   ),
                                 ),
                               )
@@ -311,23 +301,22 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              15.verticalSpace,
               Container(
-                width: 405,
-                height: 70,
-                decoration: const BoxDecoration(
+                width: double.infinity,
+                // height: 70,
+                padding: EdgeInsets.symmetric(vertical: 5.h),
+                decoration: BoxDecoration(
                     color: AppColors.cardAttendance,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
+                    borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                    boxShadow: const [
                       BoxShadow(
                           color: AppColors.secondaryText,
                           blurRadius: 5.0,
                           offset: Offset(0.0, 0.0))
                     ]),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 12, top: 15, bottom: 15),
+                  padding: EdgeInsets.only(left: 12.w, top: 15.h, bottom: 15.h),
                   child: customRichText(
                       'Location: ',
                       studentDataProvider.userData.location,
@@ -337,9 +326,7 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                       AppColors.primaryText),
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              15.verticalSpace,
               GestureDetector(
                 onTap: () {
                   showModalBottomSheet(
@@ -348,38 +335,36 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                           bottomSheet(attendanceForm, classesStudent));
                 },
                 child: Container(
-                  height: 40,
-                  width: 150,
+                  width: 130.w,
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
                   decoration: BoxDecoration(
                       color: AppColors.cardAttendance,
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      borderRadius: BorderRadius.all(Radius.circular(5.r)),
                       border: Border.all(width: 1, color: Colors.transparent),
                       boxShadow: [
                         BoxShadow(
                             color: AppColors.colorShadow.withOpacity(0.2),
                             blurRadius: 1,
-                            offset: const Offset(0, 2))
+                            offset: Offset(0, 2))
                       ]),
                   child: Center(
                     child: Text(
                       'Scan your face',
                       style: GoogleFonts.inter(
-                          fontSize: 15,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryButton),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              15.verticalSpace,
               Padding(
-                padding: const EdgeInsets.only(left: 15),
+                padding: EdgeInsets.only(left: 15),
                 child: file != null
                     ? Container(
-                        width: 350,
-                        height: 320,
+                        width: 350.w,
+                        height: 320.h,
                         child: Center(
                           child: file != null
                               ? Image.file(File(file!.path))
@@ -388,11 +373,9 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                       )
                     : Container(),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              10.verticalSpace,
               Padding(
-                padding: const EdgeInsets.only(left: 0),
+                padding: EdgeInsets.only(left: 0),
                 child: file != null
                     ? CustomButton(
                         buttonName: 'Attendance',
@@ -435,7 +418,7 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                                     classesStudent: classesStudent,
                                   ),
                                   transitionDuration:
-                                      const Duration(milliseconds: 200),
+                                      Duration(milliseconds: 200),
                                   transitionsBuilder: (context, animation,
                                       secondaryAnimation, child) {
                                     return ScaleTransition(
@@ -453,7 +436,7 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                               title: "Failed",
                               message:
                                   "Please check and take attendance again!",
-                              duration: const Duration(seconds: 10),
+                              duration: Duration(seconds: 10),
                             ).show(context);
                           }
                           await SecureStorage().deleteSecureData('image');
@@ -461,9 +444,7 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                               .deleteSecureData('imageOffline');
                           await _progressDialog.hide();
                         },
-                        height: 55,
-                        width: 400,
-                        fontSize: 20)
+                        fontSize: 18.sp)
                     : Container(),
               )
             ],
@@ -475,11 +456,13 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
 
   Container infoLocation(String location) {
     return Container(
-      width: 405,
-      height: 70,
-      decoration: const BoxDecoration(
+      width: double.infinity,
+      // height: 70,
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+
+      decoration: BoxDecoration(
           color: AppColors.cardAttendance,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10.r)),
           boxShadow: [
             BoxShadow(
                 color: AppColors.secondaryText,
@@ -487,7 +470,7 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                 offset: Offset(0.0, 0.0))
           ]),
       child: Padding(
-        padding: const EdgeInsets.only(left: 12, top: 15, bottom: 15),
+        padding: EdgeInsets.only(left: 12.w, top: 15.h, bottom: 15.h),
         child: customRichText('Location: ', location, FontWeight.bold,
             FontWeight.w500, AppColors.primaryText, AppColors.primaryText),
       ),
@@ -507,7 +490,7 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
         text: title,
         style: TextStyle(
           fontWeight: fontWeightTitle,
-          fontSize: 15,
+          fontSize: 13.sp,
           color: colorTextTitle,
         ),
       ),
@@ -515,7 +498,7 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
         text: message,
         style: TextStyle(
           fontWeight: fontWeightMessage,
-          fontSize: 15,
+          fontSize: 13.sp,
           color: colorTextMessage,
         ),
       ),
@@ -525,18 +508,16 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
   Widget bottomSheet(
       AttendanceForm attendanceForm, ClassesStudent classesStudent) {
     return Container(
-      height: 100,
+      height: 80.h,
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Column(
         children: <Widget>[
-          const Text(
+          Text(
             'Choose Your Photo',
-            style: TextStyle(fontSize: 20.0),
+            style: TextStyle(fontSize: 18.sp),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          10.verticalSpace,
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -552,8 +533,7 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                               page: 'AttendanceQR',
                               classesStudent: classesStudent,
                             ),
-                            transitionDuration:
-                                const Duration(milliseconds: 300),
+                            transitionDuration: Duration(milliseconds: 300),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
                               return ScaleTransition(
@@ -564,26 +544,31 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.camera),
-                      label: const Text('Camera'),
+                      icon: Icon(Icons.camera),
+                      label: Text('Camera'),
                     )
-                  : ElevatedButton.icon(
-                      onPressed: () {
-                        takePhoto(ImageSource.gallery);
-                      },
-                      icon: const Icon(Icons.camera),
-                      label: const Text('Gallery'),
+                  : Row(
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            takePhoto(ImageSource.camera);
+                          },
+                          icon: const Icon(Icons.camera),
+                          label: const Text('Camera'),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            takePhoto(ImageSource.gallery);
+                          },
+                          icon: const Icon(
+                              Icons.photo_size_select_actual_rounded),
+                          label: const Text('Gallery'),
+                        ),
+                      ],
                     ),
-              // const SizedBox(
-              //   width: 10,
-              // ),
-              // ElevatedButton.icon(
-              //   onPressed: () {
-              //     takePhoto(ImageSource.gallery);
-              //   },
-              //   icon: const Icon(Icons.camera),
-              //   label: const Text('Gallery'),
-              // ),
             ],
           )
         ],
@@ -604,7 +589,7 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
     if (status.contains('Present')) {
       return AppColors.textApproved;
     } else if (status.contains('Late')) {
-      return const Color.fromARGB(231, 196, 123, 34);
+      return Color.fromARGB(231, 196, 123, 34);
     } else if (status.contains('Absence')) {
       return AppColors.importantText;
     } else {

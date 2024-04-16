@@ -245,6 +245,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       // const SizedBox(
                       //   height: 10,
                       // ),
+                      10.verticalSpace,
                       CustomTextField(
                           readOnly: false,
                           controller: confirmPassword,
@@ -277,8 +278,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       18.verticalSpace,
                       CustomButton(
                           fontSize: 18.sp,
-                          // height: 60,
-                          // width: 400,
+                          height: 60,
+                          width: double.infinity,
                           buttonName: 'Register',
                           colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
@@ -342,9 +343,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   "Please complete the form property", 3);
                             }
                           }),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                     10.verticalSpace,
                       Padding(
                         padding: EdgeInsets.only(right: 20.w),
                         child: Row(

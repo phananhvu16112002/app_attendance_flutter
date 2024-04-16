@@ -37,7 +37,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 color: Colors.white,
                 // height: MediaQuery.of(context).size.height,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+                  padding: EdgeInsets.only(top: 10.h, left: 15.w, right: 15.w),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -48,16 +48,9 @@ class _WelcomePageState extends State<WelcomePage> {
                             width: 70.w,
                             height: 70.h,
                           ),
-                          const SizedBox(
-                            width: 20,
+                          SizedBox(
+                            width: 20.w,
                           ),
-                          // Expanded(
-                          //     child: CustomText(
-                          //   message: schoolName,
-                          //   fontSize: 40,
-                          //   fontWeight: FontWeight.w800,
-                          //   color: AppColors.primaryText,
-                          // )),
                           Expanded(
                               child: customRichText(
                                   'TON ',
@@ -72,8 +65,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                   AppColors.primaryText))
                         ],
                       ),
-                      const SizedBox(
-                        height: 5,
+                      SizedBox(
+                        height: 5.h,
                       ),
                       CustomText(
                           message: descriptionSchool,
@@ -90,8 +83,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               fontSize: 20.sp,
                               height: 60.h,
                               width: double.infinity,
-                              buttonName:
-                                  'Login',
+                              buttonName: 'Login',
                               colorShadow: AppColors.colorShadow,
                               backgroundColorButton: AppColors.primaryButton,
                               borderColor: Colors.transparent,
@@ -127,9 +119,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       Padding(
                         padding: const EdgeInsets.only(right: 0),
                         child: CustomButton(
-                            fontSize: 20,
-                            height: 60,
-                            width: 400,
+                            fontSize: 20.sp,
+                            height: 60.h,
+                            width: double.infinity,
                             buttonName: 'Register',
                             colorShadow: Colors.transparent,
                             backgroundColorButton: Colors.white,
@@ -160,8 +152,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                   ),
                                 )),
                       ),
-                      const SizedBox(
-                        height: 20,
+                       SizedBox(
+                        height: 40.h,
                       ),
                     ],
                   ),

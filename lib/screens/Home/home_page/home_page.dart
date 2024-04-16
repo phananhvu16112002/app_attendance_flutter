@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // _loadToken();
+    _loadToken();
   }
 
   Future<void> _loadToken() async {
@@ -102,11 +102,11 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                      width: 22.w,
-                      height: 22.h,
+                      width: 25.w,
+                      height: 25.h,
                       child: SvgPicture.asset(listBottomNav[index].svgPath,
-                          width: 22.w,
-                          height: 22.h,
+                          width: 25.w,
+                          height: 25.h,
                           color: isActive
                               ? AppColors.primaryButton
                               : AppColors.secondaryText)),

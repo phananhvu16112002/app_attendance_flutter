@@ -46,33 +46,6 @@ class _FlashScreenState extends State<FlashScreen> {
       }
     }
   }
-
-  // void showSettingsAlert() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: const Text('Location Permission'),
-  //       content: const Text('Please grant permission to get your location.'),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () async {
-  //             Navigator.pop(context);
-  //           },
-  //           child: const Text('Cancel'),
-  //         ),
-  //         TextButton(
-  //           onPressed: () async {
-  //             await Geolocator.openLocationSettings();
-  //           },
-  //           child: const Text(
-  //             'Open Settings',
-  //             style: TextStyle(color: AppColors.primaryButton),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
   Future<void> showSettingsAlert(BuildContext context) async {
     return showDialog(
       context: context,

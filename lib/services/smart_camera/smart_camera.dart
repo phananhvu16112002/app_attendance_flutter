@@ -8,6 +8,7 @@ import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_QR/at
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:face_camera/face_camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -118,7 +119,7 @@ class _SmartCameraState extends State<SmartCamera> {
         defaultCameraLens: CameraLens.front,
         captureControlIcon: CircleAvatar(
           backgroundColor: const Color(0xff96f0ff).withOpacity(0.5),
-          radius: 50,
+          radius: 50.r,
           child: const Icon(Icons.camera_enhance_outlined,
               size: 30, color: Colors.black),
         ),
@@ -135,10 +136,10 @@ class _SmartCameraState extends State<SmartCamera> {
   }
 
   Widget _message(String msg) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 55, vertical: 15),
+        padding: EdgeInsets.symmetric(horizontal: 55.w, vertical: 15.h),
         child: Text(msg,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontSize: 14, height: 1.5, fontWeight: FontWeight.w400)),
+            style: TextStyle(
+                fontSize: 12.sp, height: 1.5, fontWeight: FontWeight.w400)),
       );
 }

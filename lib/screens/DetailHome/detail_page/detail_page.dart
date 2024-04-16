@@ -9,6 +9,7 @@ import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/componen
 import 'package:attendance_system_nodejs/screens/DetailHome/notification_class/notification_class.dart';
 import 'package:attendance_system_nodejs/screens/DetailHome/report_class/report_class.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +40,6 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // studentClasses = widget.studentClasses;
     classesStudent = widget.classesStudent;
     Future.delayed(Duration.zero, () {
       if (mounted) {
@@ -52,8 +52,6 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final socketServerDataProvider =
-        Provider.of<SocketServerProvider>(context, listen: false);
     List<BottomNavModel> listBottomNav = [
       BottomNavModel(title: 'Home', svgPath: 'assets/icons/home.svg'),
       BottomNavModel(title: 'Report', svgPath: 'assets/icons/home.svg'),
@@ -61,34 +59,20 @@ class _DetailPageState extends State<DetailPage> {
       BottomNavModel(title: 'Profile', svgPath: 'assets/icons/user.svg'),
     ];
     return Scaffold(
-        // extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
-        // floatingActionButton: FloatingActionButton(
-        //   shape: const CircleBorder(),
-        //   backgroundColor: AppColors.importantText,
-        //   foregroundColor: Colors.white,
-        //   elevation: 2,
-        //   onPressed: () {},
-        //   child: const Icon(
-        //     Icons.report,
-        //     size: 30,
-        //   ),
-        // ),
-        // floatingActionButtonLocation:
-        //     FloatingActionButtonLocation.miniCenterDocked,
         bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-            height: 65,
+            height: 65.h,
             itemCount: listBottomNav.length,
             tabBuilder: (index, isActive) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                      width: 24,
-                      height: 24,
+                      width: 24.w,
+                      height: 24.h,
                       child: SvgPicture.asset(listBottomNav[index].svgPath,
-                          width: 24,
-                          height: 24,
+                          width: 24.w,
+                          height: 24.h,
                           color: isActive
                               ? AppColors.primaryButton
                               : AppColors.secondaryText)),
@@ -109,86 +93,6 @@ class _DetailPageState extends State<DetailPage> {
         // appBar: customAppbar(socketServerDataProvider),
         body: _buildBody());
   }
-
-  // PreferredSize customAppbar(SocketServerProvider socketServerProvider) {
-  //   print(classesStudent.courseName.length);
-  //   return PreferredSize(
-  //     preferredSize: Size.fromHeight(120),
-  //     child: AppBar(
-  //       leading: GestureDetector(
-  //         onTap: () {
-  //           socketServerProvider.disconnectSocketServer();
-  //           setState(() {});
-  //           Navigator.pop(context);
-  //         },
-  //         child: Container(
-  //           padding: const EdgeInsets.all(8.0),
-  //           child: const Icon(Icons.arrow_back,
-  //               color: Colors.white), // Thay đổi icon và màu sắc tùy ý
-  //         ),
-  //       ),
-  //       backgroundColor: AppColors.colorAppbar,
-  //       flexibleSpace: Padding(
-  //         padding: EdgeInsets.only(
-  //             left: 50.0,
-  //             top: classesStudent.courseName.length >= 8 ? 0 : 0,
-  //             bottom: 25),
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             CustomText(
-  //                 message: classesStudent.courseName,
-  //                 fontSize: 25,
-  //                 fontWeight: FontWeight.bold,
-  //                 color: Colors.white),
-  //             Row(
-  //               children: [
-  //                 CustomText(
-  //                     message: 'CourseID: ${classesStudent.courseID}',
-  //                     fontSize: 15,
-  //                     fontWeight: FontWeight.w500,
-  //                     color: Colors.white),
-  //                 const SizedBox(
-  //                   width: 5,
-  //                 ),
-  //                 Container(height: 10, width: 1, color: Colors.white),
-  //                 const SizedBox(
-  //                   width: 5,
-  //                 ),
-  //                 CustomText(
-  //                     message: 'Room: ${classesStudent.roomNumber}',
-  //                     fontSize: 15,
-  //                     fontWeight: FontWeight.w500,
-  //                     color: Colors.white),
-  //                 const SizedBox(
-  //                   width: 5,
-  //                 ),
-  //                 Container(height: 10, width: 1, color: Colors.white),
-  //                 const SizedBox(
-  //                   width: 5,
-  //                 ),
-  //                 CustomText(
-  //                     message: 'Shift: ${classesStudent.shiftNumber}',
-  //                     fontSize: 15,
-  //                     fontWeight: FontWeight.w500,
-  //                     color: Colors.white),
-  //               ],
-  //             ),
-  //             const SizedBox(
-  //               height: 5,
-  //             ),
-  //             CustomText(
-  //                 message: 'Lectuer: ${classesStudent.teacherName}',
-  //                 fontSize: 15,
-  //                 fontWeight: FontWeight.w500,
-  //                 color: Colors.white),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _buildBody() {
     switch (_bottomNavIndex) {

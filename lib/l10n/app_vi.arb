@@ -1,3 +1,8 @@
 {
-    "helloWorld":"Xin Chào!"
+    "helloWorld":"Xin Chào!",
+    "title_login": "Đăng nhập",
+    "title_hi":"Chào, ",
+    "title_student": "Sinh viên",
+    "title_profile_language": "Ngôn ngữ"
+
 }

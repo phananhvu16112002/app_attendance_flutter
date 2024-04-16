@@ -41,10 +41,12 @@ class _ImageSliderState extends State<ImageSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 250.h,
       child: Stack(children: <Widget>[
         PageView(
+          reverse: true,
+          allowImplicitScrolling: true,
           controller: _pageController,
           onPageChanged: (int page) {
             setState(() {

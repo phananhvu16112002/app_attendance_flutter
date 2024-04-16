@@ -5,6 +5,7 @@ import 'package:attendance_system_nodejs/common/bases/custom_rich_text.dart';
 import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/bases/custom_text_field.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
+import 'package:attendance_system_nodejs/main.dart';
 import 'package:attendance_system_nodejs/models/attendance_form.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/data_offline.dart';
@@ -21,8 +22,10 @@ import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:attendance_system_nodejs/services/get_location/get_location_services.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:flutter/cupertino.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
@@ -34,6 +37,8 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // import 'secure_storage'
 
 class HomePageBody extends StatefulWidget {
@@ -90,6 +95,12 @@ class _HomePageBodyState extends State<HomePageBody> {
         });
       }
     });
+    // if (isInternetConnected) {
+    //   print('al;sdka;ldk');
+    //   sendDataToServer();
+    // } else {
+    //   print('failed internet');
+    // }
   }
 
   void sendDataToServer() async {
@@ -255,170 +266,160 @@ class _HomePageBodyState extends State<HomePageBody> {
     final studentDataProvider = Provider.of<StudentDataProvider>(context);
     final classesStudentDataProvider =
         Provider.of<ClassesStudentProvider>(context, listen: false);
-    return SingleChildScrollView(
+    return RefreshIndicator(
+      onRefresh: () {
+        return Future.delayed(Duration(seconds: 3), () {
+          setState(() {});
+        });
+      },
+      child: SingleChildScrollView(
         child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(children: [
-          Container(
-            height: 310.h,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                color: AppColors.colorAppbar,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10.r),
-                    bottomRight: Radius.circular(10.r))),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 13.w, top: 25.h, right: 13.w),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(children: [
+              Container(
+                // height: 310.h,
+                padding: EdgeInsets.symmetric(vertical: 20.h),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: AppColors.colorAppbar,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10.r),
+                        bottomRight: Radius.circular(10.r))),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: 13.w, top: 25.h, right: 13.w),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              CustomText(
-                                  message: 'Hi, ',
-                                  fontSize: 24.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.thirdText),
-                              CustomText(
-                                  message: studentName,
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white),
-                            ],
-                          ),
-                          5.verticalSpace,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Icon(Icons.person_3_outlined,
-                                      size: 11.sp, color: AppColors.thirdText),
                                   CustomText(
-                                      message: '$studentID | ',
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w500,
+                                      message: AppLocalizations.of(context)
+                                              ?.title_hi ??
+                                          'Hi',
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.bold,
                                       color: AppColors.thirdText),
                                   CustomText(
-                                      message: 'Student',
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.thirdText),
+                                      message: studentName,
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white),
                                 ],
                               ),
+                              5.verticalSpace,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.person_3_outlined,
+                                          size: 11.sp,
+                                          color: AppColors.thirdText),
+                                      CustomText(
+                                          message: '$studentID | ',
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.thirdText),
+                                      CustomText(
+                                          message: AppLocalizations.of(context)
+                                                  ?.title_student ??
+                                              'Student',
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.thirdText),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              10.verticalSpace,
+                              Container(
+                                width: 290.w,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.location_on_outlined,
+                                        size: 11.sp, color: Colors.white),
+                                    Expanded(
+                                      child: Text(
+                                        studentDataProvider.userData.location,
+                                        style: TextStyle(
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              20.verticalSpace,
                             ],
                           ),
-                          10.verticalSpace,
-                          Container(
-                            width: 290.w,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.location_on_outlined,
-                                    size: 11.sp, color: Colors.white),
-                                Expanded(
-                                  child: Text(
-                                    studentDataProvider.userData.location,
-                                    style: TextStyle(
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: 10.h, right: 0.w, bottom: 10.h),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(25.r),
+                                child: Image.asset(
+                                  'assets/images/avatar.png',
+                                  height: 55.h,
+                                  width: 55.w,
+                                  fit: BoxFit.cover,
                                 ),
-                              ],
-                            ),
-                          ),
-                          20.verticalSpace,
+                              )),
                         ],
                       ),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: 10.h, right: 0.w, bottom: 10.h),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(25.r),
-                            child: Image.asset(
-                              'assets/images/avatar.png',
-                              height: 55.h,
-                              width: 55.w,
-                              fit: BoxFit.cover,
-                            ),
-                          )),
-                    ],
-                  ),
+                    ),
+                    Container(
+                        height: 1.h,
+                        width: MediaQuery.of(context).size.width,
+                        color: const Color.fromARGB(106, 255, 255, 255)),
+                    5.verticalSpace,
+                    CustomCalendar(),
+                    10.verticalSpace,
+                    Container(
+                        height: 1.h,
+                        width: MediaQuery.of(context).size.width,
+                        color: const Color.fromARGB(106, 255, 255, 255)),
+                  ],
                 ),
-                Container(
-                    height: 1.h,
-                    width: MediaQuery.of(context).size.width,
-                    color: const Color.fromARGB(106, 255, 255, 255)),
-                5.verticalSpace,
-                CustomCalendar(),
-                10.verticalSpace,
-                Container(
-                    height: 1.h,
-                    width: MediaQuery.of(context).size.width,
-                    color: const Color.fromARGB(106, 255, 255, 255)),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 275.h,
-            left: 25.w,
-            right: 25.w,
-            child: searchClass(),
-          ),
-          //Body 2
-          checkQR()
-        ]),
-        if (!activeQR)
-          StreamBuilder(
-              stream: Connectivity().onConnectivityChanged,
-              builder: (context, snapshot) {
-                print(snapshot.toString());
-                if (snapshot.hasData) {
-                  ConnectivityResult? result = snapshot.data;
-                  if (result == ConnectivityResult.wifi ||
-                      result == ConnectivityResult.mobile) {
-                    print('Have Internet');
-                    return callAPI(context, classesStudentDataProvider);
-                    // return classInformation(
-                    //     10,
-                    //     'Intro Programming',
-                    //     'Mai Van Manh',
-                    //     '5202020',
-                    //     'Laboratory',
-                    //     '10',
-                    //     '5',
-                    //     3,
-                    //     'A0303',
-                    //     2,
-                    //     3,
-                    //     4,
-                    //     0.5);
-                    // return customLoading();
-                  } else if (result == ConnectivityResult.none ||
-                      isConnected == false) {
-                    print('No Internet');
-
-                    return noInternetWithHive();
-                  }
-                }
-                print('Check connected: $isConnected');
-                return callAPI(context, classesStudentDataProvider);
-              })
-        else
-          scanQR(context),
-      ],
-    ));
+              ),
+              Positioned(
+                top: 285.h,
+                left: 25.w,
+                right: 25.w,
+                child: InkWell(
+                    onTap: () {
+                      //Navigate search
+                    },
+                    child: searchClass()),
+              ),
+              //Body 2
+              checkQR()
+            ]),
+            if (!activeQR)
+              isInternetConnected
+                  ? callAPI(context, classesStudentDataProvider)
+                  : noInternetWithHive()
+            else
+              scanQR(context),
+            20.verticalSpace
+          ],
+        ),
+      ),
+    );
   }
 
   Container scanQR(BuildContext context) {
@@ -428,6 +429,7 @@ class _HomePageBodyState extends State<HomePageBody> {
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
+          20.verticalSpace,
           CustomText(
               message: 'SCAN QR CODE',
               fontSize: 23.sp,
@@ -480,76 +482,70 @@ class _HomePageBodyState extends State<HomePageBody> {
     );
   }
 
-  Container checkQR() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: 340.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      activeQR = false;
-                    });
-                  },
-                  child: Container(
-                    width: 138.w,
-                    height: 30.h,
-                    margin: EdgeInsets.only(top: 10.h),
-                    decoration: BoxDecoration(
-                        color:
-                            activeQR ? Colors.white : AppColors.primaryButton,
-                        border: Border.all(
-                            color: AppColors.secondaryText, width: 1.w),
-                        borderRadius: BorderRadius.all(Radius.circular(5.r))),
-                    child: Center(
-                        child: CustomText(
-                            message: 'Take Attendance',
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.bold,
-                            color: activeQR
-                                ? AppColors.primaryText
-                                : Colors.white)),
-                  ),
+  Widget checkQR() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 345.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    activeQR = false;
+                  });
+                },
+                child: Container(
+                  width: 138.w,
+                  height: 30.h,
+                  margin: EdgeInsets.only(top: 10.h),
+                  decoration: BoxDecoration(
+                      color: activeQR ? Colors.white : AppColors.primaryButton,
+                      border: Border.all(
+                          color: AppColors.secondaryText, width: 1.w),
+                      borderRadius: BorderRadius.all(Radius.circular(5.r))),
+                  child: Center(
+                      child: CustomText(
+                          message: 'Take Attendance',
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color:
+                              activeQR ? AppColors.primaryText : Colors.white)),
                 ),
-                SizedBox(
-                  width: 10.w,
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    activeQR = true;
+                  });
+                },
+                child: Container(
+                  width: 138.w,
+                  height: 30.h,
+                  margin: EdgeInsets.only(top: 10.h),
+                  decoration: BoxDecoration(
+                      color: activeQR ? AppColors.primaryButton : Colors.white,
+                      border: Border.all(
+                          color: AppColors.secondaryText, width: 1.w),
+                      borderRadius: BorderRadius.all(Radius.circular(5.r))),
+                  child: Center(
+                      child: CustomText(
+                          message: 'Scan QR',
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color:
+                              activeQR ? Colors.white : AppColors.primaryText)),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      activeQR = true;
-                    });
-                  },
-                  child: Container(
-                    width: 138.w,
-                    height: 30.h,
-                    margin: EdgeInsets.only(top: 10.h),
-                    decoration: BoxDecoration(
-                        color:
-                            activeQR ? AppColors.primaryButton : Colors.white,
-                        border: Border.all(
-                            color: AppColors.secondaryText, width: 1.w),
-                        borderRadius: BorderRadius.all(Radius.circular(5.r))),
-                    child: Center(
-                        child: CustomText(
-                            message: 'Scan QR',
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.bold,
-                            color: activeQR
-                                ? Colors.white
-                                : AppColors.primaryText)),
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -561,7 +557,7 @@ class _HomePageBodyState extends State<HomePageBody> {
           boxShadow: [
             BoxShadow(
                 color: AppColors.secondaryText,
-                blurRadius: 15.r,
+                blurRadius: 5.r,
                 offset: Offset(0.0, 0.0))
           ]),
       //Fix PrefixIcon
@@ -585,7 +581,7 @@ class _HomePageBodyState extends State<HomePageBody> {
             contentPadding:
                 EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             suffixIcon: Icon(Icons.search, color: AppColors.secondaryText),
-            hintText: 'Search class', // change here hinttext
+            hintText: 'Search class',
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15.0.r)),
                 borderSide:
@@ -637,9 +633,6 @@ class _HomePageBodyState extends State<HomePageBody> {
                         opacity: 0.3,
                         child: Image.asset('assets/images/nodata.png'),
                       ),
-                      // const SizedBox(
-                      //   height: 5,
-                      // ),
                       5.verticalSpace,
                       CustomText(
                           message: "You haven't joint any classes yet!",
@@ -659,73 +652,61 @@ class _HomePageBodyState extends State<HomePageBody> {
             Future.delayed(Duration.zero, () {
               classDataProvider.setClassesStudentList(studentClasses);
             });
-            return SizedBox(
-              height: 500.h,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListView.builder(
-                      padding: EdgeInsets.only(top: 20.h),
-                      shrinkWrap: true,
-                      itemCount: studentClasses.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var data = studentClasses[index];
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              left: 5.w, right: 5.w, bottom: 10.h),
-                          child: GestureDetector(
-                            onTap: () {
-                              // Navigator.pushNamed(context,'/DetailPage',arguments: {'studentClasses': data});
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      DetailPage(
-                                    classesStudent: data,
-                                  ),
-                                  transitionDuration:
-                                      const Duration(milliseconds: 200),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return ScaleTransition(
-                                      scale: animation,
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                left: 5.w,
-                                right: 5.w,
-                              ),
-                              child: classInformation(
-                                data.totalWeeks,
-                                data.courseName,
-                                data.teacherName,
-                                data.courseID,
-                                data.classType,
-                                data.group,
-                                data.subGroup,
-                                data.shiftNumber,
-                                data.roomNumber,
-                                data.totalPresence,
-                                data.totalAbsence,
-                                data.totalLate,
-                                data.progress,
-                              ),
-                            ),
+            return ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.only(top: 20.h),
+              shrinkWrap: true,
+              itemCount: studentClasses.length,
+              itemBuilder: (BuildContext context, int index) {
+                var data = studentClasses[index];
+                return Padding(
+                  padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 10.h),
+                  child: GestureDetector(
+                    onTap: () {
+                      // Navigator.pushNamed(context,'/DetailPage',arguments: {'studentClasses': data});
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  DetailPage(
+                            classesStudent: data,
                           ),
-                        );
-                      },
+                          transitionDuration: const Duration(milliseconds: 200),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return ScaleTransition(
+                              scale: animation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 5.w,
+                        right: 5.w,
+                      ),
+                      child: classInformation(
+                        data.totalWeeks,
+                        data.courseName,
+                        data.teacherName,
+                        data.courseID,
+                        data.classType,
+                        data.group,
+                        data.subGroup,
+                        data.shiftNumber,
+                        data.roomNumber,
+                        data.totalPresence,
+                        data.totalAbsence,
+                        data.totalLate,
+                        data.progress,
+                      ),
                     ),
-                    20.verticalSpace,
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
           }
         }
@@ -737,25 +718,21 @@ class _HomePageBodyState extends State<HomePageBody> {
   Widget noInternet() {
     return Center(
       child: Container(
-        width: 200,
-        height: 350,
+        width: 200.w,
+        height: 350.h,
         child: Center(
           child: Column(
             children: [
-              const SizedBox(
-                height: 100,
-              ),
+              100.verticalSpace,
               Opacity(
                 opacity: 0.5,
                 child: Image.asset('assets/images/nointernet.png'),
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
                 "Please check your internet!",
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey.withOpacity(0.5),
                 ),
@@ -768,76 +745,59 @@ class _HomePageBodyState extends State<HomePageBody> {
   }
 
   Widget noInternetWithHive() {
+    print('No internet with hive');
     if (classesStudentBox.isOpen || classesStudentBox.isNotEmpty) {
-      return SizedBox(
-        height: 500,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListView.builder(
-                padding: const EdgeInsets.only(top: 20),
-                shrinkWrap: true,
-                controller: _controller,
-                itemCount: classesStudentBox.values.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var data = classesStudentBox.getAt(index);
-                  return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 5, right: 5, bottom: 10),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    DetailPageOffline(
-                              classesStudent: data,
-                            ),
-                            transitionDuration:
-                                const Duration(milliseconds: 200),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              return ScaleTransition(
-                                scale: animation,
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 5,
-                          right: 5,
-                        ),
-                        child: classInformation(
-                          data!.totalWeeks,
-                          data.courseName,
-                          data.teacherName,
-                          data.courseID,
-                          data.classType,
-                          data.group,
-                          data.subGroup,
-                          data.shiftNumber,
-                          data.roomNumber,
-                          data.totalPresence,
-                          data.totalAbsence,
-                          data.totalLate,
-                          double.parse(data.progress.toString()),
-                        ),
-                      ),
+      return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.only(top: 20.h),
+        shrinkWrap: true,
+        controller: _controller,
+        itemCount: classesStudentBox.values.length,
+        itemBuilder: (BuildContext context, int index) {
+          var data = classesStudentBox.getAt(index);
+          return Padding(
+            padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 10.h),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        DetailPageOffline(
+                      classesStudent: data,
                     ),
-                  );
-                },
+                    transitionDuration: const Duration(milliseconds: 200),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return ScaleTransition(
+                        scale: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: classInformation(
+                  data!.totalWeeks,
+                  data.courseName,
+                  data.teacherName,
+                  data.courseID,
+                  data.classType,
+                  data.group,
+                  data.subGroup,
+                  data.shiftNumber,
+                  data.roomNumber,
+                  data.totalPresence,
+                  data.totalAbsence,
+                  data.totalLate,
+                  double.parse(data.progress.toString()),
+                ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       );
     } else {
       return noInternet();
@@ -868,188 +828,181 @@ class _HomePageBodyState extends State<HomePageBody> {
     double progress,
   ) {
     return Container(
-        width: double.infinity,
-        // height: MediaQuery.of(context).size.height * 0.18,
-        padding: EdgeInsets.symmetric(vertical: 10.h),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20.r)),
-            boxShadow: [
-              BoxShadow(
-                  color: AppColors.secondaryText,
-                  blurRadius: 5,
-                  offset: Offset(5.0, 4.0))
-            ]),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      width: double.infinity,
+      // height: MediaQuery.of(context).size.height * 0.18,
+      padding: EdgeInsets.symmetric(vertical: 13.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20.r)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.secondaryText,
+            blurRadius: 2,
+            offset: Offset(3.0, 2.0),
+          )
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        child: Row(
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 20.w, top: 10.h),
-              child: Row(
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
-                    child: SizedBox(
-                      // width: 55.,
-                      // height: 80,
-                      child: CircularPercentIndicator(
-                        radius: 40.r,
-                        lineWidth: 6.w,
-                        percent: progress, // Thay đổi giá trị tại đây
-                        center: Text(
-                          "$totalWeeks Weeks",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 11.sp),
-                        ),
-                        backgroundColor: AppColors.secondaryText,
-                        progressColor: AppColors.primaryButton,
-                        animation: true,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 15.w,
-                  ),
-                  Container(
-                    // width: 165,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    padding: EdgeInsets.only(top: 10.h),
+                    child: Row(
                       children: [
-                        customRichText(
-                          title: 'Course: ',
-                          message: courseName,
-                          fontWeightTitle: FontWeight.bold,
-                          fontWeightMessage: FontWeight.w400,
-                          colorText: AppColors.primaryText,
-                          fontSize: 11.sp,
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
+                          child: SizedBox(
+                            child: CircularPercentIndicator(
+                              radius: 40.r,
+                              lineWidth: 5.w,
+                              percent: progress,
+                              center: Text(
+                                "$totalWeeks Weeks",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                              backgroundColor: AppColors.secondaryText,
+                              progressColor: AppColors.primaryButton,
+                              animation: true,
+                            ),
+                          ),
                         ),
-                        5.verticalSpace,
-                        customRichText(
-                          title: 'Type: ',
-                          message: classType,
-                          fontWeightTitle: FontWeight.bold,
-                          fontWeightMessage: FontWeight.w400,
-                          colorText: AppColors.primaryText,
-                          fontSize: 11.sp,
+                        SizedBox(width: 15.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              customRichText(
+                                title: 'Course: ',
+                                message: courseName,
+                                fontWeightTitle: FontWeight.bold,
+                                fontWeightMessage: FontWeight.w400,
+                                colorText: AppColors.primaryText,
+                                fontSize: 12.sp,
+                              ),
+                              5.verticalSpace,
+                              customRichText(
+                                title: 'Type: ',
+                                message: classType,
+                                fontWeightTitle: FontWeight.bold,
+                                fontWeightMessage: FontWeight.w400,
+                                colorText: AppColors.primaryText,
+                                fontSize: 12.sp,
+                              ),
+                              5.verticalSpace,
+                              customRichText(
+                                title: 'Lecturer: ',
+                                message: teacherName,
+                                fontWeightTitle: FontWeight.bold,
+                                fontWeightMessage: FontWeight.w400,
+                                colorText: AppColors.primaryText,
+                                fontSize: 12.sp,
+                              ),
+                              5.verticalSpace,
+                              customRichText(
+                                title: 'CourseID: ',
+                                message: courseID,
+                                fontWeightTitle: FontWeight.bold,
+                                fontWeightMessage: FontWeight.w400,
+                                colorText: AppColors.primaryText,
+                                fontSize: 12.sp,
+                              ),
+                              5.verticalSpace,
+                              Row(
+                                children: [
+                                  customRichText(
+                                    title: 'Shift: ',
+                                    message: "$shift",
+                                    fontWeightTitle: FontWeight.bold,
+                                    fontWeightMessage: FontWeight.w400,
+                                    colorText: AppColors.primaryText,
+                                    fontSize: 12.sp,
+                                  ),
+                                  SizedBox(width: 5.w),
+                                  customRichText(
+                                    title: 'Class: ',
+                                    message: roomNumber,
+                                    fontWeightTitle: FontWeight.bold,
+                                    fontWeightMessage: FontWeight.w400,
+                                    colorText: AppColors.primaryText,
+                                    fontSize: 12.sp,
+                                  ),
+                                ],
+                              ),
+                              5.verticalSpace,
+                              Row(
+                                children: [
+                                  customRichText(
+                                    title: 'Group: ',
+                                    message: group,
+                                    fontWeightTitle: FontWeight.bold,
+                                    fontWeightMessage: FontWeight.w400,
+                                    colorText: AppColors.primaryText,
+                                    fontSize: 12.sp,
+                                  ),
+                                  SizedBox(width: 5.w),
+                                  customRichText(
+                                    title: 'SubGroup: ',
+                                    message: subGroup,
+                                    fontWeightTitle: FontWeight.bold,
+                                    fontWeightMessage: FontWeight.w400,
+                                    colorText: AppColors.primaryText,
+                                    fontSize: 12.sp,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        // const SizedBox(
-                        //   height: 5,
-                        // ),
-                        5.verticalSpace,
-                        customRichText(
-                          title: 'Lectuer: ',
-                          message: teacherName,
-                          fontWeightTitle: FontWeight.bold,
-                          fontWeightMessage: FontWeight.w400,
-                          colorText: AppColors.primaryText,
-                          fontSize: 11.sp,
+                        SizedBox(width: 5.w),
+                        Center(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 55.h),
+                            width: 1.5.w,
+                            color: Colors.black,
+                          ),
                         ),
-                        5.verticalSpace,
-
-                        customRichText(
-                          title: 'CourseID: ',
-                          message: courseID,
-                          fontWeightTitle: FontWeight.bold,
-                          fontWeightMessage: FontWeight.w400,
-                          colorText: AppColors.primaryText,
-                          fontSize: 11.sp,
-                        ),
-                        5.verticalSpace,
-
-                        Row(
+                        SizedBox(width: 5.w),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             customRichText(
-                              title: 'Shift: ',
-                              message: "$shift",
+                              title: 'Total Presence: ',
+                              message: '${totalPresence.ceil()}',
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
                               colorText: AppColors.primaryText,
-                              fontSize: 11.sp,
+                              fontSize: 13.sp,
                             ),
-                            10.verticalSpace,
+                            5.verticalSpace,
                             customRichText(
-                              title: 'Class: ',
-                              message: roomNumber,
+                              title: 'Total Late: ',
+                              message: '$totalLate',
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
                               colorText: AppColors.primaryText,
-                              fontSize: 11.sp,
+                              fontSize: 13.sp,
+                            ),
+                            5.verticalSpace,
+                            customRichText(
+                              title: 'Total Absent: ',
+                              message: '${totalAbsence.ceil()}',
+                              fontWeightTitle: FontWeight.bold,
+                              fontWeightMessage: FontWeight.w400,
+                              colorText: AppColors.primaryText,
+                              fontSize: 13.sp,
                             ),
                           ],
                         ),
-                        5.verticalSpace,
-
-                        Row(
-                          children: [
-                            customRichText(
-                              title: 'Group: ',
-                              message: group,
-                              fontWeightTitle: FontWeight.bold,
-                              fontWeightMessage: FontWeight.w400,
-                              colorText: AppColors.primaryText,
-                              fontSize: 11.sp,
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            customRichText(
-                              title: 'SubGroup: ',
-                              message: subGroup,
-                              fontWeightTitle: FontWeight.bold,
-                              fontWeightMessage: FontWeight.w400,
-                              colorText: AppColors.primaryText,
-                              fontSize: 11.sp,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(bottom: 25.h),
-                      height: 90.h,
-                      width: 1.5.w,
-                      color: Colors.black),
-                  SizedBox(
-                    width: 5.w,
-                  ),
-                  Padding(
-                    padding: !activeForm
-                        ? EdgeInsets.only(top: 20.h, bottom: 20.h)
-                        : EdgeInsets.only(top: 20.h, bottom: 10.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        customRichText(
-                          title: 'Total Presence: ',
-                          message: '${totalPresence.ceil()}',
-                          fontWeightTitle: FontWeight.bold,
-                          fontWeightMessage: FontWeight.w400,
-                          colorText: AppColors.primaryText,
-                          fontSize: 11.sp,
-                        ),
-                        5.verticalSpace,
-                        customRichText(
-                          title: 'Total Late: ',
-                          message: '${totalLate}',
-                          fontWeightTitle: FontWeight.bold,
-                          fontWeightMessage: FontWeight.w400,
-                          colorText: AppColors.primaryText,
-                          fontSize: 11.sp,
-                        ),
-                        5.verticalSpace,
-                        customRichText(
-                          title: 'Total Absent: ',
-                          message: '${totalAbsence.ceil()}',
-                          fontWeightTitle: FontWeight.bold,
-                          fontWeightMessage: FontWeight.w400,
-                          colorText: AppColors.primaryText,
-                          fontSize: 11.sp,
-                        ),
-                        15.verticalSpace,
                       ],
                     ),
                   ),
@@ -1057,8 +1010,215 @@ class _HomePageBodyState extends State<HomePageBody> {
               ),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
+
+  // Widget classInformation(
+  //   int totalWeeks,
+  //   String courseName,
+  //   String teacherName,
+  //   String courseID,
+  //   String classType,
+  //   String group,
+  //   String subGroup,
+  //   int shift,
+  //   String roomNumber,
+  //   int totalPresence,
+  //   int totalAbsence,
+  //   int totalLate,
+  //   double progress,
+  // ) {
+  //   return Container(
+  //       width: double.infinity,
+  //       // height: MediaQuery.of(context).size.height * 0.18,
+  //       padding: EdgeInsets.symmetric(vertical: 13.h),
+  //       decoration: BoxDecoration(
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.all(Radius.circular(20.r)),
+  //           boxShadow: [
+  //             BoxShadow(
+  //                 color: AppColors.secondaryText,
+  //                 blurRadius: 2,
+  //                 offset: Offset(3.0, 2.0))
+  //           ]),
+  //       child: Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: 10.w),
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Padding(
+  //               padding: EdgeInsets.only(top: 10.h),
+  //               child: Expanded(
+  //                 child: Row(
+  //                   children: [
+  //                     Padding(
+  //                       padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
+  //                       child: SizedBox(
+  //                         child: CircularPercentIndicator(
+  //                           radius: 40.r,
+  //                           lineWidth: 5.w,
+  //                           percent: progress, // Thay đổi giá trị tại đây
+  //                           center: Text(
+  //                             "$totalWeeks Weeks",
+  //                             style: TextStyle(
+  //                                 fontWeight: FontWeight.bold, fontSize: 12.sp),
+  //                           ),
+  //                           backgroundColor: AppColors.secondaryText,
+  //                           progressColor: AppColors.primaryButton,
+  //                           animation: true,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     SizedBox(
+  //                       width: 15.w,
+  //                     ),
+  //                     Expanded(
+  //                       child: Column(
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children: [
+  //                           customRichText(
+  //                             title: 'Course: ',
+  //                             message: courseName,
+  //                             fontWeightTitle: FontWeight.bold,
+  //                             fontWeightMessage: FontWeight.w400,
+  //                             colorText: AppColors.primaryText,
+  //                             fontSize: 12.sp,
+  //                           ),
+  //                           5.verticalSpace,
+  //                           customRichText(
+  //                             title: 'Type: ',
+  //                             message: classType,
+  //                             fontWeightTitle: FontWeight.bold,
+  //                             fontWeightMessage: FontWeight.w400,
+  //                             colorText: AppColors.primaryText,
+  //                             fontSize: 12.sp,
+  //                           ),
+  //                           5.verticalSpace,
+  //                           customRichText(
+  //                             title: 'Lectuer: ',
+  //                             message: teacherName,
+  //                             fontWeightTitle: FontWeight.bold,
+  //                             fontWeightMessage: FontWeight.w400,
+  //                             colorText: AppColors.primaryText,
+  //                             fontSize: 12.sp,
+  //                           ),
+  //                           5.verticalSpace,
+  //                           customRichText(
+  //                             title: 'CourseID: ',
+  //                             message: courseID,
+  //                             fontWeightTitle: FontWeight.bold,
+  //                             fontWeightMessage: FontWeight.w400,
+  //                             colorText: AppColors.primaryText,
+  //                             fontSize: 12.sp,
+  //                           ),
+  //                           5.verticalSpace,
+  //                           Row(
+  //                             children: [
+  //                               customRichText(
+  //                                 title: 'Shift: ',
+  //                                 message: "$shift",
+  //                                 fontWeightTitle: FontWeight.bold,
+  //                                 fontWeightMessage: FontWeight.w400,
+  //                                 colorText: AppColors.primaryText,
+  //                                 fontSize: 12.sp,
+  //                               ),
+  //                               SizedBox(
+  //                                 width: 5.w,
+  //                               ),
+  //                               customRichText(
+  //                                 title: 'Class: ',
+  //                                 message: roomNumber,
+  //                                 fontWeightTitle: FontWeight.bold,
+  //                                 fontWeightMessage: FontWeight.w400,
+  //                                 colorText: AppColors.primaryText,
+  //                                 fontSize: 12.sp,
+  //                               ),
+  //                             ],
+  //                           ),
+  //                           5.verticalSpace,
+  //                           Row(
+  //                             children: [
+  //                               customRichText(
+  //                                 title: 'Group: ',
+  //                                 message: group,
+  //                                 fontWeightTitle: FontWeight.bold,
+  //                                 fontWeightMessage: FontWeight.w400,
+  //                                 colorText: AppColors.primaryText,
+  //                                 fontSize: 12.sp,
+  //                               ),
+  //                               SizedBox(
+  //                                 width: 5.w,
+  //                               ),
+  //                               customRichText(
+  //                                 title: 'SubGroup: ',
+  //                                 message: subGroup,
+  //                                 fontWeightTitle: FontWeight.bold,
+  //                                 fontWeightMessage: FontWeight.w400,
+  //                                 colorText: AppColors.primaryText,
+  //                                 fontSize: 12.sp,
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                     SizedBox(
+  //                       width: 5.w,
+  //                     ),
+  //                     Center(
+  //                       child: Container(
+  //                           // margin: EdgeInsets.only(bottom: 25.h),
+  //                           // height: 90.h,
+  //                           padding: EdgeInsets.symmetric(vertical: 55.h),
+  //                           width: 1.5.w,
+  //                           color: Colors.black),
+  //                     ),
+  //                     SizedBox(
+  //                       width: 5.w,
+  //                     ),
+  //                     Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       mainAxisAlignment: MainAxisAlignment.center,
+  //                       children: [
+  //                         customRichText(
+  //                           title: 'Total Presence: ',
+  //                           message: '${totalPresence.ceil()}',
+  //                           fontWeightTitle: FontWeight.bold,
+  //                           fontWeightMessage: FontWeight.w400,
+  //                           colorText: AppColors.primaryText,
+  //                           fontSize: 13.sp,
+  //                         ),
+  //                         5.verticalSpace,
+  //                         customRichText(
+  //                           title: 'Total Late: ',
+  //                           message: '${totalLate}',
+  //                           fontWeightTitle: FontWeight.bold,
+  //                           fontWeightMessage: FontWeight.w400,
+  //                           colorText: AppColors.primaryText,
+  //                           fontSize: 13.sp,
+  //                         ),
+  //                         5.verticalSpace,
+  //                         customRichText(
+  //                           title: 'Total Absent: ',
+  //                           message: '${totalAbsence.ceil()}',
+  //                           fontWeightTitle: FontWeight.bold,
+  //                           fontWeightMessage: FontWeight.w400,
+  //                           colorText: AppColors.primaryText,
+  //                           fontSize: 13.sp,
+  //                         ),
+  //                         // 15.verticalSpace,
+  //                       ],
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ));
+  // }
 
   Widget customLoading() {
     return Container(

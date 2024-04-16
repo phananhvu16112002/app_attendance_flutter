@@ -1,3 +1,7 @@
 {
-    "helloWorld":"Welcome"
+    "helloWorld":"Welcome",
+    "title_login": "Login",
+    "title_hi":"Hi, ",
+    "title_student": "Student",
+    "title_profile_language": "Language"
 }

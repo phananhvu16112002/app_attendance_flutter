@@ -15,22 +15,14 @@ import 'package:attendance_system_nodejs/providers/attendanceDetail_data_provide
 import 'package:attendance_system_nodejs/providers/attendanceFormForDetailPage_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/attendanceForm_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/classesStudent_data_provider.dart';
+import 'package:attendance_system_nodejs/providers/language_provider.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/create_new_password.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/flash_screen.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/forgot_password.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/forgot_password_otp_page.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/otp_page.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/register_page.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/upload_image.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
-import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
-import 'package:attendance_system_nodejs/screens/Home/profile_page/profile.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:face_camera/face_camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -43,16 +35,22 @@ import 'firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   print("Handling a background message: ${message.messageId}");
 }
 
+bool isInternetConnected = false;
+bool isEngland = true;
 void main() async {
   SecureStorage secureStorage = SecureStorage();
   WidgetsFlutterBinding.ensureInitialized();
+  Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    if (result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi) {
+      isInternetConnected = true;
+    } else {
+      isInternetConnected = false;
+    }
+  });
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   await messaging.requestPermission(
@@ -91,6 +89,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SocketServerProvider()),
         ChangeNotifierProvider(create: (_) => AttendanceFormDataProvider()),
         ChangeNotifierProvider(create: (_) => ClassesStudentProvider()),
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
         ChangeNotifierProvider(
             create: (_) => AttendanceFormDataForDetailPageProvider())
       ],
@@ -113,221 +112,118 @@ class _MyAppState extends State<MyApp> {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       builder: (context, child) {
-        return MaterialApp(
-          supportedLocales: L10n.all,
-          locale: const Locale('vi'),
-          localizationsDelegates: [
-            AppLocalizations.delegate, // Add this line
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          title: 'Attendance TDTU',
-          theme: ThemeData(
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: AppColors.backgroundColor),
-            useMaterial3: false,
-          ),
-          
-          initialRoute: '/',
-          routes: {
-            '/Welcome': (context) => const WelcomePage(),
-            '/Login': (context) => const SignInPage(),
-            '/Register': (context) => const RegisterPage(),
-            '/ForgotPassword': (context) => const ForgotPassword(),
-            '/ForgotPasswordOTP': (context) => const ForgotPasswordOTPPage(),
-            '/CreateNewPassword': (context) => const CreateNewPassword(),
-            '/OTP': (context) => const OTPPage(),
-            '/HomePage': (context) => const HomePage(),
-            '/ProfilePage': (context) => const ProfilePage(),
-            // '/DetailReport': (context) => const DetailReport(),
+        return Consumer<LanguageProvider>(
+          builder: (context, languageProvider, child) {
+            bool isEnglish = languageProvider.isEnglish;
+            Locale locale = isEnglish ? Locale('en') : Locale('vi');
+            return MaterialApp(
+              supportedLocales: L10n.all,
+              locale: locale,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              title: 'Attendance TDTU',
+              theme: ThemeData(
+                colorScheme:
+                    ColorScheme.fromSeed(seedColor: AppColors.backgroundColor),
+                useMaterial3: false,
+              ),
+              home: FlashScreen(),
+              debugShowCheckedModeBanner: false,
+            );
           },
-          home: child,
-          debugShowCheckedModeBanner: false,
         );
       },
-      child: WelcomePage(),
     );
   }
 }
 
 
+
+
+//  AttendanceFormPage( classesStudent: ClassesStudent(
+//               studentID: 'studentID',
+//               classID: 'classID',
+//               total: 10,
+//               totalPresence: 10,
+//               totalAbsence: 10,
+//               totalLate: 10,
+//               roomNumber: 'roomNumber',
+//               shiftNumber: 3,
+//               startTime: '2024-03-03T10:57:55.000Z',
+//               endTime: '2024-03-03T10:57:55.000Z',
+//               classType: 'classType',
+//               group: 'group',
+//               subGroup: 'subGroup',
+//               courseID: 'courseID',
+//               teacherID: 'teacherID',
+//               courseName: 'courseName',
+//               totalWeeks: 9,
+//               requiredWeeks: 9,
+//               credit: 9,
+//               teacherEmail: 'teacherEmail',
+//               teacherName: 'teacherName',
+//               progress: 0.5),)
+
+
+
+
+
+
+// AttendanceFormPageQR(
+//          attendanceForm: AttendanceForm(formID: 'formID', classes: 'classes', startTime: '2024-03-03T10:57:55.000Z', endTime: 'endTime', dateOpen: 'dateOpen', status: false, typeAttendance: 0 , location: 'location', latitude: 0.0, longtitude: 0.0, radius: 0.0),
+//         )
+
+
 // AfterAttendance(
-//         attendanceDetail: AttendanceDetail(
-//             studentDetail: 'studentDetail',
-//             classDetail: 'classDetail',
-//             attendanceForm: AttendanceForm(
-//                 formID: 'formID',
-//                 classes: 'classes',
-//                 startTime: '',
-//                 endTime: '',
-//                 dateOpen: '',
-//                 status: false,
-//                 typeAttendance: 0,
+//             attendanceDetail: AttendanceDetail(
+//                 studentDetail: 'studentDetail',
+//                 classDetail: 'classDetail',
+//                 attendanceForm: AttendanceForm(
+//                     formID: 'formID',
+//                     classes: 'classes',
+//                     startTime: '2024-03-03T10:57:55.000Z',
+//                     endTime: 'endTime',
+//                     dateOpen: 'dateOpen',
+//                     status: false,
+//                     typeAttendance: 0,
+//                     location: 'location',
+//                     latitude: 0.0,
+//                     longtitude: 0.0,
+//                     radius: 0.0),
+//                 result: 0,
+//                 dateAttendanced: 'dateAttendanced',
 //                 location: 'location',
-//                 latitude: 0.0,
-//                 longtitude: 0.0,
-//                 radius: 0.0),
-//             result: 1,
-//             dateAttendanced: '',
-//             location: 'location',
-//             note: 'note',
-//             latitude: 0.0,
-//             longitude: 0.0,
-//             url: ''),
-//         classesStudent: ClassesStudent(
-//             studentID: 'studentID',
-//             classID: 'classID',
-//             total: 10,
-//             totalPresence: 10,
-//             totalAbsence: 10,
-//             totalLate: 10,
-//             roomNumber: 'A0505',
-//             shiftNumber: 5,
-//             startTime: '',
-//             endTime: '',
-//             classType: 'classType',
-//             group: 'group',
-//             subGroup: 'subGroup',
-//             courseID: 'courseID',
-//             teacherID: 'teacherID',
-//             courseName: 'courseName',
-//             totalWeeks: 10,
-//             requiredWeeks: 2,
-//             credit: 2,
-//             teacherEmail: 'teacherEmail',
-//             teacherName: 'teacherName',
-//             progress: 0.5),
-//       ),
-
-// AttendanceFormPage(
-//         classesStudent: ClassesStudent(
-//             studentID: 'studentID',
-//             classID: 'classID',
-//             total: 10,
-//             totalPresence: 10,
-//             totalAbsence: 10,
-//             totalLate: 10,
-//             roomNumber: 'A0505',
-//             shiftNumber: 5,
-//             startTime: '',
-//             endTime: '',
-//             classType: 'classType',
-//             group: 'group',
-//             subGroup: 'subGroup',
-//             courseID: 'courseID',
-//             teacherID: 'teacherID',
-//             courseName: 'courseName',
-//             totalWeeks: 10,
-//             requiredWeeks: 2,
-//             credit: 2,
-//             teacherEmail: 'teacherEmail',
-//             teacherName: 'teacherName',
-//             progress: 0.5),
-//       ),
-
-// EditReportPage(
-//         classesStudent: ClassesStudent(
-//             studentID: 'studentID',
-//             classID: 'classID',
-//             total: 10,
-//             totalPresence: 10,
-//             totalAbsence: 10,/
-//             totalLate: 10,
-//             roomNumber: 'roomNumber',
-//             shiftNumber: 5,
-//             startTime: 'startTime',
-//             endTime: 'endTime',
-//             classType: 'classType',
-//             group: 'group',
-//             subGroup: 'subGroup',
-//             courseID: 'courseID',
-//             teacherID: 'teacherID',
-//             courseName: 'courseName',
-//             totalWeeks: 10,
-//             requiredWeeks: 2,
-//             credit: 2,
-//             teacherEmail: 'teacherEmail',
-//             teacherName: 'teacherName',
-//             progress: 0.5),
-//         reportData: ReportData(
-//             reportID: 1,
-//             topic: 'topic',
-//             problem: 'problem',
-//             message: 'message',
-//             status: 'Pending',
-//             createdAt: 'createdAt',
-//             checkNew: false,
-//             important: false,
-//             reportImage: [ReportImage(imageID: 'imageID', imageURL: '')],
-//             feedBack: FeedBack(
-//                 feedbackID: 1,
-//                 topicFeedback: 'topicFeedback',
-//                 messageFeedback: 'messageFeedback',
-//                 confirmStatus: 'Pending',
-//                 createdAtFeedBack: '')),
-//       ),
+//                 note: 'note',
+//                 latitude: 0,
+//                 longitude: 0,
+//                 url: 'url'),
+//             classesStudent: ClassesStudent(
+//                 studentID: 'studentID',
+//                 classID: 'classID',
+//                 total: 10,
+//                 totalPresence: 10,
+//                 totalAbsence: 10,
+//                 totalLate: 10,
+//                 roomNumber: 'roomNumber',
+//                 shiftNumber: 3,
+//                 startTime: '2024-03-03T10:57:55.000Z',
+//                 endTime: '2024-03-03T10:57:55.000Z',
+//                 classType: 'classType',
+//                 group: 'group',
+//                 subGroup: 'subGroup',
+//                 courseID: 'courseID',
+//                 teacherID: 'teacherID',
+//                 courseName: 'courseName',
+//                 totalWeeks: 9,
+//                 requiredWeeks: 9,
+//                 credit: 9,
+//                 teacherEmail: 'teacherEmail',
+//                 teacherName: 'teacherName',
+//                 progress: 0.5))
 
 
-// ReportAttendance(
-//         classesStudent: ClassesStudent(
-//             studentID: 'studentID',
-//             classID: 'classID',
-//             total: 10,
-//             totalPresence: 10,
-//             totalAbsence: 10,
-//             totalLate: 10,
-//             roomNumber: 'roomNumber',
-//             shiftNumber: 5,
-//             startTime: 'startTime',
-//             endTime: 'endTime',
-//             classType: 'classType',
-//             group: 'group',
-//             subGroup: 'subGroup',
-//             courseID: 'courseID',
-//             teacherID: 'teacherID',
-//             courseName: 'courseName',
-//             totalWeeks: 10,
-//             requiredWeeks: 2,
-//             credit: 2,
-//             teacherEmail: 'teacherEmail',
-//             teacherName: 'teacherName',
-//             progress: 0.5),
-//         attendanceFormDataForDetailPage: AttendanceFormDataForDetailPage(
-//             formID: '1',
-//             startTime: '',
-//             endTime: '',
-//             status: false,
-//             dateOpen: '',
-//             type: 0,
-//             latitude: 0.0,
-//             longitude: 0.0,
-//             radius: 0.0),
-//       ),
 
-
-// DetailPage(
-//         classesStudent: ClassesStudent(
-//             studentID: 'studentID',
-//             classID: 'classID',
-//             total: 10,
-//             totalPresence: 10,
-//             totalAbsence: 10,
-//             totalLate: 10,
-//             roomNumber: 'roomNumber',
-//             shiftNumber: 5,
-//             startTime: 'startTime',
-//             endTime: 'endTime',
-//             classType: 'classType',
-//             group: 'group',
-//             subGroup: 'subGroup',
-//             courseID: 'courseID',
-//             teacherID: 'teacherID',
-//             courseName: 'courseName',
-//             totalWeeks: 10,
-//             requiredWeeks: 2,
-//             credit: 2,
-//             teacherEmail: 'teacherEmail',
-//             teacherName: 'teacherName',
-//             progress: 0.5),
-//       ),

@@ -3,7 +3,10 @@ import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelForAPI_ReportPage_Version1/report_model.dart';
 import 'package:attendance_system_nodejs/screens/Home/detail_report/detail_report.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class ReportPage extends StatefulWidget {
@@ -26,77 +29,85 @@ class _ReportPageState extends State<ReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppColors.cardAttendance,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          shadowColor: Colors.transparent,
-            title: const Text(
-              'Reports',
-              style: TextStyle(
-                  color: AppColors.primaryText,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25),
-            ),
-            actions: [
-              Image.asset(
-                'assets/icons/garbage.png',
-                width: 30,
-                height: 30,
+    return RefreshIndicator(
+      onRefresh: () {
+        return Future.delayed(Duration(seconds: 3), () {
+          setState(() {});
+        });
+      },
+      child: Scaffold(
+          backgroundColor: const Color.fromARGB(255, 247, 245, 245),
+          appBar: AppBar(
+              backgroundColor: Colors.white,
+              shadowColor: Colors.transparent,
+              title: Text(
+                'Reports',
+                style: TextStyle(
+                    color: AppColors.primaryText,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.sp),
               ),
-            ]),
-        body: FutureBuilder(
-            future: API(context).getReportDataForStudent(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasData) {
-                if (snapshot.data != null) {
-                  List<ReportModel>? data = snapshot.data;
-                  return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: data!.length,
-                      itemBuilder: ((context, index) {
-                        ReportModel reportModel = data[index];
+              actions: [
+                Image.asset(
+                  'assets/icons/garbage.png',
+                  width: 25.w,
+                  height: 25.h,
+                ),
+              ]),
+          body: FutureBuilder(
+              future: API(context).getReportDataForStudent(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasData) {
+                  if (snapshot.data != null) {
+                    List<ReportModel>? data = snapshot.data;
+                    return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: data!.length,
+                        itemBuilder: ((context, index) {
+                          ReportModel reportModel = data[index];
 
-                        print(DateTime.parse(reportModel.createdAt).toLocal());
-                        print(reportModel.feedbackCreatedAt);
+                          print(
+                              DateTime.parse(reportModel.createdAt).toLocal());
+                          print(reportModel.feedbackCreatedAt);
 
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (builder) => DetailReport(
-                                            reportModel: reportModel,
-                                          )));
-                            },
-                            child: cardReport(
-                                getPathStatus(reportModel.status),
-                                reportModel.courseCourseName,
-                                reportModel.teacherName,
-                                reportModel.classesRoomNumber,
-                                reportModel.classesShiftNumber.toString(),
-                                reportModel.status,
-                                formatDate(reportModel.createdAt),
-                                reportModel.courseTotalWeeks.toString(),
-                                formatDate(reportModel.feedbackCreatedAt),
-                                formatTime(reportModel.feedbackCreatedAt)),
-                          ),
-                        );
-                      }));
+                          return Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) => DetailReport(
+                                              reportModel: reportModel,
+                                            )));
+                              },
+                              child: cardReport(
+                                  getPathStatus(reportModel.status),
+                                  reportModel.courseCourseName,
+                                  reportModel.teacherName,
+                                  reportModel.classesRoomNumber,
+                                  reportModel.classesShiftNumber.toString(),
+                                  reportModel.status,
+                                  formatDate(reportModel.createdAt),
+                                  reportModel.courseTotalWeeks.toString(),
+                                  formatDate(reportModel.feedbackCreatedAt),
+                                  formatTime(reportModel.feedbackCreatedAt)),
+                            ),
+                          );
+                        }));
+                  }
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  return Center(child: CircularProgressIndicator());
                 }
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-              return Text('Alo ALo');
-            }));
+                return Text('Alo ALo');
+              })),
+    );
   }
 
   Widget cardReport(
@@ -110,39 +121,36 @@ class _ReportPageState extends State<ReportPage> {
       String week,
       String returnDate,
       String timeReport) {
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        // height: MediaQuery.of(context).size.height * 0.26,
-        decoration: const BoxDecoration(
-            color: AppColors.cardReport,
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            boxShadow: [
-              BoxShadow(
-                  color: AppColors.secondaryText,
-                  blurRadius: 5.0,
-                  offset: Offset(0.0, 0.0))
-            ]),
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+      decoration: BoxDecoration(
+          color: AppColors.cardReport,
+          borderRadius: BorderRadius.all(Radius.circular(20.r)),
+          boxShadow: [
+            BoxShadow(
+                color: AppColors.secondaryText,
+                blurRadius: 5.0,
+                offset: Offset(0.0, 0.0))
+          ]),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 10,bottom: 10,left: 10, right: 10),
-              child: Image.asset(
-                pathStatus,
-                width: 35,
-                height: 35,
-              ),
+            Image.asset(
+              pathStatus,
+              width: 35.w,
+              height: 35.h,
             ),
-            Container(
-              width: 220,
+            SizedBox(
+              width: 10.w,
+            ),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // const SizedBox(
-                  //   height: 10,
-                  // ),
                   customRichText(
                       'Class: ',
                       className,
@@ -150,9 +158,7 @@ class _ReportPageState extends State<ReportPage> {
                       FontWeight.w500,
                       AppColors.primaryText,
                       AppColors.primaryText),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  10.verticalSpace,
                   customRichText(
                       'Lectuer: ',
                       lectuerName,
@@ -160,10 +166,9 @@ class _ReportPageState extends State<ReportPage> {
                       FontWeight.w500,
                       AppColors.primaryText,
                       AppColors.primaryText),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  10.verticalSpace,
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       customRichText(
                           'Room: ',
@@ -172,8 +177,8 @@ class _ReportPageState extends State<ReportPage> {
                           FontWeight.w500,
                           AppColors.primaryText,
                           AppColors.primaryText),
-                      const SizedBox(
-                        width: 10,
+                      SizedBox(
+                        width: 10.w,
                       ),
                       customRichText(
                           'Shift: ',
@@ -184,9 +189,7 @@ class _ReportPageState extends State<ReportPage> {
                           AppColors.primaryText),
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  10.verticalSpace,
                   customRichText(
                       'Status: ',
                       status,
@@ -194,9 +197,7 @@ class _ReportPageState extends State<ReportPage> {
                       FontWeight.w500,
                       AppColors.primaryText,
                       getColorBasedOnStatus(status)),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  10.verticalSpace,
                   Row(
                     children: [
                       customRichText(
@@ -206,8 +207,8 @@ class _ReportPageState extends State<ReportPage> {
                           FontWeight.w500,
                           AppColors.primaryText,
                           AppColors.primaryText),
-                      const SizedBox(
-                        width: 10,
+                      SizedBox(
+                        width: 10.w,
                       ),
                       customRichText(
                           'Week: ',
@@ -218,9 +219,7 @@ class _ReportPageState extends State<ReportPage> {
                           AppColors.primaryText),
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  10.verticalSpace,
                   customRichText(
                       'Return Date: ',
                       returnDate,
@@ -241,27 +240,19 @@ class _ReportPageState extends State<ReportPage> {
                 ],
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                          height: 180, width: 2, color: AppColors.primaryText),
-                      const CustomText(
-                          message: 'Detail',
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryButton)
-                    ],
-                  ),
-                )
-              ],
-            )
+            Container(
+              width: 1.5.w,
+              padding: EdgeInsets.symmetric(vertical: 100.h),
+              color: AppColors.primaryText,
+            ),
+            SizedBox(
+              width: 10.w,
+            ),
+            CustomText(
+                message: 'Detail',
+                fontSize: 15.sp,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryButton)
           ],
         ),
       ),
@@ -281,7 +272,7 @@ class _ReportPageState extends State<ReportPage> {
         text: title,
         style: TextStyle(
           fontWeight: fontWeightTitle,
-          fontSize: 15,
+          fontSize: 15.sp,
           color: colorTextTitle,
         ),
       ),
@@ -289,7 +280,7 @@ class _ReportPageState extends State<ReportPage> {
         text: message,
         style: TextStyle(
           fontWeight: fontWeightMessage,
-          fontSize: 15,
+          fontSize: 15.sp,
           color: colorTextMessage,
         ),
       ),

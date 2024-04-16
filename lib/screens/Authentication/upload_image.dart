@@ -8,6 +8,7 @@ import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
@@ -63,26 +64,26 @@ class _UploadImageState extends State<UploadImage> {
 
   ProgressDialog customDialogLoading() {
     return ProgressDialog(context,
+        isDismissible: false,
         customBody: Container(
-          width: 200,
-          height: 150,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               color: Colors.white),
-          child: const Center(
+          child: Center(
               child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(
                 color: AppColors.primaryButton,
               ),
-              SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -101,28 +102,27 @@ class _UploadImageState extends State<UploadImage> {
               images.clear();
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (builder) => const SignInPage()),
+                  MaterialPageRoute(builder: (builder) => SignInPage()),
                   (route) => false);
             },
-            icon: const Icon(Icons.arrow_back_ios,
-                size: 25, color: Colors.white)),
+            icon: Icon(Icons.arrow_back_ios, size: 20.sp, color: Colors.white)),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Upload Face',
           style: TextStyle(
-            fontSize: 25,
+            fontSize: 23.sp,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: AppColors.primaryButton,
       ),
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Colors.white,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,34 +135,34 @@ class _UploadImageState extends State<UploadImage> {
                   child: _image1 != null
                       ? Image.file(
                           _image1!,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          height: MediaQuery.of(context).size.height * 0.3,
+                          width: double.infinity,
+                          height: 250.h,
                         )
                       : selectImage(context),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 InkWell(
                   onTap: () => _getImageFromCamera(2),
                   child: _image2 != null
                       ? Image.file(
                           _image2!,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          height: MediaQuery.of(context).size.height * 0.3,
+                          width: double.infinity,
+                          height: 250.h,
                         )
                       : selectImage(context),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 InkWell(
                   onTap: () => _getImageFromCamera(3),
                   child: _image3 != null
                       ? Image.file(
                           _image3!,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          height: MediaQuery.of(context).size.height * 0.3,
+                          width: double.infinity,
+                          height: 250.h,
                         )
                       : selectImage(context),
                 ),
-                const SizedBox(height: 5),
+                10.verticalSpace,
                 if (_image1 != null && _image2 != null && _image3 != null)
                   InkWell(
                     onTap: () async {
@@ -175,10 +175,7 @@ class _UploadImageState extends State<UploadImage> {
                       var image3 =
                           await secureStorage.readSecureData('_image3');
                       images.add(XFile(image3));
-                      // print(images.length);
-                      // for (int i = 0; i < images.length; i++) {
-                      //   print(images[i]);
-                      // }
+
                       String studentID =
                           await secureStorage.readSecureData('studentID');
                       _progressDialog.show();
@@ -194,18 +191,18 @@ class _UploadImageState extends State<UploadImage> {
                       }
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                      padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                       child: Container(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
+                        // height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
                           color: AppColors.primaryButton,
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: CustomText(
                             message: 'Upload Image',
-                            fontSize: 18,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -214,19 +211,23 @@ class _UploadImageState extends State<UploadImage> {
                     ),
                   )
                 else
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primaryButton,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: const Center(
-                      child: CustomText(
-                        message: 'Required 3 image Face',
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Container(
+                      // height: 50,
+                      padding: EdgeInsets.symmetric(vertical: 15.h),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryButton,
+                        borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                      ),
+                      child: Center(
+                        child: CustomText(
+                          message: 'Required 3 image Face',
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -242,14 +243,14 @@ class _UploadImageState extends State<UploadImage> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Failed Upload'),
-        content: const Text('Please check required'),
+        title: Text('Failed Upload'),
+        content: Text('Please check required'),
         actions: [
           TextButton(
             onPressed: () async {
               Navigator.pop(context); // Đóng hộp thoại
             },
-            child: const Text('OK'),
+            child: Text('OK'),
           ),
         ],
       ),
@@ -260,8 +261,8 @@ class _UploadImageState extends State<UploadImage> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Upload Sucessfully'),
-        content: const Text('You can check image face in settings'),
+        title: Text('Upload Sucessfully'),
+        content: Text('You can check image face in settings'),
         actions: [
           TextButton(
             onPressed: () async {
@@ -270,43 +271,45 @@ class _UploadImageState extends State<UploadImage> {
                   MaterialPageRoute(builder: (builder) => HomePage()),
                   (route) => false); // Đóng hộp thoại
             },
-            child: const Text('OK'),
+            child: Text('OK'),
           ),
         ],
       ),
     );
   }
 
-  
-
-  Container selectImage(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.85,
-      height: MediaQuery.of(context).size.height * 0.3,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          width: 2,
-          style: BorderStyle.solid,
-          color: AppColors.primaryButton.withOpacity(0.5),
+  Widget selectImage(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: Container(
+        width: double.infinity,
+        // height: MediaQuery.of(context).size.height * 0.3,
+        padding: EdgeInsets.symmetric(vertical: 70.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            width: 2.w,
+            style: BorderStyle.solid,
+            color: AppColors.primaryButton.withOpacity(0.5),
+          ),
         ),
-      ),
-      child: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.plus_one_outlined,
-              size: 40,
-              color: AppColors.primaryButton,
-            ),
-            CustomText(
-              message: 'Add your face',
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryButton,
-            ),
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.plus_one_outlined,
+                size: 35.sp,
+                color: AppColors.primaryButton,
+              ),
+              CustomText(
+                message: 'Add your face',
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryButton,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -319,27 +322,27 @@ class _UploadImageState extends State<UploadImage> {
 //       color: Colors.white,
 //       child: Column(
 //         children: [
-//           const SizedBox(
+//            SizedBox(
 //             height: 8,
 //           ),
 //           Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 24.0),
+//             padding:  EdgeInsets.symmetric(horizontal: 24.0),
 //             child: Row(
 //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //               children: [
-//                 const Text('Hot Camp',
+//                  Text('Hot Camp',
 //                     style: TextStyle(
 //                         color: AppColors.primary3,
 //                         fontSize: 20,
 //                         fontWeight: FontWeight.w700)),
 //                 Row(
 //                   children: [
-//                     const Text('See more',
+//                      Text('See more',
 //                         style: TextStyle(
 //                             color: AppColors.primary3,
 //                             fontSize: 12,
 //                             fontWeight: FontWeight.w400)),
-//                     const SizedBox(
+//                      SizedBox(
 //                       width: 4,
 //                     ),
 //                     SvgPicture.asset('assets/icons/more.svg')
@@ -348,7 +351,7 @@ class _UploadImageState extends State<UploadImage> {
 //               ],
 //             ),
 //           ),
-//           const SizedBox(
+//            SizedBox(
 //             height: 16,
 //           ),
 //           CarouselSlider(
@@ -360,8 +363,8 @@ class _UploadImageState extends State<UploadImage> {
 //               enableInfiniteScroll: true,
 //               reverse: false,
 //               // autoPlay: true,
-//               autoPlayInterval: const Duration(seconds: 3),
-//               autoPlayAnimationDuration: const Duration(milliseconds: 800),
+//               autoPlayInterval:  Duration(seconds: 3),
+//               autoPlayAnimationDuration:  Duration(milliseconds: 800),
 //               autoPlayCurve: Curves.fastOutSlowIn,
 //               enlargeCenterPage: true,
 //               scrollDirection: Axis.horizontal,
@@ -376,17 +379,17 @@ class _UploadImageState extends State<UploadImage> {
 //                 builder: (BuildContext context) {
 //                   return currentIndex == imageUrls.indexOf(e)
 //                       ? Container(
-//                           decoration: const BoxDecoration(
+//                           decoration:  BoxDecoration(
 //                             color: AppColors.primary3,
 //                             borderRadius: BorderRadius.all(Radius.circular(16)),
 //                           ),
 //                           child: Padding(
-//                             padding: const EdgeInsets.all(15),
+//                             padding:  EdgeInsets.all(15),
 //                             child: Column(
 //                               crossAxisAlignment: CrossAxisAlignment.start,
 //                               children: [
 //                                 ClipRRect(
-//                                   borderRadius: const BorderRadius.only(
+//                                   borderRadius:  BorderRadius.only(
 //                                       topLeft: Radius.circular(8),
 //                                       topRight: Radius.circular(8),
 //                                       bottomLeft: Radius.circular(8)),
@@ -397,21 +400,21 @@ class _UploadImageState extends State<UploadImage> {
 //                                     fit: BoxFit.cover,
 //                                   ),
 //                                 ),
-//                                 const SizedBox(height: 16),
-//                                 const Text(
+//                                  SizedBox(height: 16),
+//                                  Text(
 //                                   'Himalayaa mountain peak',
 //                                   style: TextStyle(
 //                                       fontSize: 16,
 //                                       color: AppColors.colorText,
 //                                       fontWeight: FontWeight.w600),
 //                                 ),
-//                                 const SizedBox(height: 2),
+//                                  SizedBox(height: 2),
 //                                 Row(
 //                                   children: [
 //                                     SvgPicture.asset(
 //                                         'assets/icons/location.svg'),
-//                                     const SizedBox(width: 2),
-//                                     const Text(
+//                                      SizedBox(width: 2),
+//                                      Text(
 //                                       'Himalayan',
 //                                       style: TextStyle(
 //                                           fontSize: 10,
@@ -420,12 +423,12 @@ class _UploadImageState extends State<UploadImage> {
 //                                     ),
 //                                   ],
 //                                 ),
-//                                 const SizedBox(height: 2),
+//                                  SizedBox(height: 2),
 //                                 Row(
 //                                   children: [
 //                                     SvgPicture.asset('assets/icons/star.svg'),
-//                                     const SizedBox(width: 2),
-//                                     const Text(
+//                                      SizedBox(width: 2),
+//                                      Text(
 //                                       '4.5  ',
 //                                       style: TextStyle(
 //                                           fontSize: 16,
@@ -443,13 +446,13 @@ class _UploadImageState extends State<UploadImage> {
 //                             Container(
 //                               width: 180,
 //                               height: 250,
-//                               decoration: const BoxDecoration(
+//                               decoration:  BoxDecoration(
 //                                 color: AppColors.primary3,
 //                                 borderRadius:
 //                                     BorderRadius.all(Radius.circular(8)),
 //                               ),
 //                               child: Padding(
-//                                 padding: const EdgeInsets.all(0),
+//                                 padding:  EdgeInsets.all(0),
 //                                 child: Column(
 //                                   crossAxisAlignment: CrossAxisAlignment.start,
 //                                   children: [
@@ -461,8 +464,8 @@ class _UploadImageState extends State<UploadImage> {
 //                                         fit: BoxFit.cover,
 //                                       ),
 //                                     ),
-//                                     const SizedBox(height: 16),
-//                                     const Padding(
+//                                      SizedBox(height: 16),
+//                                      Padding(
 //                                       padding: EdgeInsets.symmetric(
 //                                           horizontal: 16.0),
 //                                       child: Text(
@@ -473,16 +476,16 @@ class _UploadImageState extends State<UploadImage> {
 //                                             fontWeight: FontWeight.w600),
 //                                       ),
 //                                     ),
-//                                     const SizedBox(height: 2),
+//                                      SizedBox(height: 2),
 //                                     Padding(
-//                                       padding: const EdgeInsets.symmetric(
+//                                       padding:  EdgeInsets.symmetric(
 //                                           horizontal: 16.0),
 //                                       child: Row(
 //                                         children: [
 //                                           SvgPicture.asset(
 //                                               'assets/icons/location.svg'),
-//                                           const SizedBox(width: 2),
-//                                           const Text(
+//                                            SizedBox(width: 2),
+//                                            Text(
 //                                             'Himalayan',
 //                                             style: TextStyle(
 //                                                 fontSize: 10,
@@ -507,7 +510,7 @@ class _UploadImageState extends State<UploadImage> {
 //               );
 //             }).toList(),
 //           ),
-//           const SizedBox(
+//            SizedBox(
 //             height: 16,
 //           ),
 //         ],

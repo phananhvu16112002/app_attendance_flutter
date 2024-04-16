@@ -10,13 +10,14 @@ import 'package:attendance_system_nodejs/providers/attendanceFormForDetailPage_d
 import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/detail_page.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 class ReportAttendance extends StatefulWidget {
-  const ReportAttendance(
+  ReportAttendance(
       {super.key,
       required this.classesStudent,
       required this.attendanceFormDataForDetailPage});
@@ -59,26 +60,25 @@ class _ReportAttendanceState extends State<ReportAttendance> {
 
   ProgressDialog customDialogLoading() {
     return ProgressDialog(context,
+        isDismissible: false,
         customBody: Container(
-          width: 200,
-          height: 150,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               color: Colors.white),
-          child: const Center(
+          child: Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(
                 color: AppColors.primaryButton,
               ),
-              SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -105,304 +105,247 @@ class _ReportAttendanceState extends State<ReportAttendance> {
     ));
   }
 
-  Padding _body(BuildContext context) {
+  Widget _body(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+      padding: EdgeInsets.only(top: 10, left: 15, right: 15),
       child: Container(
-        width: 400,
-        // height: MediaQuery.of(context).size.height,
+        width: double.infinity,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
                   color: AppColors.secondaryText,
-                  blurRadius: 15.0,
+                  blurRadius: 15.0.r,
                   offset: Offset(0.0, 0.0))
             ]),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 15,
-                ),
-                Center(
-                    child: Text(
-                  'Report Attendance',
-                  style: GoogleFonts.inter(
-                      color: AppColors.primaryButton,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                )),
-                const SizedBox(
-                  height: 15,
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    // height: MediaQuery.of(context).size.height,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const CustomText(
-                              message: 'Send To:',
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primaryText),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          customFormField(
-                              classesStudent.teacherName,
-                              370,
-                              50,
-                              _lectuerController,
-                              IconButton(
-                                  onPressed: () {}, icon: const Icon(null)),
-                              1,
-                              true, (value) {
-                            return;
-                          }),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const CustomText(
-                              message: 'Topic',
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primaryText),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          customFormField(
-                              'Attendance Form ${formatDate(attendanceFormDataForDetailPage.dateOpen)}',
-                              // 'Attendance FOrm',
-                              370,
-                              50,
-                              _topicController,
-                              IconButton(
-                                  onPressed: () {}, icon: const Icon(null)),
-                              1,
-                              false, (value) {
-                            return;
-                          }),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const CustomText(
-                              message: 'Type Of Problem',
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primaryText),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Container(
-                            width: 370,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(
-                                  width: 1,
-                                  color:
-                                      const Color.fromARGB(92, 190, 188, 188)),
-                            ),
-                            child: DropdownButton(
-                              underline: Container(),
-                              value: dropdownvalue,
-                              icon: const Icon(Icons.keyboard_arrow_down),
-                              items: items.map((String items) {
-                                return DropdownMenuItem(
-                                    value: items,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Container(
-                                        width: 317,
-                                        child: Text(
-                                          items,
-                                          style: const TextStyle(
-                                              color:
-                                                  Color.fromARGB(99, 0, 0, 0),
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                      ),
-                                    ));
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue = newValue!;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const CustomText(
-                              message: 'Message',
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primaryText),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          customFormField(
-                              'Description your problem',
-                              370,
-                              200,
-                              _message,
-                              IconButton(
-                                  onPressed: () {}, icon: const Icon(null)),
-                              200 ~/ 20,
-                              false, (value) {
-                            if (value!.isEmpty) {
-                              return 'Enter your message';
-                            }
-                          }),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              const CustomText(
-                                  message: 'Evidence of the problem: ',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primaryText),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Row(
-                                children: [
-                                  //Call bottom modal imagepicker gallery or camera
-                                  CustomButton(
-                                    buttonName: 'Upload File',
-                                    backgroundColorButton:
-                                        AppColors.cardAttendance,
-                                    borderColor: AppColors.secondaryText,
-                                    textColor: AppColors.primaryButton,
-                                    colorShadow: Colors.transparent,
-                                    function: () {
-                                      showModalBottomSheet(
-                                          context: context,
-                                          builder: (builder) => bottomSheet());
-                                    },
-                                    height: 35,
-                                    width: 100,
-                                    fontSize: 12,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 0),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children:
-                                    _imageFiles.asMap().entries.map((entry) {
-                                  final index = entry.key;
-                                  final XFile? imageFile = entry.value;
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: InkWell(
-                                      onLongPress: () => _deleteImage(index),
-                                      onTap: () => _changeImage(index),
-                                      child: imageFile != null
-                                          ? Center(
-                                              child: Image(
-                                                width: 240,
-                                                height: 240,
-                                                fit: BoxFit.cover,
-                                                image: FileImage(
-                                                    File(imageFile.path)),
-                                              ),
-                                            )
-                                          : null,
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  15.verticalSpace,
+                  Center(
+                      child: Text(
+                    'Report Attendance',
+                    style: GoogleFonts.inter(
+                        color: AppColors.primaryButton,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold),
+                  )),
+                  18.verticalSpace,
+                  CustomText(
+                      message: 'Send To:',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryText),
+                  5.verticalSpace,
+                  customFormField(
+                      classesStudent.teacherName,
+                      _lectuerController,
+                      IconButton(onPressed: () {}, icon: Icon(null)),
+                      1,
+                      true, (value) {
+                    return;
+                  }),
+                  10.verticalSpace,
+                  CustomText(
+                      message: 'Topic',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryText),
+                  5.verticalSpace,
+                  customFormField(
+                      'Attendance Form ${formatDate(attendanceFormDataForDetailPage.dateOpen)}',
+                      _topicController,
+                      IconButton(onPressed: () {}, icon: const Icon(null)),
+                      1,
+                      false, (value) {
+                    return;
+                  }),
+                  10.verticalSpace,
+                  CustomText(
+                      message: 'Type Of Problem',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryText),
+                  5.verticalSpace,
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0.r),
+                      border: Border.all(
+                          width: 1.w,
+                          color: const Color.fromARGB(92, 190, 188, 188)),
+                    ),
+                    child: DropdownButton(
+                      isExpanded: true,
+                      underline: Container(),
+                      value: dropdownvalue,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: items.map((String items) {
+                        return DropdownMenuItem(
+                            value: items,
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 0),
-                              child: CustomButton(
-                                  buttonName: 'Send',
-                                  backgroundColorButton: _imageFiles.isNotEmpty
-                                      ? AppColors.primaryButton
-                                      : Colors.grey.withOpacity(0.3),
-                                  colorShadow: AppColors.colorShadow,
-                                  borderColor: Colors.transparent,
-                                  textColor: _imageFiles.isNotEmpty
-                                      ? Colors.white
-                                      : Colors.black,
-                                  function: _imageFiles.isNotEmpty
-                                      ? () async {
-                                          try {
-                                            if (_formKey.currentState!
-                                                .validate()) {
-                                              _progressDialog.show();
-                                              String check = await API(context)
-                                                  .submitReport(
-                                                      classesStudent.classID,
-                                                      attendanceFormDataForDetailPage
-                                                          .formID,
-                                                      _topicController
-                                                              .text.isNotEmpty
-                                                          ? _topicController
-                                                              .text
-                                                          // : 'Attendance Form',
-                                                          : 'Attendance Form ${formatDate(attendanceFormDataForDetailPage.dateOpen)}',
-                                                      dropdownvalue,
-                                                      _message.text,
-                                                      _imageFiles);
-                                              if (check == '') {
-                                                print('Success');
-                                                await _progressDialog.hide();
-                                                await _showDialog(context,
-                                                    "Send successfully report to lectuer");
-                                              } else {
-                                                print('failed');
-
-                                                await _progressDialog.hide();
-                                                await _showDialog(
-                                                    context, check);
-                                              }
-                                            }
-                                          } catch (e) {
-                                            print('Error send report: $e');
-                                            await _showDialog(
-                                                context, e.toString());
-                                          } finally {
-                                            await _progressDialog.hide();
-                                          }
-                                        }
-                                      : null,
-                                  height: 50,
-                                  width: 370,
-                                  fontSize: 20),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
+                              padding: EdgeInsets.only(left: 8.0.w),
+                              child: Container(
+                                // width: double.infinity,
+                                child: Text(
+                                  items,
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(99, 0, 0, 0),
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              ),
+                            ));
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownvalue = newValue!;
+                        });
+                      },
+                    ),
+                  ),
+                  10.verticalSpace,
+                  CustomText(
+                      message: 'Message',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryText),
+                  5.verticalSpace,
+                  customFormField(
+                      'Description your problem',
+                      _message,
+                      IconButton(onPressed: () {}, icon: const Icon(null)),
+                      200 ~/ 20,
+                      false, (value) {
+                    if (value!.isEmpty) {
+                      return 'Enter your message';
+                    }
+                  }),
+                  10.verticalSpace,
+                  Row(
+                    children: [
+                      CustomText(
+                          message: 'Evidence of the problem: ',
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryText),
+                      SizedBox(
+                        width: 10.w,
                       ),
-                    )),
-              ],
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (builder) => bottomSheet());
+                        },
+                        child: Container(
+                          width: 100.w,
+                          height: 30.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.primaryButton,
+                              borderRadius: BorderRadius.circular(5.r)),
+                          child: Center(
+                            child: CustomText(
+                                message: 'Upload File',
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  10.verticalSpace,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: _imageFiles.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final XFile? imageFile = entry.value;
+                          return Padding(
+                            padding: EdgeInsets.only(right: 10.w),
+                            child: InkWell(
+                              onLongPress: () => _deleteImage(index),
+                              onTap: () => _changeImage(index),
+                              child: imageFile != null
+                                  ? Center(
+                                      child: Image(
+                                        width: 200.w,
+                                        height: 200.h,
+                                        fit: BoxFit.cover,
+                                        image: FileImage(File(imageFile.path)),
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  10.verticalSpace,
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: CustomButton(
+                          buttonName: 'Send',
+                          backgroundColorButton: _imageFiles.isNotEmpty
+                              ? AppColors.primaryButton
+                              : AppColors.primaryButton.withOpacity(0.3),
+                          colorShadow: AppColors.colorShadow,
+                          borderColor: Colors.transparent,
+                          textColor: Colors.white,
+                          function: _imageFiles.isNotEmpty
+                              ? () async {
+                                  try {
+                                    if (_formKey.currentState!.validate()) {
+                                      _progressDialog.show();
+                                      String check = await API(context)
+                                          .submitReport(
+                                              classesStudent.classID,
+                                              attendanceFormDataForDetailPage
+                                                  .formID,
+                                              _topicController.text.isNotEmpty
+                                                  ? _topicController.text
+                                                  // : 'Attendance Form',
+                                                  : 'Attendance Form ${formatDate(attendanceFormDataForDetailPage.dateOpen)}',
+                                              dropdownvalue,
+                                              _message.text,
+                                              _imageFiles);
+                                      if (check == '') {
+                                        print('Success');
+                                        await _progressDialog.hide();
+                                        await _showDialog(context,
+                                            "Send successfully report to lectuer");
+                                      } else {
+                                        print('failed');
+
+                                        await _progressDialog.hide();
+                                        await _showDialog(context, check);
+                                      }
+                                    }
+                                  } catch (e) {
+                                    print('Error send report: $e');
+                                    await _showDialog(context, e.toString());
+                                  } finally {
+                                    await _progressDialog.hide();
+                                  }
+                                }
+                              : null,
+                          fontSize: 18.sp),
+                    ),
+                  ),
+                  20.verticalSpace,
+                ],
+              ),
             ),
           ),
         ),
@@ -413,14 +356,17 @@ class _ReportAttendanceState extends State<ReportAttendance> {
   Container customAppBar(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 130,
-      decoration: const BoxDecoration(
-          color: AppColors.primaryButton,
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20))),
+      // height: 130,
+      padding: EdgeInsets.symmetric(vertical: 30.h),
+      decoration: BoxDecoration(
+        color: AppColors.primaryButton,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20.r),
+          bottomRight: Radius.circular(20.r),
+        ),
+      ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+        padding: EdgeInsets.symmetric(horizontal: 14.0.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -430,78 +376,136 @@ class _ReportAttendanceState extends State<ReportAttendance> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    // socketServerProvider.disconnectSocketServer();
-                    // Navigator.pop(context);
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) =>
-                                DetailPage(classesStudent: classesStudent)));
+                    Navigator.pop(context);
                   },
                   child: Container(
-                    width: 50,
-                    height: 50,
+                    width: 50.w,
+                    height: 50.h,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      borderRadius: BorderRadius.all(Radius.circular(10.r)),
                     ),
                     child: Center(
                       child: Icon(
                         Icons.arrow_back_ios_new_outlined,
-                        size: 20,
+                        size: 18.sp,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 14,
+                SizedBox(
+                  width: 14.w,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        width: 300,
-                        child: customText(classesStudent.courseName, 18,
-                            FontWeight.w600, Colors.white)),
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    Row(
-                      children: [
-                        CustomText(
-                            message: 'CourseID: ${classesStudent.courseID} ',
-                            fontSize: 14,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      customText(
+                        classesStudent.courseName,
+                        18.sp,
+                        FontWeight.w600,
+                        Colors.white,
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Row(
+                        children: [
+                          Row(
+                            children: [
+                              CustomText(
+                                message: 'CourseID: ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              CustomText(
+                                message: '${classesStudent.courseID} ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 2.w,
+                          ),
+                          Container(
+                            width: 1.w,
+                            padding: EdgeInsets.symmetric(vertical: 8.h),
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          Row(
+                            children: [
+                              CustomText(
+                                message: ' Room: ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              CustomText(
+                                message: '${classesStudent.roomNumber} ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomText(
+                                message: 'Shift: ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              CustomText(
+                                message: '${classesStudent.shiftNumber} ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          Container(
+                            width: 1.w,
+                            padding: EdgeInsets.symmetric(vertical: 8.h),
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          CustomText(
+                            message: ' Lecturer: ',
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                          CustomText(
+                            message: '${classesStudent.teacherName} ',
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
-                            color: Colors.white),
-                        const SizedBox(
-                          width: 2,
-                        ),
-                        Container(width: 1, height: 14, color: Colors.white),
-                        CustomText(
-                            message: ' Room: ${classesStudent.roomNumber} ',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white),
-                        const SizedBox(
-                          width: 2,
-                        ),
-                        Container(width: 1, height: 14, color: Colors.white),
-                        CustomText(
-                            message: ' Shift: ${classesStudent.shiftNumber} ',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    CustomText(
-                        message: 'Lectuer: ${classesStudent.teacherName}',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white)
-                  ],
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -520,7 +524,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
           width: 200,
           child: AlertDialog(
             backgroundColor: Colors.white,
-            title: const Text(
+            title: Text(
               "Successfully",
               style: TextStyle(
                   color: Colors.black,
@@ -528,19 +532,19 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   fontSize: 25),
             ),
             content: Text(message,
-                style: const TextStyle(
+                style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.normal,
                     fontSize: 15)),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  // Future.delayed(const Duration(seconds: 30), () {
+                  // Future.delayed( Duration(seconds: 30), () {
                   //   Navigator.of(context).pop();
                   // });
                   Navigator.pop(context);
                 },
-                child: const Text("OK",
+                child: Text("OK",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.normal,
@@ -559,12 +563,12 @@ class _ReportAttendanceState extends State<ReportAttendance> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          title: const Text("Confirm",
+          title: Text("Confirm",
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 25)),
-          content: const Text("Do you want to delete image ?",
+          content: Text("Do you want to delete image ?",
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.normal,
@@ -574,7 +578,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("Cancel",
+              child: Text("Cancel",
                   style: TextStyle(
                       color: AppColors.primaryButton,
                       fontWeight: FontWeight.bold,
@@ -587,7 +591,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                 });
                 Navigator.of(context).pop();
               },
-              child: const Text("Yes",
+              child: Text("Yes",
                   style: TextStyle(
                       color: AppColors.importantText,
                       fontWeight: FontWeight.bold,
@@ -601,16 +605,14 @@ class _ReportAttendanceState extends State<ReportAttendance> {
 
   SizedBox customFormField(
       String hintText,
-      double width,
-      double height,
       TextEditingController textEditingController,
       IconButton iconButton,
       int maxLines,
       bool readOnly,
       String? Function(String?) validator) {
     return SizedBox(
-      width: width,
-      height: height,
+      // width: width,
+      // height: height,
       child: TextFormField(
         onTapOutside: (event) {
           FocusManager.instance.primaryFocus?.unfocus();
@@ -620,25 +622,26 @@ class _ReportAttendanceState extends State<ReportAttendance> {
         readOnly: readOnly,
         controller: textEditingController,
         keyboardType: TextInputType.text,
-        style: const TextStyle(
+        style: TextStyle(
             color: AppColors.primaryText,
             fontWeight: FontWeight.normal,
-            fontSize: 15),
+            fontSize: 14.sp),
         obscureText: false,
         decoration: InputDecoration(
             hintText: hintText,
             suffixIcon: iconButton,
-            border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
                 borderSide: BorderSide(
-                    width: 1, color: Color.fromARGB(92, 190, 188, 188))),
-            enabledBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                    width: 1.w, color: Color.fromARGB(92, 190, 188, 188))),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
                 borderSide: BorderSide(
-                    width: 1, color: Color.fromARGB(92, 190, 188, 188))),
-            focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              borderSide: BorderSide(width: 1, color: AppColors.primaryButton),
+                    width: 1.w, color: Color.fromARGB(92, 190, 188, 188))),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.r)),
+              borderSide:
+                  BorderSide(width: 1.w, color: AppColors.primaryButton),
             )),
       ),
     );
@@ -648,14 +651,14 @@ class _ReportAttendanceState extends State<ReportAttendance> {
     return Container(
       height: 100,
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: <Widget>[
-          const Text(
+          Text(
             'Choose Your Photo',
             style: TextStyle(fontSize: 20.0),
           ),
-          const SizedBox(
+          SizedBox(
             height: 20,
           ),
           Row(
@@ -665,18 +668,18 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                 onPressed: () {
                   takePhoto(ImageSource.camera);
                 },
-                icon: const Icon(Icons.camera),
-                label: const Text('Camera'),
+                icon: Icon(Icons.camera),
+                label: Text('Camera'),
               ),
-              const SizedBox(
+              SizedBox(
                 width: 10,
               ),
               ElevatedButton.icon(
                 onPressed: () {
                   takePhoto(ImageSource.gallery);
                 },
-                icon: const Icon(Icons.camera),
-                label: const Text('Gallery'),
+                icon: Icon(Icons.camera),
+                label: Text('Gallery'),
               ),
             ],
           )
@@ -726,14 +729,14 @@ class _ReportAttendanceState extends State<ReportAttendance> {
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: Colors.white,
-            title: const Text(
+            title: Text(
               "Warning",
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 25),
             ),
-            content: const Text(
+            content: Text(
                 "You only upload maximum 3 images. You can click an image and update",
                 style: TextStyle(
                     color: Colors.black,
@@ -744,7 +747,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text("OK"),
+                child: Text("OK"),
               ),
             ],
           );
