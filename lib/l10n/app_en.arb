@@ -92,5 +92,16 @@
     "otp_verification_message": "Please enter the verification code we just sent on your email address.",
     "verify": "Verify",
     "resend": "Re-send",
-    "resend_message": "Didn't recieve the code ? "
+    "resend_message": "Didn't recieve the code ? ",
+    "late": "Late",
+    "notification": "Notifications",
+    "title_class_notification": "Class",
+    "title_attendance_form_notification": "Attendance form opens at",
+    "title_lecturer_notitication": "Lecturer",
+    "title_report": "Report",
+    "title_no_notification": "No Notification",
+    "title_was_responsed": "was responsed at",
+    "title_please_take_attendance": "Please take attendance!"
+
+
 }

@@ -92,5 +92,18 @@
     "otp_verification_message": "Vui lòng nhập mã OTP vừa được gửi qua email",
     "verify": "Xác thực",
     "resend": "Gửi lại",
-    "resend_message": "Chưa nhận được mã ? "
+    "resend_message": "Chưa nhận được mã ? ",
+    "late": "Trễ",
+    "notification": "Thông báo",
+    "title_class_notification": "Lớp",
+    "title_attendance_form_notification": "Form điểm danh mở vào lúc",
+    "title_lecturer_notitication": "Giảng viên",
+    "title_report": "Báo cáo",
+    "title_no_notification": "Không có thông báo",
+    "title_was_responsed": "được phản hồi vào lúc",
+    "title_please_take_attendance": "Điểm danh ngay nào!"
+
+    
+
+
 }

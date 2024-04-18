@@ -232,7 +232,7 @@ class _AfterAttendanceState extends State<AfterAttendance> {
 }
 
 String formatDate(String? date) {
-  if (date != null || date != '') {
+  if (date != null && date != '') {
     DateTime serverDateTime = DateTime.parse(date!).toLocal();
     String formattedDate = DateFormat('MMMM d, y').format(serverDateTime);
     return formattedDate;
@@ -241,7 +241,7 @@ String formatDate(String? date) {
 }
 
 String formatTime(String? time) {
-  if (time != '' || time != null) {
+  if (time != '' && time != null) {
     DateTime serverDateTime = DateTime.parse(time!).toLocal();
     String formattedTime = DateFormat("HH:mm:ss a").format(serverDateTime);
     return formattedTime;
