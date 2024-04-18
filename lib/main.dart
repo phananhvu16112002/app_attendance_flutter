@@ -182,6 +182,33 @@ class _MyAppState extends State<MyApp> {
 //               ),
 
 
+// DetailPageOffline(
+//                 classesStudent: ClassesStudent(
+//                     studentID: 'studentID',
+//                     classID: 'classID',
+//                     total: 10,
+//                     totalPresence: 10,
+//                     totalAbsence: 10,
+//                     totalLate: 10,
+//                     roomNumber: 'roomNumber',
+//                     shiftNumber: 3,
+//                     startTime: '2024-03-03T10:57:55.000Z',
+//                     endTime: '2024-03-03T10:57:55.000Z',
+//                     classType: 'classType',
+//                     group: 'group',
+//                     subGroup: 'subGroup',
+//                     courseID: 'courseID',
+//                     teacherID: 'teacherID',
+//                     courseName: 'courseName',
+//                     totalWeeks: 9,
+//                     requiredWeeks: 9,
+//                     credit: 9,
+//                     teacherEmail: 'teacherEmail',
+//                     teacherName: 'teacherName',
+//                     progress: 0.5),
+//               ),
+
+
 
 
 //  AttendanceFormPage( classesStudent: ClassesStudent(

@@ -63,6 +63,8 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
           children: [
             customAppBar(),
             SingleChildScrollView(child: _builBody()),
+            // customCard(classes.startTime, classes.endTime, classes.endTime,
+            //     classes.endTime, 'Present', 'location')
           ],
         ));
   }
@@ -91,12 +93,12 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
           : Center(
               child: Container(
                 width: 250.w,
-                height: 200.h,
+                height: 350.h,
                 child: Center(
                   child: Column(
                     children: [
-                       SizedBox(
-                        height: 100.h,
+                      SizedBox(
+                        height: 50.h,
                       ),
                       Opacity(
                         opacity: 0.3,
@@ -116,6 +118,123 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
     );
   }
 
+  // Container customCard(
+  //   String startTime,
+  //   String endTime,
+  //   String date,
+  //   String timeAttendance,
+  //   String status,
+  //   String location,
+  // ) {
+  //   return Container(
+  //     width: double.infinity,
+  //     // height: location.isNotEmpty
+  //     //     ? MediaQuery.of(context).size.width * 0.65
+  //     //     : MediaQuery.of(context).size.width * 0.50,
+  //     padding: EdgeInsets.symmetric(vertical: 15.h),
+  //     decoration:  BoxDecoration(
+  //         color: Colors.white,
+  //         borderRadius: BorderRadius.all(Radius.circular(10.r)),
+  //         boxShadow: [
+  //           BoxShadow(
+  //               color: Color.fromARGB(195, 190, 188, 188),
+  //               blurRadius: 5.0,
+  //               offset: Offset(2.0, 1.0))
+  //         ]),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         CustomText(
+  //             message: date.toString(),
+  //             fontSize: 16.sp,
+  //             fontWeight: FontWeight.w600,
+  //             color: AppColors.primaryText),
+  //        2.verticalSpace,
+  //         Container(
+  //           height: 1.h,
+  //           width: double.infinity,
+  //           color: const Color.fromARGB(105, 190, 188, 188),
+  //         ),
+  //         5.verticalSpace,
+  //         Row(
+  //           crossAxisAlignment: CrossAxisAlignment.center,
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Container(
+  //               // width: 220,
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   customRichText(
+  //                       'Start Time: ',
+  //                       startTime,
+  //                       FontWeight.w600,
+  //                       FontWeight.w500,
+  //                       AppColors.primaryText,
+  //                       AppColors.primaryText),
+  //                   const SizedBox(
+  //                     height: 10,
+  //                   ),
+  //                   customRichText(
+  //                       'End Time: ',
+  //                       endTime,
+  //                       FontWeight.w600,
+  //                       FontWeight.w500,
+  //                       AppColors.primaryText,
+  //                       AppColors.primaryText),
+  //                   const SizedBox(
+  //                     height: 10,
+  //                   ),
+  //                   customRichText(
+  //                       'Location: ',
+  //                       location,
+  //                       FontWeight.w600,
+  //                       FontWeight.w500,
+  //                       AppColors.primaryText,
+  //                       AppColors.primaryText),
+  //                   const SizedBox(
+  //                     height: 10,
+  //                   ),
+  //                   customRichText(
+  //                       'Time Attendance: ',
+  //                       timeAttendance.toString(),
+  //                       FontWeight.w600,
+  //                       FontWeight.w500,
+  //                       AppColors.primaryText,
+  //                       AppColors.primaryText),
+  //                   const SizedBox(
+  //                     height: 10,
+  //                   ),
+  //                   customRichText(
+  //                       'Status: ',
+  //                       status,
+  //                       FontWeight.w600,
+  //                       FontWeight.w500,
+  //                       AppColors.primaryText,
+  //                       getColorBasedOnStatus(status)),
+  //                   const SizedBox(
+  //                     width: 10,
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //             Container(
+  //               margin: const EdgeInsets.only(right: 10, top: 10),
+  //               height: 130,
+  //               width: 130,
+  //               child: file != null
+  //                   ? Image.file(
+  //                       File(file!.path),
+  //                     )
+  //                   : Container(),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
   Container customCard(
     String startTime,
     String endTime,
@@ -125,117 +244,111 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
     String location,
   ) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.5,
-      height: location.isNotEmpty
-          ? MediaQuery.of(context).size.width * 0.65
-          : MediaQuery.of(context).size.width * 0.50,
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          boxShadow: [
-            BoxShadow(
-                color: Color.fromARGB(195, 190, 188, 188),
-                blurRadius: 5.0,
-                offset: Offset(2.0, 1.0))
-          ]),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CustomText(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 15.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(10.r)),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(195, 190, 188, 188),
+            blurRadius: 5.0,
+            offset: Offset(2.0, 1.0),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 18.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomText(
               message: date.toString(),
-              fontSize: 16,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.primaryText),
-          const SizedBox(
-            height: 2,
-          ),
-          Container(
-            height: 1,
-            width: 405,
-            color: const Color.fromARGB(105, 190, 188, 188),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 5, right: 5),
-                child: Container(
-                  width: 220,
+              color: AppColors.primaryText,
+            ),
+            2.verticalSpace,
+            Container(
+              height: 1.h,
+              width: double.infinity,
+              color: const Color.fromARGB(105, 190, 188, 188),
+            ),
+            5.verticalSpace,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       customRichText(
-                          'Start Time: ',
-                          startTime,
-                          FontWeight.w600,
-                          FontWeight.w500,
-                          AppColors.primaryText,
-                          AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
+                        'Start Time: ',
+                        startTime,
+                        FontWeight.w600,
+                        FontWeight.w500,
+                        AppColors.primaryText,
+                        AppColors.primaryText,
                       ),
+                      5.verticalSpace,
                       customRichText(
-                          'End Time: ',
-                          endTime,
-                          FontWeight.w600,
-                          FontWeight.w500,
-                          AppColors.primaryText,
-                          AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
+                        'End Time: ',
+                        endTime,
+                        FontWeight.w600,
+                        FontWeight.w500,
+                        AppColors.primaryText,
+                        AppColors.primaryText,
                       ),
+                      5.verticalSpace,
                       customRichText(
-                          'Location: ',
-                          location,
-                          FontWeight.w600,
-                          FontWeight.w500,
-                          AppColors.primaryText,
-                          AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
+                        'Location: ',
+                        location,
+                        FontWeight.w600,
+                        FontWeight.w500,
+                        AppColors.primaryText,
+                        AppColors.primaryText,
                       ),
+                      5.verticalSpace,
                       customRichText(
-                          'Time Attendance: ',
-                          timeAttendance.toString(),
-                          FontWeight.w600,
-                          FontWeight.w500,
-                          AppColors.primaryText,
-                          AppColors.primaryText),
-                      const SizedBox(
-                        height: 10,
+                        'Time Attendance: ',
+                        timeAttendance.toString(),
+                        FontWeight.w600,
+                        FontWeight.w500,
+                        AppColors.primaryText,
+                        AppColors.primaryText,
                       ),
+                      5.verticalSpace,
                       customRichText(
-                          'Status: ',
-                          status,
-                          FontWeight.w600,
-                          FontWeight.w500,
-                          AppColors.primaryText,
-                          getColorBasedOnStatus(status)),
-                      const SizedBox(
-                        width: 10,
+                        'Status: ',
+                        status,
+                        FontWeight.w600,
+                        FontWeight.w500,
+                        AppColors.primaryText,
+                        getColorBasedOnStatus(status),
+                      ),
+                      SizedBox(
+                        width: 10.w,
                       ),
                     ],
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(right: 10, top: 10),
-                height: 130,
-                width: 130,
-                child: file != null
-                    ? Image.file(
-                        File(file!.path),
-                      )
-                    : Container(),
-              ),
-            ],
-          ),
-        ],
+                Container(
+                  margin: EdgeInsets.only(right: 10.w, top: 10.h),
+                  height: 130.h,
+                  width: 130.w,
+                  child: file != null
+                      ? Image.file(
+                          File(file!.path),
+                        )
+                      : Container(),
+                  // child: Image.network('https://i.imgur.com/8JhlwPy_d.webp?maxwidth=520&shape=thumb&fidelity=high'),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -253,7 +366,7 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
         text: title,
         style: TextStyle(
           fontWeight: fontWeightTitle,
-          fontSize: 15,
+          fontSize: 13.sp,
           color: colorTextTitle,
         ),
       ),
@@ -261,7 +374,7 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
         text: message,
         style: TextStyle(
           fontWeight: fontWeightMessage,
-          fontSize: 15,
+          fontSize: 13.sp,
           color: colorTextMessage,
         ),
       ),
