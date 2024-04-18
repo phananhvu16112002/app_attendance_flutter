@@ -45,5 +45,17 @@
     "confirm": "Xác nhận",
     "choose_language": "Chọn ngôn ngữ",
     "vietnamese": "Tiếng Việt",
-    "english": "Tiếng Anh"
+    "english": "Tiếng Anh",
+    "notification": "Thông báo",
+    "title_class_notification": "Lớp",
+    "title_attendance_form_notification": "Form điểm danh mở vào lúc",
+    "title_lecturer_notitication": "Giảng viên",
+    "title_report": "Báo cáo",
+    "title_no_notification": "Không có thông báo",
+    "title_was_responsed": "được phản hồi vào lúc",
+    "title_please_take_attendance": "Điểm danh ngay nào!"
+
+    
+
+
 }

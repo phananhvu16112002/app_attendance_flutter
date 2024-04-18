@@ -39,6 +39,7 @@ class _ReportPageState extends State<ReportPage> {
       child: Scaffold(
           backgroundColor: const Color.fromARGB(255, 247, 245, 245),
           appBar: AppBar(
+            centerTitle: false,
               backgroundColor: Colors.white,
               shadowColor: Colors.transparent,
               title: Text(
