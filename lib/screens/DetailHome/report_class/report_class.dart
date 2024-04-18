@@ -41,9 +41,11 @@ class _ReportClassState extends State<ReportClass> {
                 child: Column(
                   children: [
                     FutureBuilder(
-                        future: API(context).getReportInClass(classesStudent.classID),
+                        future: API(context)
+                            .getReportInClass(classesStudent.classID),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return Center(
                               child: CircularProgressIndicator(),
                             );
@@ -52,13 +54,14 @@ class _ReportClassState extends State<ReportClass> {
                               List<ReportModelClass>? data = snapshot.data;
                               return data != null && data.isNotEmpty
                                   ? ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
+                                      physics: NeverScrollableScrollPhysics(),
                                       padding: EdgeInsets.zero,
                                       shrinkWrap: true,
                                       scrollDirection: Axis.vertical,
                                       itemCount: data.length,
                                       itemBuilder: ((context, index) {
-                                        ReportModelClass reportModel = data[index];
+                                        ReportModelClass reportModel =
+                                            data[index];
                                         return Padding(
                                           padding: const EdgeInsets.all(10.0),
                                           child: InkWell(
@@ -69,24 +72,29 @@ class _ReportClassState extends State<ReportClass> {
                                                 classesStudent.courseName,
                                                 classesStudent.teacherName,
                                                 classesStudent.roomNumber,
-                                                classesStudent.shiftNumber.toString(),
+                                                classesStudent.shiftNumber
+                                                    .toString(),
                                                 reportModel.status ?? '',
-                                                formatDate(reportModel.createdAt),
-                                                classesStudent.totalWeeks.toString(),
                                                 formatDate(
-                                                    reportModel.feedback?.createdAt ??
-                                                        ''),
-                                                formatTime(
-                                                    reportModel.feedback?.createdAt ??
-                                                        '')),
+                                                    reportModel.createdAt),
+                                                classesStudent.totalWeeks
+                                                    .toString(),
+                                                formatDate(reportModel
+                                                        .feedback?.createdAt ??
+                                                    ''),
+                                                formatTime(reportModel
+                                                        .feedback?.createdAt ??
+                                                    '')),
                                           ),
                                         );
                                       }))
                                   : Container(
                                       width: MediaQuery.of(context).size.width,
-                                      height: MediaQuery.of(context).size.height,
+                                      height:
+                                          MediaQuery.of(context).size.height,
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Opacity(
                                             opacity: 0.3,
@@ -108,7 +116,8 @@ class _ReportClassState extends State<ReportClass> {
                                     );
                             }
                           } else if (snapshot.hasError) {
-                            return Center(child: Text('Error: ${snapshot.error}'));
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
                           } else {
                             return Center(child: CircularProgressIndicator());
                           }

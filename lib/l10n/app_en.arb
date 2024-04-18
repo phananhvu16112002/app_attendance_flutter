@@ -65,5 +65,15 @@
     "total": "Total",
     "present": "Present",
     "absent": "Absent",
-    "late": "Late"
+    "late": "Late",
+    "notification": "Notifications",
+    "title_class_notification": "Class",
+    "title_attendance_form_notification": "Attendance form opens at",
+    "title_lecturer_notitication": "Lecturer",
+    "title_report": "Report",
+    "title_no_notification": "No Notification",
+    "title_was_responsed": "was responsed at",
+    "title_please_take_attendance": "Please take attendance!"
+
+
 }
