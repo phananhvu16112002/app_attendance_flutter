@@ -543,6 +543,8 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   //   Navigator.of(context).pop();
                   // });
                   Navigator.pop(context);
+                  Navigator.pop(context);
+
                 },
                 child: Text("OK",
                     style: TextStyle(

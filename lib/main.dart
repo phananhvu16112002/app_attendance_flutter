@@ -64,10 +64,12 @@ void main() async {
       provisional: false,
       sound: true);
   if (Platform.isAndroid) {
+    print('I am Android');
     final token = await messaging.getToken();
     await secureStorage.writeSecureData('tokenFirebase', token!);
   }
   if (Platform.isIOS) {
+    print('I am IOS');
     final tokenIOS = await messaging.getAPNSToken();
     await secureStorage.writeSecureData('tokenFirebase', tokenIOS!);
   }

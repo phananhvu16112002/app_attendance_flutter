@@ -54,8 +54,8 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     List<BottomNavModel> listBottomNav = [
       BottomNavModel(title: 'Home', svgPath: 'assets/icons/home.svg'),
-      BottomNavModel(title: 'Report', svgPath: 'assets/icons/home.svg'),
-      BottomNavModel(title: 'History', svgPath: 'assets/icons/home.svg'),
+      BottomNavModel(title: 'Report', svgPath: 'assets/icons/report.svg'),
+      BottomNavModel(title: 'History', svgPath: 'assets/icons/notification.svg'),
       BottomNavModel(title: 'Profile', svgPath: 'assets/icons/user.svg'),
     ];
     return Scaffold(
@@ -101,7 +101,9 @@ class _DetailPageState extends State<DetailPage> {
           classesStudent: widget.classesStudent,
         );
       case 1:
-        return const ReportClass();
+        return ReportClass(
+          classesStudent: widget.classesStudent,
+        );
       case 2:
         return const NotificationClass();
       case 3:
