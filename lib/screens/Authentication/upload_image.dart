@@ -27,6 +27,33 @@ class _UploadImageState extends State<UploadImage> {
   SecureStorage secureStorage = SecureStorage();
   late ProgressDialog _progressDialog;
 
+  // Future<void> _getImageFromCamera(int imageIndex) async {
+  //   final image = await ImagePicker().pickImage(source: ImageSource.camera);
+  //   if (image != null) {
+  //     setState(() {
+  //       switch (imageIndex) {
+  //         case 1:
+  //           _image1 = File(image.path);
+  //           // images.add(XFile(_image1!.path));
+  //           print('add data');
+  //           secureStorage.writeSecureData('_image1', _image1!.path);
+  //           break;
+  //         case 2:
+  //           _image2 = File(image.path);
+  //           // images.add(XFile(_image2!.path));
+
+  //           secureStorage.writeSecureData('_image2', _image2!.path);
+
+  //           break;
+  //         case 3:
+  //           _image3 = File(image.path);
+  //           // images.add(XFile(_image3!.path));
+  //           secureStorage.writeSecureData('_image3', _image3!.path);
+  //           break;
+  //       }
+  //     });
+  //   }
+  // }
   Future<void> _getImageFromCamera(int imageIndex) async {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
     if (image != null) {
@@ -34,20 +61,26 @@ class _UploadImageState extends State<UploadImage> {
         switch (imageIndex) {
           case 1:
             _image1 = File(image.path);
-            // images.add(XFile(_image1!.path));
-            print('add data');
+            if (images.length >= 1)
+              images[0] = XFile(_image1!.path);
+            else
+              images.add(XFile(_image1!.path));
             secureStorage.writeSecureData('_image1', _image1!.path);
             break;
           case 2:
             _image2 = File(image.path);
-            // images.add(XFile(_image2!.path));
-
+            if (images.length >= 2)
+              images[1] = XFile(_image2!.path);
+            else
+              images.add(XFile(_image2!.path));
             secureStorage.writeSecureData('_image2', _image2!.path);
-
             break;
           case 3:
             _image3 = File(image.path);
-            // images.add(XFile(_image3!.path));
+            if (images.length >= 3)
+              images[2] = XFile(_image3!.path);
+            else
+              images.add(XFile(_image3!.path));
             secureStorage.writeSecureData('_image3', _image3!.path);
             break;
         }
@@ -166,18 +199,19 @@ class _UploadImageState extends State<UploadImage> {
                 if (_image1 != null && _image2 != null && _image3 != null)
                   InkWell(
                     onTap: () async {
-                      var image1 =
-                          await secureStorage.readSecureData('_image1');
-                      images.add(XFile(image1));
-                      var image2 =
-                          await secureStorage.readSecureData('_image2');
-                      images.add(XFile(image2));
-                      var image3 =
-                          await secureStorage.readSecureData('_image3');
-                      images.add(XFile(image3));
+                      // var image1 =
+                      //     await secureStorage.readSecureData('_image1');
+                      // images.add(XFile(image1));
+                      // var image2 =
+                      //     await secureStorage.readSecureData('_image2');
+                      // images.add(XFile(image2));
+                      // var image3 =
+                      //     await secureStorage.readSecureData('_image3');
+                      // images.add(XFile(image3));
 
                       String studentID =
                           await secureStorage.readSecureData('studentID');
+                      print('length: ${images.length}');
                       _progressDialog.show();
                       bool check = await API(context)
                           .uploadMultipleImage(studentID, images);
@@ -194,6 +228,8 @@ class _UploadImageState extends State<UploadImage> {
                       padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                       child: Container(
                         // height: 50,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0.w, vertical: 20.h),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: AppColors.primaryButton,

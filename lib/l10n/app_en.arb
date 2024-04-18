@@ -14,7 +14,7 @@
     "field_course_shift": "Shift",
     "field_course_room": "Room",
     "field_course_group": "Group",
-    "field_course_subGroup": "Sub Group",
+    "field_course_subGroup": "Sub",
 
     "field_lecturer": "Lecturer",
 
@@ -29,7 +29,7 @@
     "detail": "Detail",
     "day": "Day",
     "week": "Week",
-    "report": "Báo cáo sự cố",
+    "report": "Reports",
 
     "setting_privacy": "Setting and Privacy",
     "password": "Password",

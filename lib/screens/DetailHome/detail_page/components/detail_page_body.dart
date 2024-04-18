@@ -39,21 +39,14 @@ class _DetailPageBodyState extends State<DetailPageBody> {
   int totalLate = 0;
   final ScrollController _controller = ScrollController();
 
-  void _scrollDown() {
-    _controller.animateTo(_controller.position.maxScrollExtent,
-        duration: const Duration(seconds: 2), curve: Curves.fastOutSlowIn);
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     classesStudent = widget.classesStudent;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -303,43 +296,57 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                         }),
                                     10.verticalSpace,
                                     ListView.builder(
-                                        padding: const EdgeInsets.all(0),
-                                        itemCount: snapshot.data!.length,
-                                        shrinkWrap: true,
-                                        controller: _controller,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          var data = snapshot.data![index];
-                                          print(
-                                              'Time Attendanced: ${data.dateAttendanced}');
+                                      padding: const EdgeInsets.all(0),
+                                      itemCount: snapshot.data!.length,
+                                      shrinkWrap: true,
+                                      controller: _controller,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        var data = snapshot.data![index];
+                                        if ((activePresent &&
+                                                data.result ==
+                                                    1) || // Lọc theo trạng thái Present
+                                            (activeAbsent &&
+                                                data.result ==
+                                                    0) || // Lọc theo trạng thái Absent
+                                            (activeLate &&
+                                                data.result ==
+                                                    0.5) || // Lọc theo trạng thái Late
+                                            activeTotal) {
+                                          // Hiển thị tất cả dữ liệu khi trạng thái là All
                                           return Padding(
                                             padding: EdgeInsets.only(
                                                 bottom: 15.h,
                                                 left: 10.w,
                                                 right: 10.w),
                                             child: customCard(
-                                                formatTime(data.attendanceForm
-                                                    .startTime), //startTime
-                                                formatTime(data.attendanceForm
-                                                    .endTime), //Endtime
-                                                formatDate(data.attendanceForm
-                                                    .dateOpen), //dateOpen
-                                                data.dateAttendanced != ''
-                                                    ? formatTime(data
-                                                        .dateAttendanced) //timeAttendance
-                                                    : 'null',
-                                                getResult(data
-                                                    .result), //Status attendance
-                                                data.dateAttendanced != ''
-                                                    ? data.location
-                                                    : 'null',
-                                                data.url ?? '', //image
-                                                data.attendanceForm.status,
-                                                data.attendanceForm,
-                                                attendanceFormDataForDetailPageProvider,
-                                                data.report),
+                                              formatTime(data
+                                                  .attendanceForm.startTime),
+                                              formatTime(
+                                                  data.attendanceForm.endTime),
+                                              formatDate(
+                                                  data.attendanceForm.dateOpen),
+                                              data.dateAttendanced != ''
+                                                  ? formatTime(
+                                                      data.dateAttendanced)
+                                                  : 'null',
+                                              getResult(data.result),
+                                              data.dateAttendanced != ''
+                                                  ? data.location
+                                                  : 'null',
+                                              data.url ?? '',
+                                              data.attendanceForm.status,
+                                              data.attendanceForm,
+                                              attendanceFormDataForDetailPageProvider,
+                                              data.report,
+                                            ),
                                           );
-                                        }),
+                                        } else {
+                                          return SizedBox
+                                              .shrink(); // Ẩn các mục không phù hợp với trạng thái được chọn
+                                        }
+                                      },
+                                    ),
                                     25.verticalSpace
                                   ],
                                 ),
@@ -362,155 +369,6 @@ class _DetailPageBodyState extends State<DetailPageBody> {
       ),
     );
   }
-
-  // Container customAppBar(SocketServerProvider socketServerProvider) {
-  //   return Container(
-  //     width: double.infinity,
-  //     // height: 130,
-  //     padding: EdgeInsets.symmetric(vertical: 30.h),
-  //     decoration: BoxDecoration(
-  //         color: AppColors.primaryButton,
-  //         borderRadius: BorderRadius.only(
-  //             bottomLeft: Radius.circular(20.r),
-  //             bottomRight: Radius.circular(20.r))),
-  //     child: Padding(
-  //       padding: EdgeInsets.symmetric(horizontal: 14.0.w),
-  //       child: Expanded(
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Row(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 GestureDetector(
-  //                   onTap: () {
-  //                     socketServerProvider.disconnectSocketServer();
-  //                     Navigator.pop(context);
-  //                   },
-  //                   child: Container(
-  //                     width: 50.w,
-  //                     height: 50.h,
-  //                     decoration: BoxDecoration(
-  //                       color: Colors.white,
-  //                       borderRadius: BorderRadius.all(Radius.circular(10.r)),
-  //                     ),
-  //                     child: Center(
-  //                       child: Icon(
-  //                         Icons.arrow_back_ios_new_outlined,
-  //                         size: 18.sp,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 SizedBox(
-  //                   width: 14.w,
-  //                 ),
-  //                 Expanded(
-  //                   child: Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                     children: [
-  //                       customText(classesStudent.courseName, 18.sp,
-  //                           FontWeight.w600, Colors.white),
-  //                       SizedBox(
-  //                         height: 5.h,
-  //                       ),
-  //                       Row(
-  //                         children: [
-  //                           Row(
-  //                             children: [
-  //                               CustomText(
-  //                                   message: 'CourseID: ',
-  //                                   fontSize: 14.sp,
-  //                                   fontWeight: FontWeight.w600,
-  //                                   color: Colors.white),
-  //                               CustomText(
-  //                                   message: '${classesStudent.courseID} ',
-  //                                   fontSize: 14.sp,
-  //                                   fontWeight: FontWeight.w400,
-  //                                   color: Colors.white),
-  //                             ],
-  //                           ),
-  //                           SizedBox(
-  //                             width: 2.w,
-  //                           ),
-  //                           Container(
-  //                               width: 1.w,
-  //                               padding: EdgeInsets.symmetric(vertical: 8.h),
-  //                               color: Colors.white),
-  //                           SizedBox(
-  //                             width: 5.w,
-  //                           ),
-  //                           Row(
-  //                             children: [
-  //                               CustomText(
-  //                                   message: ' Room: ',
-  //                                   fontSize: 14.sp,
-  //                                   fontWeight: FontWeight.w600,
-  //                                   color: Colors.white),
-  //                               CustomText(
-  //                                   message: '${classesStudent.roomNumber} ',
-  //                                   fontSize: 14.sp,
-  //                                   fontWeight: FontWeight.w400,
-  //                                   color: Colors.white),
-  //                             ],
-  //                           ),
-  //                         ],
-  //                       ),
-  //                       SizedBox(
-  //                         height: 5.h,
-  //                       ),
-  //                       Row(
-  //                         crossAxisAlignment: CrossAxisAlignment.start,
-  //                         children: [
-  //                           Row(
-  //                             crossAxisAlignment: CrossAxisAlignment.start,
-  //                             children: [
-  //                               CustomText(
-  //                                   message: 'Shift: ',
-  //                                   fontSize: 14.sp,
-  //                                   fontWeight: FontWeight.w600,
-  //                                   color: Colors.white),
-  //                               CustomText(
-  //                                   message: '${classesStudent.shiftNumber} ',
-  //                                   fontSize: 14.sp,
-  //                                   fontWeight: FontWeight.w400,
-  //                                   color: Colors.white),
-  //                             ],
-  //                           ),
-  //                           SizedBox(
-  //                             width: 5.w,
-  //                           ),
-  //                           Container(
-  //                               width: 1.w,
-  //                               padding: EdgeInsets.symmetric(vertical: 8.h),
-  //                               color: Colors.white),
-  //                           SizedBox(
-  //                             width: 5.w,
-  //                           ),
-  //                           CustomText(
-  //                               message: ' Lecturer: ',
-  //                               fontSize: 14.sp,
-  //                               fontWeight: FontWeight.w600,
-  //                               color: Colors.white),
-  //                           CustomText(
-  //                               message: '${classesStudent.teacherName} ',
-  //                               fontSize: 14.sp,
-  //                               fontWeight: FontWeight.w400,
-  //                               color: Colors.white),
-  //                         ],
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Container customAppBar(SocketServerProvider socketServerProvider) {
     return Container(
@@ -1082,400 +940,6 @@ class _DetailPageBodyState extends State<DetailPageBody> {
     );
   }
 
-  // Container customCard(
-  //     String startTime,
-  //     String endTime,
-  //     String date,
-  //     String timeAttendance,
-  //     String status,
-  //     String location,
-  //     String url,
-  //     bool statusForm,
-  //     AttendanceFormDataForDetailPage attendanceFormForDetailPage,
-  //     AttendanceFormDataForDetailPageProvider
-  //         attendanceFormDataForDetailPageProvider,
-  //     ReportData? reportData) {
-  //   DateTime endTimeParse =
-  //       DateTime.parse(attendanceFormForDetailPage.endTime).toLocal();
-  //   DateTime dateParse =
-  //       DateTime.parse(attendanceFormForDetailPage.dateOpen).toLocal();
-  //   var now = DateTime.now();
-  //   var tempDateParse =
-  //       DateTime(dateParse.year, dateParse.month, dateParse.day);
-  //   var tempNowParse = DateTime(now.year, now.month, now.day);
-
-  //   return Container(
-  //     width: double.infinity,
-  //     padding: EdgeInsets.symmetric(vertical: 10.h),
-  //     decoration: BoxDecoration(
-  //         color: Colors.white,
-  //         borderRadius: BorderRadius.all(Radius.circular(10.r)),
-  //         boxShadow: const [
-  //           BoxShadow(
-  //               color: Color.fromARGB(195, 190, 188, 188),
-  //               blurRadius: 5.0,
-  //               offset: Offset(2.0, 1.0))
-  //         ]),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Center(
-  //           child: CustomText(
-  //               message: date.toString(),
-  //               fontSize: 14.sp,
-  //               fontWeight: FontWeight.w600,
-  //               color: AppColors.primaryText),
-  //         ),
-  //         5.verticalSpace,
-  //         Container(
-  //           height: 1.h,
-  //           width: double.infinity,
-  //           color: const Color.fromARGB(105, 190, 188, 188),
-  //         ),
-  //         5.verticalSpace,
-  //         Padding(
-  //           padding: EdgeInsets.symmetric(horizontal: 10.w),
-  //           child: Row(
-  //             mainAxisSize: MainAxisSize.min,
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               Expanded(
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     customRichText(
-  //                         'Start Time: ',
-  //                         startTime,
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         AppColors.primaryText),
-  //                     10.verticalSpace,
-  //                     customRichText(
-  //                         'End Time: ',
-  //                         endTime,
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         AppColors.primaryText),
-  //                     10.verticalSpace,
-  //                     customRichText(
-  //                         'Location: ',
-  //                         location,
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         AppColors.primaryText),
-  //                     10.verticalSpace,
-  //                     customRichText(
-  //                         'Time Attendance: ',
-  //                         timeAttendance.toString(),
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         AppColors.primaryText),
-  //                     10.verticalSpace,
-  //                     customRichText(
-  //                         'Status: ',
-  //                         status,
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         getColorBasedOnStatus(status)),
-  //                     SizedBox(
-  //                       width: 10.w,
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 width: 5.w,
-  //               ),
-  //               Container(
-  //                 // margin: EdgeInsets.only(right: 10.w, top: 10.h),
-  //                 height: 120.h,
-  //                 width: 120.w,
-  //                 child: url.isEmpty || url == ''
-  //                     ? Image.asset('assets/images/logo.png')
-  //                     : Image.network(url),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         5.verticalSpace,
-  //         Container(
-  //           height: 1.h,
-  //           width: double.infinity,
-  //           color: const Color.fromARGB(105, 190, 188, 188),
-  //         ),
-  //         15.verticalSpace,
-  //         if (statusForm == true &&
-  //             now.isBefore(endTimeParse) &&
-  //             tempDateParse
-  //                 .isAtSameMomentAs(tempNowParse) && //dateOpen chỉ so sánh date
-  //             timeAttendance == "null")
-  //           InkWell(
-  //             onTap: () {
-  //               attendanceFormDataForDetailPageProvider
-  //                   .setAttendanceFormData(attendanceFormForDetailPage);
-  //               Navigator.push(
-  //                 context,
-  //                 PageRouteBuilder(
-  //                   pageBuilder: (context, animation, secondaryAnimation) =>
-  //                       AttendanceFormPage(
-  //                     classesStudent: classesStudent,
-  //                   ),
-  //                   transitionDuration: const Duration(milliseconds: 1000),
-  //                   transitionsBuilder:
-  //                       (context, animation, secondaryAnimation, child) {
-  //                     var curve = Curves.easeInOutCubic;
-  //                     var tween =
-  //                         Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
-  //                             .chain(CurveTween(curve: curve));
-  //                     var offsetAnimation = animation.drive(tween);
-  //                     return SlideTransition(
-  //                       position: offsetAnimation,
-  //                       child: child,
-  //                     );
-  //                   },
-  //                 ),
-  //               );
-  //             },
-  //             child: Center(
-  //               child: CustomText(
-  //                   message: 'Take Attendance',
-  //                   fontSize: 14.sp,
-  //                   fontWeight: FontWeight.bold,
-  //                   color: AppColors.primaryButton),
-  //             ),
-  //           )
-  //         else if (reportData == null || reportData.checkNew == false)
-  //           InkWell(
-  //             onTap: () {
-  //               Navigator.push(
-  //                 context,
-  //                 PageRouteBuilder(
-  //                   pageBuilder: (context, animation, secondaryAnimation) =>
-  //                       ReportAttendance(
-  //                     classesStudent: classesStudent,
-  //                     attendanceFormDataForDetailPage:
-  //                         attendanceFormForDetailPage,
-  //                   ),
-  //                   transitionDuration: const Duration(milliseconds: 1000),
-  //                   transitionsBuilder:
-  //                       (context, animation, secondaryAnimation, child) {
-  //                     var curve = Curves.easeInOutCubic;
-  //                     var tween =
-  //                         Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
-  //                             .chain(CurveTween(curve: curve));
-  //                     var offsetAnimation = animation.drive(tween);
-  //                     return SlideTransition(
-  //                       position: offsetAnimation,
-  //                       child: child,
-  //                     );
-  //                   },
-  //                 ),
-  //               );
-  //             },
-  //             child: Center(
-  //               child: CustomText(
-  //                   message: 'Report',
-  //                   fontSize: 14.sp,
-  //                   fontWeight: FontWeight.bold,
-  //                   color: AppColors.importantText),
-  //             ),
-  //           )
-  //         else
-  //           InkWell(
-  //             onTap: () {
-  //               Navigator.push(
-  //                 context,
-  //                 PageRouteBuilder(
-  //                   pageBuilder: (context, animation, secondaryAnimation) =>
-  //                       EditReportPage(
-  //                     classesStudent: classesStudent,
-  //                     reportData: reportData,
-  //                   ),
-  //                   transitionDuration: const Duration(milliseconds: 1000),
-  //                   transitionsBuilder:
-  //                       (context, animation, secondaryAnimation, child) {
-  //                     var curve = Curves.easeInOutCubic;
-  //                     var tween =
-  //                         Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
-  //                             .chain(CurveTween(curve: curve));
-  //                     var offsetAnimation = animation.drive(tween);
-  //                     return SlideTransition(
-  //                       position: offsetAnimation,
-  //                       child: child,
-  //                     );
-  //                   },
-  //                 ),
-  //               );
-  //             },
-  //             child: Center(
-  //               child: CustomText(
-  //                   message: 'Edit',
-  //                   fontSize: 14.sp,
-  //                   fontWeight: FontWeight.bold,
-  //                   color: AppColors.importantText),
-  //             ),
-  //           )
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Container customCardStream(
-  //     String startTime,
-  //     String endTime,
-  //     String date,
-  //     String timeAttendance,
-  //     String status,
-  //     String location,
-  //     String url,
-  //     bool statusForm,
-  //     AttendanceFormDataForDetailPage? attendanceFormForDetailPage,
-  //     AttendanceFormDataForDetailPageProvider
-  //         attendanceFormDataForDetailPageProvider,
-  //     ReportData? reportData) {
-  //   return Container(
-  //     width: double.infinity,
-  //     padding: EdgeInsets.symmetric(vertical: 10.h),
-  //     decoration: const BoxDecoration(
-  //         color: Colors.white,
-  //         borderRadius: BorderRadius.all(Radius.circular(10)),
-  //         boxShadow: [
-  //           BoxShadow(
-  //               color: Color.fromARGB(195, 190, 188, 188),
-  //               blurRadius: 5.0,
-  //               offset: Offset(2.0, 1.0))
-  //         ]),
-  //     child: Column(
-  //       children: [
-  //         CustomText(
-  //             message: date.toString(),
-  //             fontSize: 14.sp,
-  //             fontWeight: FontWeight.w600,
-  //             color: AppColors.primaryText),
-  //         5.verticalSpace,
-  //         Container(
-  //           height: 1.h,
-  //           width: double.infinity,
-  //           color: const Color.fromARGB(105, 190, 188, 188),
-  //         ),
-  //         5.verticalSpace,
-  //         Padding(
-  //           padding: EdgeInsets.symmetric(horizontal: 10.w),
-  //           child: Row(
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               Expanded(
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     customRichText(
-  //                         'Start Time: ',
-  //                         startTime,
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         AppColors.primaryText),
-  //                     10.verticalSpace,
-  //                     customRichText(
-  //                         'End Time: ',
-  //                         endTime,
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         AppColors.primaryText),
-  //                     10.verticalSpace,
-  //                     customRichText(
-  //                         'Location: ',
-  //                         location,
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         AppColors.primaryText),
-  //                     10.verticalSpace,
-  //                     customRichText(
-  //                         'Time Attendance: ',
-  //                         timeAttendance.toString(),
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         AppColors.primaryText),
-  //                     10.verticalSpace,
-  //                     customRichText(
-  //                         'Status: ',
-  //                         status,
-  //                         FontWeight.w600,
-  //                         FontWeight.w500,
-  //                         AppColors.primaryText,
-  //                         getColorBasedOnStatus(status)),
-  //                     SizedBox(
-  //                       width: 10.w,
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               Container(
-  //                 margin: EdgeInsets.only(right: 10.w, top: 10.h),
-  //                 height: 100.h,
-  //                 width: 100.w,
-  //                 child: url.isEmpty || url == ''
-  //                     ? Image.asset('assets/images/logo.png')
-  //                     : Image.network(url),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         5.verticalSpace,
-  //         Container(
-  //           height: 1.h,
-  //           width: double.infinity,
-  //           color: const Color.fromARGB(105, 190, 188, 188),
-  //         ),
-  //         15.verticalSpace,
-  //         InkWell(
-  //           onTap: () {
-  //             attendanceFormDataForDetailPageProvider
-  //                 .setAttendanceFormData(attendanceFormForDetailPage!);
-  //             Navigator.push(
-  //               context,
-  //               PageRouteBuilder(
-  //                 pageBuilder: (context, animation, secondaryAnimation) =>
-  //                     AttendanceFormPage(
-  //                   classesStudent: classesStudent,
-  //                 ),
-  //                 transitionDuration: const Duration(milliseconds: 1000),
-  //                 transitionsBuilder:
-  //                     (context, animation, secondaryAnimation, child) {
-  //                   var curve = Curves.easeInOutCubic;
-  //                   var tween =
-  //                       Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
-  //                           .chain(CurveTween(curve: curve));
-  //                   var offsetAnimation = animation.drive(tween);
-  //                   return SlideTransition(
-  //                     position: offsetAnimation,
-  //                     child: child,
-  //                   );
-  //                 },
-  //               ),
-  //             );
-  //           },
-  //           child: CustomText(
-  //               message: 'Take Attendance',
-  //               fontSize: 14.sp,
-  //               fontWeight: FontWeight.bold,
-  //               color: AppColors.primaryButton),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
   RichText customRichText(
       String title,
       String message,
@@ -1773,25 +1237,3 @@ class _DetailPageBodyState extends State<DetailPageBody> {
     );
   }
 }
-
-
-
-
-
-
-
-
-// return StreamBuilder(
-//                 stream: socketServerDataProvider.attendanceFormStream,
-//                 builder: (context, snapshot) {
-//                   if (snapshot.hasData) {
-//                     if (snapshot.data != null) {
-//                       return Text('Data: ${snapshot.data!.dateOpen}');
-//                     } else {
-//                       return Text('Error:${snapshot.error}');
-//                     }
-//                   } else {
-//                     return Text('---Error');
-//                   }
-//                 });
-

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:attendance_system_nodejs/models/ModelForAPI/api_view_image/student_model.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/report_class/report_class.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_form_data_for_detail_page.dart';
@@ -9,6 +10,7 @@ import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelForAPI_ReportPage_Version1/report_model.dart';
 import 'package:attendance_system_nodejs/models/student_classes.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
+import 'package:attendance_system_nodejs/screens/DetailHome/report_class/report_class.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:attendance_system_nodejs/utils/constraints.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
@@ -49,7 +51,7 @@ class API {
             return WillPopScope(
               onWillPop: () async {
                 // Navigate to WelcomePage when dialog is dismissed
-                
+
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -259,6 +261,91 @@ class API {
             }
 
             // print('Data $data');
+            return data;
+          } else {
+            return [];
+          }
+        } else {
+          print('New Access Token is empty');
+          return [];
+        }
+      } else {
+        print('Failed to load data. Status code: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
+
+  Future<List<ReportModelClass>> getReportInClass(String classID) async {
+    final URL =
+        'http://$baseURL:8080/api/student/classes/$classID/reports'; //$baseURL
+
+    var accessToken = await getAccessToken();
+    var headers = {'authorization': accessToken};
+    try {
+      final response = await http.get(Uri.parse(URL), headers: headers);
+      if (response.statusCode == 200) {
+        dynamic responseData = jsonDecode(response.body);
+        List<ReportModelClass> data = [];
+
+        if (responseData is List) {
+          for (var temp in responseData) {
+            if (temp is Map<String, dynamic>) {
+              try {
+                data.add(ReportModelClass.fromJson(temp));
+              } catch (e) {
+                print('Error parsing data: $e');
+              }
+            } else {
+              print('Invalid data type: $temp');
+            }
+          }
+        } else if (responseData is Map<String, dynamic>) {
+          try {
+            data.add(ReportModelClass.fromJson(responseData));
+          } catch (e) {
+            print('Error parsing data: $e');
+          }
+        } else {
+          print('Unexpected data type: $responseData');
+        }
+        print('Data $data');
+        return data;
+      } else if (response.statusCode == 498 || response.statusCode == 401) {
+        var refreshToken = await SecureStorage().readSecureData('refreshToken');
+        var newAccessToken = await refreshAccessToken(refreshToken);
+        if (newAccessToken.isNotEmpty) {
+          headers['authorization'] = newAccessToken;
+          final retryResponse =
+              await http.get(Uri.parse(URL), headers: headers);
+          if (retryResponse.statusCode == 200) {
+            dynamic responseData = jsonDecode(retryResponse.body);
+            List<ReportModelClass> data = [];
+
+            if (responseData is List) {
+              for (var temp in responseData) {
+                if (temp is Map<String, dynamic>) {
+                  try {
+                    data.add(ReportModelClass.fromJson(temp));
+                  } catch (e) {
+                    print('Error parsing data: $e');
+                  }
+                } else {
+                  print('Invalid data type: $temp');
+                }
+              }
+            } else if (responseData is Map<String, dynamic>) {
+              try {
+                data.add(ReportModelClass.fromJson(responseData));
+              } catch (e) {
+                print('Error parsing data: $e');
+              }
+            } else {
+              print('Unexpected data type: $responseData');
+            }
             return data;
           } else {
             return [];

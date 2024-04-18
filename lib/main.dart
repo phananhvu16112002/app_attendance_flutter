@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:attendance_system_nodejs/adapter/attendance_form_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/class_student_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/course_adapter.dart';
@@ -61,8 +63,17 @@ void main() async {
       criticalAlert: false,
       provisional: false,
       sound: true);
-  final token = await messaging.getToken();
-  await secureStorage.writeSecureData('tokenFirebase', token!);
+  if (Platform.isAndroid) {
+    print('I am Android');
+    final token = await messaging.getToken();
+    await secureStorage.writeSecureData('tokenFirebase', token!);
+  }
+  if (Platform.isIOS) {
+    print('I am IOS');
+    final tokenIOS = await messaging.getAPNSToken();
+    await secureStorage.writeSecureData('tokenFirebase', tokenIOS!);
+  }
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await FaceCamera.initialize(); //Add this
