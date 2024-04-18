@@ -146,7 +146,9 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
         title: Text(
           'Attendance Form QR',
           style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.sp),
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 18.sp),
         ),
         centerTitle: true,
         backgroundColor: AppColors.primaryButton,
@@ -394,7 +396,8 @@ class _AttendancePageState extends State<AttendanceFormPageQR> {
                                   studentDataProvider.userData.location,
                                   studentDataProvider.userData.latitude,
                                   studentDataProvider.userData.longtitude,
-                                  file!);
+                                  file!,
+                                  attendanceForm.typeAttendance);
                           if (data != null) {
                             print('Take Attendance Successfully');
                             socketDataProvider.takeAttendance(

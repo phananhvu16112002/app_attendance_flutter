@@ -229,7 +229,9 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                                 studentDataProvider.userData.location,
                                 studentDataProvider.userData.latitude,
                                 studentDataProvider.userData.longtitude,
-                                file!);
+                                file!,
+                                attendanceFormDataForDetailPageProvider
+                                    .attendanceFormData.type);
                         if (data != null) {
                           print('Take Attendance Successfully');
                           socketServerProvider.takeAttendance(

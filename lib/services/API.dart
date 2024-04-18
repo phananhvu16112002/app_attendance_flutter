@@ -840,21 +840,35 @@ class API {
       String location,
       double latitude,
       double longitude,
-      XFile fileImage) async {
+      XFile fileImage,
+      int typeAttendance) async {
+    var request;
     var URL = 'http://$baseURL:8080/api/student/takeAttendance';
-    var imageBytes = await fileImage.readAsBytes();
-    var imageFile =
-        http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
-    // var imageFile = await http.MultipartFile.fromPath('image', fileImage.path);
-    var request = http.MultipartRequest('POST', Uri.parse(URL))
-      ..fields['studentID'] = studentID
-      ..fields['classID'] = classID
-      ..fields['formID'] = formID
-      ..fields['dateTimeAttendance'] = dateAttendance
-      ..fields['location'] = location
-      ..fields['latitude'] = latitude.toString()
-      ..fields['longitude'] = longitude.toString()
-      ..files.add(imageFile);
+    if (typeAttendance == 0 || typeAttendance == 1) {
+      var imageBytes = await fileImage.readAsBytes();
+      var imageFile = http.MultipartFile.fromBytes('file', imageBytes,
+          filename: 'image.jpg');
+      // var imageFile = await http.MultipartFile.fromPath('image', fileImage.path);
+      request = http.MultipartRequest('POST', Uri.parse(URL))
+        ..fields['studentID'] = studentID
+        ..fields['classID'] = classID
+        ..fields['formID'] = formID
+        ..fields['dateTimeAttendance'] = dateAttendance
+        ..fields['location'] = location
+        ..fields['latitude'] = latitude.toString()
+        ..fields['longitude'] = longitude.toString()
+        ..files.add(imageFile);
+    } else {
+      request = http.MultipartRequest('POST', Uri.parse(URL))
+        ..fields['studentID'] = studentID
+        ..fields['classID'] = classID
+        ..fields['formID'] = formID
+        ..fields['dateTimeAttendance'] = dateAttendance
+        ..fields['location'] = location
+        ..fields['latitude'] = latitude.toString()
+        ..fields['longitude'] = longitude.toString();
+    }
+
     try {
       var response = await request.send();
       if (response.statusCode == 200) {
@@ -877,11 +891,6 @@ class API {
         Map<String, dynamic> data =
             json.decode(await response.stream.bytesToString());
         String message = data['message'];
-        print('data: $data');
-        print('message: ${data['message']}');
-        print('studentID: $studentID');
-        print('classID: $classID');
-        print('formID: $formID');
         print('Failed to take attendance. Status code: ${response.statusCode}');
         return null;
       }
@@ -914,7 +923,6 @@ class API {
       ..fields['latitude'] = latitude.toString()
       ..fields['longitude'] = longitude.toString()
       ..files.add(imageFile);
-
     try {
       var response = await request.send();
       if (response.statusCode == 200) {

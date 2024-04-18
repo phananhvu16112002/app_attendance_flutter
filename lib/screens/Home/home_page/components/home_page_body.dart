@@ -6,6 +6,7 @@ import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/bases/custom_text_field.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/main.dart';
+import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/attendance_form.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/data_offline.dart';
@@ -33,6 +34,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -68,6 +70,7 @@ class _HomePageBodyState extends State<HomePageBody> {
   bool isConnected = false;
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   final ScrollController _controller = ScrollController();
+  late ProgressDialog _progressDialog;
 
   @override
   void initState() {
@@ -79,6 +82,7 @@ class _HomePageBodyState extends State<HomePageBody> {
         studentID = value[1];
       });
     });
+    _progressDialog = _customLoading();
     studentClassesBox = Hive.box<StudentClasses>('student_classes');
     dataOfflineBox = Hive.box<DataOffline>('DataOfflineBoxes');
     classesStudentBox = Hive.box<ClassesStudent>('classes_student_box');
@@ -96,12 +100,36 @@ class _HomePageBodyState extends State<HomePageBody> {
         });
       }
     });
-    // if (isInternetConnected) {
-    //   print('al;sdka;ldk');
-    //   sendDataToServer();
-    // } else {
-    //   print('failed internet');
-    // }
+  }
+
+  ProgressDialog _customLoading() {
+    return ProgressDialog(context,
+        isDismissible: false,
+        customBody: Container(
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
+              color: Colors.white),
+          child: Center(
+              child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(
+                color: AppColors.primaryButton,
+              ),
+              5.verticalSpace,
+              Text(
+                'Loading',
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    color: AppColors.primaryText,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          )),
+        ));
   }
 
   void sendDataToServer() async {
@@ -158,7 +186,7 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       if (mounted) {
         setState(() {
           result = scanData;
@@ -191,10 +219,35 @@ class _HomePageBodyState extends State<HomePageBody> {
                               radius: 0.0),
                         )),
               );
-
               //Send request(formid, classID, dateAttendanced, studentID, location, latitude, longitude)
             } else {
               print('Send Request---------');
+              final studentProvider = Provider.of<StudentDataProvider>(context);
+              double latitude = studentProvider.userData.latitude;
+              double longitude = studentProvider.userData.longtitude;
+              _progressDialog.show();
+              String? location = await GetLocation()
+                  .getAddressFromLatLongWithoutInternet(latitude, longitude);
+              AttendanceDetail? attendanceDetail = await API(context)
+                  .takeAttendance(
+                      studentID,
+                      temp['classID'],
+                      temp['formID'],
+                      DateTime.now().toString(),
+                      location ?? '',
+                      latitude,
+                      longitude,
+                      XFile(''),
+                      int.parse(temp['typeAttendanced'].toString()));
+              if (attendanceDetail != null) {
+                _progressDialog.hide();
+                customDialog('Successfully Take Attendance',
+                    'Please check your attendance in class!');
+              } else {
+                _progressDialog.hide();
+                customDialog(
+                    'Failed Attendance', 'Please take attendance again!');
+              }
             }
           } else {
             controller.pauseCamera();
@@ -269,7 +322,7 @@ class _HomePageBodyState extends State<HomePageBody> {
         Provider.of<ClassesStudentProvider>(context, listen: false);
     return RefreshIndicator(
       onRefresh: () {
-        return Future.delayed(Duration(seconds: 3), () {
+        return Future.delayed(const Duration(seconds: 3), () {
           setState(() {});
         });
       },
@@ -388,7 +441,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                         width: MediaQuery.of(context).size.width,
                         color: const Color.fromARGB(106, 255, 255, 255)),
                     5.verticalSpace,
-                    CustomCalendar(),
+                    const CustomCalendar(),
                     10.verticalSpace,
                     Container(
                         height: 1.h,
@@ -406,7 +459,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (builder) => SearchPage()));
+                              builder: (builder) => const SearchPage()));
                     },
                     child: searchClass()),
               ),
@@ -566,7 +619,7 @@ class _HomePageBodyState extends State<HomePageBody> {
               BoxShadow(
                   color: AppColors.secondaryText,
                   blurRadius: 5.r,
-                  offset: Offset(0.0, 0.0))
+                  offset: const Offset(0.0, 0.0))
             ]),
         //Fix PrefixIcon
         child: Padding(
@@ -647,7 +700,7 @@ class _HomePageBodyState extends State<HomePageBody> {
               classDataProvider.setClassesStudentList(studentClasses);
             });
             return ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               padding: EdgeInsets.only(top: 20.h),
               shrinkWrap: true,
               itemCount: studentClasses.length,
@@ -742,7 +795,7 @@ class _HomePageBodyState extends State<HomePageBody> {
     print('No internet with hive');
     if (classesStudentBox.isOpen || classesStudentBox.isNotEmpty) {
       return ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         padding: EdgeInsets.only(top: 20.h),
         shrinkWrap: true,
         controller: _controller,
@@ -829,7 +882,7 @@ class _HomePageBodyState extends State<HomePageBody> {
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(20.r)),
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
             color: AppColors.secondaryText,
             blurRadius: 2,
             offset: Offset(3.0, 2.0),
@@ -1021,220 +1074,15 @@ class _HomePageBodyState extends State<HomePageBody> {
     );
   }
 
-  // Widget classInformation(
-  //   int totalWeeks,
-  //   String courseName,
-  //   String teacherName,
-  //   String courseID,
-  //   String classType,
-  //   String group,
-  //   String subGroup,
-  //   int shift,
-  //   String roomNumber,
-  //   int totalPresence,
-  //   int totalAbsence,
-  //   int totalLate,
-  //   double progress,
-  // ) {
-  //   return Container(
-  //       width: double.infinity,
-  //       // height: MediaQuery.of(context).size.height * 0.18,
-  //       padding: EdgeInsets.symmetric(vertical: 13.h),
-  //       decoration: BoxDecoration(
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.all(Radius.circular(20.r)),
-  //           boxShadow: [
-  //             BoxShadow(
-  //                 color: AppColors.secondaryText,
-  //                 blurRadius: 2,
-  //                 offset: Offset(3.0, 2.0))
-  //           ]),
-  //       child: Padding(
-  //         padding: EdgeInsets.symmetric(horizontal: 10.w),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Padding(
-  //               padding: EdgeInsets.only(top: 10.h),
-  //               child: Expanded(
-  //                 child: Row(
-  //                   children: [
-  //                     Padding(
-  //                       padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
-  //                       child: SizedBox(
-  //                         child: CircularPercentIndicator(
-  //                           radius: 40.r,
-  //                           lineWidth: 5.w,
-  //                           percent: progress, // Thay đổi giá trị tại đây
-  //                           center: Text(
-  //                             "$totalWeeks Weeks",
-  //                             style: TextStyle(
-  //                                 fontWeight: FontWeight.bold, fontSize: 12.sp),
-  //                           ),
-  //                           backgroundColor: AppColors.secondaryText,
-  //                           progressColor: AppColors.primaryButton,
-  //                           animation: true,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     SizedBox(
-  //                       width: 15.w,
-  //                     ),
-  //                     Expanded(
-  //                       child: Column(
-  //                         crossAxisAlignment: CrossAxisAlignment.start,
-  //                         children: [
-  //                           customRichText(
-  //                             title: 'Course: ',
-  //                             message: courseName,
-  //                             fontWeightTitle: FontWeight.bold,
-  //                             fontWeightMessage: FontWeight.w400,
-  //                             colorText: AppColors.primaryText,
-  //                             fontSize: 12.sp,
-  //                           ),
-  //                           5.verticalSpace,
-  //                           customRichText(
-  //                             title: 'Type: ',
-  //                             message: classType,
-  //                             fontWeightTitle: FontWeight.bold,
-  //                             fontWeightMessage: FontWeight.w400,
-  //                             colorText: AppColors.primaryText,
-  //                             fontSize: 12.sp,
-  //                           ),
-  //                           5.verticalSpace,
-  //                           customRichText(
-  //                             title: 'Lectuer: ',
-  //                             message: teacherName,
-  //                             fontWeightTitle: FontWeight.bold,
-  //                             fontWeightMessage: FontWeight.w400,
-  //                             colorText: AppColors.primaryText,
-  //                             fontSize: 12.sp,
-  //                           ),
-  //                           5.verticalSpace,
-  //                           customRichText(
-  //                             title: 'CourseID: ',
-  //                             message: courseID,
-  //                             fontWeightTitle: FontWeight.bold,
-  //                             fontWeightMessage: FontWeight.w400,
-  //                             colorText: AppColors.primaryText,
-  //                             fontSize: 12.sp,
-  //                           ),
-  //                           5.verticalSpace,
-  //                           Row(
-  //                             children: [
-  //                               customRichText(
-  //                                 title: 'Shift: ',
-  //                                 message: "$shift",
-  //                                 fontWeightTitle: FontWeight.bold,
-  //                                 fontWeightMessage: FontWeight.w400,
-  //                                 colorText: AppColors.primaryText,
-  //                                 fontSize: 12.sp,
-  //                               ),
-  //                               SizedBox(
-  //                                 width: 5.w,
-  //                               ),
-  //                               customRichText(
-  //                                 title: 'Class: ',
-  //                                 message: roomNumber,
-  //                                 fontWeightTitle: FontWeight.bold,
-  //                                 fontWeightMessage: FontWeight.w400,
-  //                                 colorText: AppColors.primaryText,
-  //                                 fontSize: 12.sp,
-  //                               ),
-  //                             ],
-  //                           ),
-  //                           5.verticalSpace,
-  //                           Row(
-  //                             children: [
-  //                               customRichText(
-  //                                 title: 'Group: ',
-  //                                 message: group,
-  //                                 fontWeightTitle: FontWeight.bold,
-  //                                 fontWeightMessage: FontWeight.w400,
-  //                                 colorText: AppColors.primaryText,
-  //                                 fontSize: 12.sp,
-  //                               ),
-  //                               SizedBox(
-  //                                 width: 5.w,
-  //                               ),
-  //                               customRichText(
-  //                                 title: 'SubGroup: ',
-  //                                 message: subGroup,
-  //                                 fontWeightTitle: FontWeight.bold,
-  //                                 fontWeightMessage: FontWeight.w400,
-  //                                 colorText: AppColors.primaryText,
-  //                                 fontSize: 12.sp,
-  //                               ),
-  //                             ],
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     SizedBox(
-  //                       width: 5.w,
-  //                     ),
-  //                     Center(
-  //                       child: Container(
-  //                           // margin: EdgeInsets.only(bottom: 25.h),
-  //                           // height: 90.h,
-  //                           padding: EdgeInsets.symmetric(vertical: 55.h),
-  //                           width: 1.5.w,
-  //                           color: Colors.black),
-  //                     ),
-  //                     SizedBox(
-  //                       width: 5.w,
-  //                     ),
-  //                     Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       mainAxisAlignment: MainAxisAlignment.center,
-  //                       children: [
-  //                         customRichText(
-  //                           title: 'Total Presence: ',
-  //                           message: '${totalPresence.ceil()}',
-  //                           fontWeightTitle: FontWeight.bold,
-  //                           fontWeightMessage: FontWeight.w400,
-  //                           colorText: AppColors.primaryText,
-  //                           fontSize: 13.sp,
-  //                         ),
-  //                         5.verticalSpace,
-  //                         customRichText(
-  //                           title: 'Total Late: ',
-  //                           message: '${totalLate}',
-  //                           fontWeightTitle: FontWeight.bold,
-  //                           fontWeightMessage: FontWeight.w400,
-  //                           colorText: AppColors.primaryText,
-  //                           fontSize: 13.sp,
-  //                         ),
-  //                         5.verticalSpace,
-  //                         customRichText(
-  //                           title: 'Total Absent: ',
-  //                           message: '${totalAbsence.ceil()}',
-  //                           fontWeightTitle: FontWeight.bold,
-  //                           fontWeightMessage: FontWeight.w400,
-  //                           colorText: AppColors.primaryText,
-  //                           fontSize: 13.sp,
-  //                         ),
-  //                         // 15.verticalSpace,
-  //                       ],
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ));
-  // }
-
   Widget customLoading() {
     return Container(
         // width: 410,
         // height: 150,
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Color.fromARGB(164, 245, 244, 244),
+            color: const Color.fromARGB(164, 245, 244, 244),
             borderRadius: BorderRadius.all(Radius.circular(20.r)),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: AppColors.secondaryText,
                   blurRadius: 5.0,
