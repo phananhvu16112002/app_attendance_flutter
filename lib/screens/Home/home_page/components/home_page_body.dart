@@ -17,6 +17,7 @@ import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/detail_p
 import 'package:attendance_system_nodejs/screens/DetailHome/detail_page_offline/detail_page_offline.dart';
 import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_offline/attendance_form_page_offline.dart';
 import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_QR/attendance_form_page_qr.dart';
+import 'package:attendance_system_nodejs/screens/Home/home_page/components/search_page.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/widget/custom_calendar.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:attendance_system_nodejs/services/get_location/get_location_services.dart';
@@ -402,7 +403,10 @@ class _HomePageBodyState extends State<HomePageBody> {
                 right: 25.w,
                 child: InkWell(
                     onTap: () {
-                      //Navigate search
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => SearchPage()));
                     },
                     child: searchClass()),
               ),
@@ -508,7 +512,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                       borderRadius: BorderRadius.all(Radius.circular(5.r))),
                   child: Center(
                       child: CustomText(
-                          message: AppLocalizations.of(context)?.btn_take_attendance ?? 'Take Attendance',
+                          message: AppLocalizations.of(context)
+                                  ?.btn_take_attendance ??
+                              'Take Attendance',
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
                           color:
@@ -535,7 +541,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                       borderRadius: BorderRadius.all(Radius.circular(5.r))),
                   child: Center(
                       child: CustomText(
-                          message: AppLocalizations.of(context)?.btn_scan_qr ?? 'Scan QR',
+                          message: AppLocalizations.of(context)?.btn_scan_qr ??
+                              'Scan QR',
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
                           color:
@@ -551,48 +558,35 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   Container searchClass() {
     return Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15.r),
-          boxShadow: [
-            BoxShadow(
-                color: AppColors.secondaryText,
-                blurRadius: 5.r,
-                offset: Offset(0.0, 0.0))
-          ]),
-      //Fix PrefixIcon
-      child: TextFormField(
-        onTapOutside: (event) {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        readOnly: true,
-        controller: searchController,
-        keyboardType: TextInputType.text,
-        style: TextStyle(
-            color: AppColors.primaryText,
-            fontWeight: FontWeight.normal,
-            fontSize: 13.sp),
-        obscureText: false,
-        decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderSide:
-                    BorderSide(width: 1.w, color: AppColors.primaryButton),
-                borderRadius: BorderRadius.all(Radius.circular(15.0.r))),
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-            suffixIcon: Icon(Icons.search, color: AppColors.secondaryText),
-            hintText: 'Search class',
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15.0.r)),
-                borderSide:
-                    BorderSide(width: 1.w, color: AppColors.secondaryText)),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15.0.r)),
-              borderSide:
-                  BorderSide(width: 1.w, color: AppColors.primaryButton),
-            )),
-      ),
-    );
+        padding: EdgeInsets.symmetric(vertical: 18.h),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15.r),
+            boxShadow: [
+              BoxShadow(
+                  color: AppColors.secondaryText,
+                  blurRadius: 5.r,
+                  offset: Offset(0.0, 0.0))
+            ]),
+        //Fix PrefixIcon
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomText(
+                  message: 'Search Class',
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.primaryText.withOpacity(0.5)),
+              Icon(
+                Icons.search,
+                color: AppColors.primaryText.withOpacity(0.5),
+                size: 15.sp,
+              )
+            ],
+          ),
+        ));
   }
 
   FutureBuilder<List<ClassesStudent>> callAPI(
@@ -869,7 +863,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                                   fontSize: 12.sp,
                                 ),
                               ),
-                              backgroundColor: AppColors.secondaryText,
+                              backgroundColor:
+                                  AppColors.secondaryText.withOpacity(0.3),
                               progressColor: AppColors.primaryButton,
                               animation: true,
                             ),
@@ -881,7 +876,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               customRichText(
-                                title: '${AppLocalizations.of(context)?.field_course ?? 'Course'}: ',
+                                title:
+                                    '${AppLocalizations.of(context)?.field_course ?? 'Course'}: ',
                                 message: courseName,
                                 fontWeightTitle: FontWeight.bold,
                                 fontWeightMessage: FontWeight.w400,
@@ -890,7 +886,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                               ),
                               5.verticalSpace,
                               customRichText(
-                                title: '${AppLocalizations.of(context)?.field_course_type ?? 'Method'}: ',
+                                title:
+                                    '${AppLocalizations.of(context)?.field_course_type ?? 'Method'}: ',
                                 message: classType,
                                 fontWeightTitle: FontWeight.bold,
                                 fontWeightMessage: FontWeight.w400,
@@ -899,7 +896,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                               ),
                               5.verticalSpace,
                               customRichText(
-                                title: '${AppLocalizations.of(context)?.field_lecturer ?? 'Lectuer'}: ',
+                                title:
+                                    '${AppLocalizations.of(context)?.field_lecturer ?? 'Lectuer'}: ',
                                 message: teacherName,
                                 fontWeightTitle: FontWeight.bold,
                                 fontWeightMessage: FontWeight.w400,
@@ -908,7 +906,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                               ),
                               5.verticalSpace,
                               customRichText(
-                                title: '${AppLocalizations.of(context)?.field_course_id ?? 'Course ID'}: ',
+                                title:
+                                    '${AppLocalizations.of(context)?.field_course_id ?? 'Course ID'}: ',
                                 message: courseID,
                                 fontWeightTitle: FontWeight.bold,
                                 fontWeightMessage: FontWeight.w400,
@@ -919,21 +918,23 @@ class _HomePageBodyState extends State<HomePageBody> {
                               Row(
                                 children: [
                                   customRichText(
-                                    title: '${AppLocalizations.of(context)?.field_course_shift ?? 'Shift'}: ',
+                                    title:
+                                        '${AppLocalizations.of(context)?.field_course_shift ?? 'Shift'}: ',
                                     message: "$shift",
                                     fontWeightTitle: FontWeight.bold,
                                     fontWeightMessage: FontWeight.w400,
                                     colorText: AppColors.primaryText,
                                     fontSize: 12.sp,
                                   ),
-                                  SizedBox(width: 5.w),
+                                  // SizedBox(width: 5.w),
                                   customRichText(
-                                    title: '${AppLocalizations.of(context)?.field_course_room ?? 'Room'}: ',
+                                    title:
+                                        ' ${AppLocalizations.of(context)?.field_course_room ?? 'Room'}: ',
                                     message: roomNumber,
                                     fontWeightTitle: FontWeight.bold,
                                     fontWeightMessage: FontWeight.w400,
                                     colorText: AppColors.primaryText,
-                                    fontSize: 12.sp,
+                                    fontSize: 11.5.sp,
                                   ),
                                 ],
                               ),
@@ -941,7 +942,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                               Row(
                                 children: [
                                   customRichText(
-                                    title: '${AppLocalizations.of(context)?.field_course_group ?? 'Group'}: ',
+                                    title:
+                                        '${AppLocalizations.of(context)?.field_course_group ?? 'Group'}: ',
                                     message: group,
                                     fontWeightTitle: FontWeight.bold,
                                     fontWeightMessage: FontWeight.w400,
@@ -950,7 +952,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                                   ),
                                   SizedBox(width: 5.w),
                                   customRichText(
-                                    title: '${AppLocalizations.of(context)?.field_course_subGroup ?? 'SubGroup'}: ',
+                                    title:
+                                        '${AppLocalizations.of(context)?.field_course_subGroup ?? 'SubGroup'}: ',
                                     message: subGroup,
                                     fontWeightTitle: FontWeight.bold,
                                     fontWeightMessage: FontWeight.w400,
@@ -976,7 +979,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             customRichText(
-                              title: '${AppLocalizations.of(context)?.stats_total_presence ?? 'Total Presence'}: ',
+                              title:
+                                  '${AppLocalizations.of(context)?.stats_total_presence ?? 'Total Presence'}: ',
                               message: '${totalPresence.ceil()}',
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
@@ -985,7 +989,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                             ),
                             5.verticalSpace,
                             customRichText(
-                              title: '${AppLocalizations.of(context)?.stats_total_late ?? 'Total Late'}: ',
+                              title:
+                                  '${AppLocalizations.of(context)?.stats_total_late ?? 'Total Late'}: ',
                               message: '$totalLate',
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
@@ -994,7 +999,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                             ),
                             5.verticalSpace,
                             customRichText(
-                              title: '${AppLocalizations.of(context)?.stats_total_absence ?? 'Total Absence'}: ',
+                              title:
+                                  '${AppLocalizations.of(context)?.stats_total_absence ?? 'Total Absence'}: ',
                               message: '${totalAbsence.ceil()}',
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,

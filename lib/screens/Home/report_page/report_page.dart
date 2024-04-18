@@ -32,7 +32,7 @@ class _ReportPageState extends State<ReportPage> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () {
-        return Future.delayed(Duration(seconds: 3), () {
+        return Future.delayed(const Duration(seconds: 3), () {
           setState(() {});
         });
       },
@@ -65,41 +65,67 @@ class _ReportPageState extends State<ReportPage> {
                 } else if (snapshot.hasData) {
                   if (snapshot.data != null) {
                     List<ReportModel>? data = snapshot.data;
-                    return ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: data!.length,
-                        itemBuilder: ((context, index) {
-                          ReportModel reportModel = data[index];
+                    return data != null && data.isNotEmpty
+                        ? ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: data.length,
+                            itemBuilder: ((context, index) {
+                              ReportModel reportModel = data[index];
 
-                          print(
-                              DateTime.parse(reportModel.createdAt).toLocal());
-                          print(reportModel.feedbackCreatedAt);
+                              print(DateTime.parse(reportModel.createdAt)
+                                  .toLocal());
+                              print(reportModel.feedbackCreatedAt);
 
-                          return Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (builder) => DetailReport(
-                                              reportModel: reportModel,
-                                            )));
-                              },
-                              child: cardReport(
-                                  getPathStatus(reportModel.status),
-                                  reportModel.courseCourseName,
-                                  reportModel.teacherName,
-                                  reportModel.classesRoomNumber,
-                                  reportModel.classesShiftNumber.toString(),
-                                  reportModel.status,
-                                  formatDate(reportModel.createdAt),
-                                  reportModel.courseTotalWeeks.toString(),
-                                  formatDate(reportModel.feedbackCreatedAt),
-                                  formatTime(reportModel.feedbackCreatedAt)),
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (builder) => DetailReport(
+                                                  reportModel: reportModel,
+                                                )));
+                                  },
+                                  child: cardReport(
+                                      getPathStatus(reportModel.status),
+                                      reportModel.courseCourseName,
+                                      reportModel.teacherName,
+                                      reportModel.classesRoomNumber,
+                                      reportModel.classesShiftNumber.toString(),
+                                      reportModel.status,
+                                      formatDate(reportModel.createdAt),
+                                      reportModel.courseTotalWeeks.toString(),
+                                      formatDate(reportModel.feedbackCreatedAt),
+                                      formatTime(
+                                          reportModel.feedbackCreatedAt)),
+                                ),
+                              );
+                            }))
+                        : Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Opacity(
+                                  opacity: 0.3,
+                                  child: Image.asset(
+                                    'assets/images/nodata.png',
+                                    width: 200.w,
+                                    height: 200.w,
+                                  ),
+                                ),
+                                10.verticalSpace,
+                                CustomText(
+                                    message: 'No Report',
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color:
+                                        AppColors.primaryText.withOpacity(0.3))
+                              ],
                             ),
                           );
-                        }));
                   }
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
@@ -199,27 +225,24 @@ class _ReportPageState extends State<ReportPage> {
                       AppColors.primaryText,
                       getColorBasedOnStatus(status)),
                   10.verticalSpace,
-                  Row(
-                    children: [
-                      customRichText(
-                          '${AppLocalizations.of(context)?.created_date ?? 'Date'}: ',
-                          dateReport,
-                          FontWeight.bold,
-                          FontWeight.w500,
-                          AppColors.primaryText,
-                          AppColors.primaryText),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      customRichText(
-                          '${AppLocalizations.of(context)?.day ?? 'Day'}: ',
-                          week,
-                          FontWeight.bold,
-                          FontWeight.w500,
-                          AppColors.primaryText,
-                          AppColors.primaryText),
-                    ],
-                  ),
+                  customRichText(
+                      '${AppLocalizations.of(context)?.created_date ?? 'Date'}: ',
+                      dateReport,
+                      FontWeight.bold,
+                      FontWeight.w500,
+                      AppColors.primaryText,
+                      AppColors.primaryText),
+                  // SizedBox(
+                  //   width: 10.w,
+                  // ),
+                  10.verticalSpace,
+                  customRichText(
+                      '${AppLocalizations.of(context)?.day ?? 'Week'}: ',
+                      week,
+                      FontWeight.bold,
+                      FontWeight.w500,
+                      AppColors.primaryText,
+                      AppColors.primaryText),
                   10.verticalSpace,
                   customRichText(
                       '${AppLocalizations.of(context)?.return_date ?? 'Return Date'}: ',
