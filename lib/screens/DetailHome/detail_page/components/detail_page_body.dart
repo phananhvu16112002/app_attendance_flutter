@@ -332,7 +332,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                                 data.dateAttendanced != ''
                                                     ? data.location
                                                     : 'null',
-                                                data.url, //image
+                                                data.url ?? '', //image
                                                 data.attendanceForm.status,
                                                 data.attendanceForm,
                                                 attendanceFormDataForDetailPageProvider,
@@ -681,7 +681,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
     String timeAttendance,
     String status,
     String location,
-    String url,
+    String? url,
     bool statusForm,
     AttendanceFormDataForDetailPage attendanceFormForDetailPage,
     AttendanceFormDataForDetailPageProvider
@@ -792,7 +792,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                   // margin: EdgeInsets.only(right: 10.w, top: 10.h),
                   height: 120.h,
                   width: 120.w,
-                  child: url.isEmpty || url == ''
+                  child: url == null || url.isEmpty || url == ''
                       ? Image.asset('assets/images/logo.png')
                       : Image.network(url),
                 ),

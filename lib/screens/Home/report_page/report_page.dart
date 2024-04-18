@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -41,7 +42,7 @@ class _ReportPageState extends State<ReportPage> {
               backgroundColor: Colors.white,
               shadowColor: Colors.transparent,
               title: Text(
-                'Reports',
+                AppLocalizations.of(context)?.report ?? "Reports",
                 style: TextStyle(
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.bold,
@@ -152,7 +153,7 @@ class _ReportPageState extends State<ReportPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   customRichText(
-                      'Class: ',
+                      '${AppLocalizations.of(context)?.field_course ?? 'Course'}: ',
                       className,
                       FontWeight.bold,
                       FontWeight.w500,
@@ -160,7 +161,7 @@ class _ReportPageState extends State<ReportPage> {
                       AppColors.primaryText),
                   10.verticalSpace,
                   customRichText(
-                      'Lectuer: ',
+                      '${AppLocalizations.of(context)?.field_lecturer ?? 'Lectuer'}: ',
                       lectuerName,
                       FontWeight.bold,
                       FontWeight.w500,
@@ -171,7 +172,7 @@ class _ReportPageState extends State<ReportPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       customRichText(
-                          'Room: ',
+                          '${AppLocalizations.of(context)?.field_course_room ?? 'Room'}: ',
                           room,
                           FontWeight.bold,
                           FontWeight.w500,
@@ -181,7 +182,7 @@ class _ReportPageState extends State<ReportPage> {
                         width: 10.w,
                       ),
                       customRichText(
-                          'Shift: ',
+                          '${AppLocalizations.of(context)?.field_course_shift ?? 'Shift'}: ',
                           shift,
                           FontWeight.bold,
                           FontWeight.w500,
@@ -191,7 +192,7 @@ class _ReportPageState extends State<ReportPage> {
                   ),
                   10.verticalSpace,
                   customRichText(
-                      'Status: ',
+                      '${AppLocalizations.of(context)?.status ?? 'Status'}: ',
                       status,
                       FontWeight.bold,
                       FontWeight.w500,
@@ -201,7 +202,7 @@ class _ReportPageState extends State<ReportPage> {
                   Row(
                     children: [
                       customRichText(
-                          'Date: ',
+                          '${AppLocalizations.of(context)?.created_date ?? 'Date'}: ',
                           dateReport,
                           FontWeight.bold,
                           FontWeight.w500,
@@ -211,7 +212,7 @@ class _ReportPageState extends State<ReportPage> {
                         width: 10.w,
                       ),
                       customRichText(
-                          'Week: ',
+                          '${AppLocalizations.of(context)?.day ?? 'Day'}: ',
                           week,
                           FontWeight.bold,
                           FontWeight.w500,
@@ -221,7 +222,7 @@ class _ReportPageState extends State<ReportPage> {
                   ),
                   10.verticalSpace,
                   customRichText(
-                      'Return Date: ',
+                      '${AppLocalizations.of(context)?.return_date ?? 'Return Date'}: ',
                       returnDate,
                       FontWeight.bold,
                       FontWeight.w500,
@@ -231,7 +232,7 @@ class _ReportPageState extends State<ReportPage> {
                     height: 10,
                   ),
                   customRichText(
-                      'Time: ',
+                      '${AppLocalizations.of(context)?.time ?? 'Time'}: ',
                       timeReport,
                       FontWeight.bold,
                       FontWeight.w500,
@@ -246,10 +247,10 @@ class _ReportPageState extends State<ReportPage> {
               color: AppColors.primaryText,
             ),
             SizedBox(
-              width: 10.w,
+              width: 5.w,
             ),
             CustomText(
-                message: 'Detail',
+                message: '${AppLocalizations.of(context)?.detail ?? 'Detail'}',
                 fontSize: 15.sp,
                 fontWeight: FontWeight.bold,
                 color: AppColors.primaryButton)

@@ -508,7 +508,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                       borderRadius: BorderRadius.all(Radius.circular(5.r))),
                   child: Center(
                       child: CustomText(
-                          message: 'Take Attendance',
+                          message: AppLocalizations.of(context)?.btn_take_attendance ?? 'Take Attendance',
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
                           color:
@@ -535,7 +535,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                       borderRadius: BorderRadius.all(Radius.circular(5.r))),
                   child: Center(
                       child: CustomText(
-                          message: 'Scan QR',
+                          message: AppLocalizations.of(context)?.btn_scan_qr ?? 'Scan QR',
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
                           color:
@@ -881,7 +881,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               customRichText(
-                                title: 'Course: ',
+                                title: '${AppLocalizations.of(context)?.field_course ?? 'Course'}: ',
                                 message: courseName,
                                 fontWeightTitle: FontWeight.bold,
                                 fontWeightMessage: FontWeight.w400,
@@ -890,7 +890,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                               ),
                               5.verticalSpace,
                               customRichText(
-                                title: 'Type: ',
+                                title: '${AppLocalizations.of(context)?.field_course_type ?? 'Method'}: ',
                                 message: classType,
                                 fontWeightTitle: FontWeight.bold,
                                 fontWeightMessage: FontWeight.w400,
@@ -899,7 +899,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                               ),
                               5.verticalSpace,
                               customRichText(
-                                title: 'Lecturer: ',
+                                title: '${AppLocalizations.of(context)?.field_lecturer ?? 'Lectuer'}: ',
                                 message: teacherName,
                                 fontWeightTitle: FontWeight.bold,
                                 fontWeightMessage: FontWeight.w400,
@@ -908,7 +908,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                               ),
                               5.verticalSpace,
                               customRichText(
-                                title: 'CourseID: ',
+                                title: '${AppLocalizations.of(context)?.field_course_id ?? 'Course ID'}: ',
                                 message: courseID,
                                 fontWeightTitle: FontWeight.bold,
                                 fontWeightMessage: FontWeight.w400,
@@ -919,7 +919,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                               Row(
                                 children: [
                                   customRichText(
-                                    title: 'Shift: ',
+                                    title: '${AppLocalizations.of(context)?.field_course_shift ?? 'Shift'}: ',
                                     message: "$shift",
                                     fontWeightTitle: FontWeight.bold,
                                     fontWeightMessage: FontWeight.w400,
@@ -928,7 +928,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                                   ),
                                   SizedBox(width: 5.w),
                                   customRichText(
-                                    title: 'Class: ',
+                                    title: '${AppLocalizations.of(context)?.field_course_room ?? 'Room'}: ',
                                     message: roomNumber,
                                     fontWeightTitle: FontWeight.bold,
                                     fontWeightMessage: FontWeight.w400,
@@ -941,7 +941,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                               Row(
                                 children: [
                                   customRichText(
-                                    title: 'Group: ',
+                                    title: '${AppLocalizations.of(context)?.field_course_group ?? 'Group'}: ',
                                     message: group,
                                     fontWeightTitle: FontWeight.bold,
                                     fontWeightMessage: FontWeight.w400,
@@ -950,7 +950,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                                   ),
                                   SizedBox(width: 5.w),
                                   customRichText(
-                                    title: 'SubGroup: ',
+                                    title: '${AppLocalizations.of(context)?.field_course_subGroup ?? 'SubGroup'}: ',
                                     message: subGroup,
                                     fontWeightTitle: FontWeight.bold,
                                     fontWeightMessage: FontWeight.w400,
@@ -976,7 +976,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             customRichText(
-                              title: 'Total Presence: ',
+                              title: '${AppLocalizations.of(context)?.stats_total_presence ?? 'Total Presence'}: ',
                               message: '${totalPresence.ceil()}',
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
@@ -985,7 +985,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                             ),
                             5.verticalSpace,
                             customRichText(
-                              title: 'Total Late: ',
+                              title: '${AppLocalizations.of(context)?.stats_total_late ?? 'Total Late'}: ',
                               message: '$totalLate',
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,
@@ -994,7 +994,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                             ),
                             5.verticalSpace,
                             customRichText(
-                              title: 'Total Absent: ',
+                              title: '${AppLocalizations.of(context)?.stats_total_absence ?? 'Total Absence'}: ',
                               message: '${totalAbsence.ceil()}',
                               fontWeightTitle: FontWeight.bold,
                               fontWeightMessage: FontWeight.w400,

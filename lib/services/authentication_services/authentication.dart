@@ -51,8 +51,9 @@ class Authenticate {
   Future<String> login(String email, String password) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
+    final deviceToken = await SecureStorage().readSecureData('tokenFirebase');
     final URL = 'http://${baseURl}:8080/api/student/login';
-    var request = {'email': email, 'password': password};
+    var request = {'email': email, 'password': password, 'deviceToken': deviceToken};
     var body = json.encode(request);
     var headers = {
       'Content-type': 'application/json; charset=UTF-8',

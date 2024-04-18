@@ -3,5 +3,47 @@
     "title_login": "Login",
     "title_hi":"Hi, ",
     "title_student": "Student",
-    "title_profile_language": "Language"
+    "title_profile_language": "Language",
+
+    "btn_take_attendance" : "Take Attendance",
+    "btn_scan_qr": "Scan QR",
+
+    "field_course": "Course",
+    "field_course_type": "Method",
+    "field_course_id": "Course ID",
+    "field_course_shift": "Shift",
+    "field_course_room": "Room",
+    "field_course_group": "Group",
+    "field_course_subGroup": "Sub Group",
+
+    "field_lecturer": "Lecturer",
+
+    "stats_total_presence": "Total presence",
+    "stats_total_late": "Total late",
+    "stats_total_absence": "Total absence",
+
+    "status": "Status",
+    "return_date": "Response Date",
+    "created_date": "Date",
+    "time": "Time",
+    "detail": "Detail",
+    "day": "Day",
+    "week": "Week",
+    "report": "Báo cáo sự cố",
+
+    "setting_privacy": "Setting and Privacy",
+    "password": "Password",
+    "display": "Display",
+    "mode_theme": "Mode theme",
+    "language": "Language",
+    "app": "App",
+    "about_us": "About us",
+    "sign_out": "Sign out",
+    "sound_notification": "Sound Notification",
+    "view_face": "View Face",
+
+    "confirm": "Confirm",
+    "choose_language": "Choose Language",
+    "vietnamese": "Vietnamese",
+    "english": "English"
 }

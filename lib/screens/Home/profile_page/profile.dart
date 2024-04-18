@@ -118,26 +118,26 @@ class _ProfilePageState extends State<ProfilePage> {
             Padding(
               padding: EdgeInsets.only(left: 10.w),
               child: CustomText(
-                  message: 'Setting and Privacy',
+                  message: '${AppLocalizations.of(context)?.setting_privacy ?? 'Setting and Privacy'}',
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primaryText),
             ),
             5.verticalSpace,
             customOptions(
-                context, 'assets/icons/changePassword.png', 'Password'),
+                context, 'assets/icons/changePassword.png', '${AppLocalizations.of(context)?.password ?? 'Password'}'),
             customOptions(
-                context, 'assets/icons/notification.png', 'Sound Notification'),
+                context, 'assets/icons/notification.png', '${AppLocalizations.of(context)?.sound_notification ?? 'Sound Notification'}'),
             10.verticalSpace,
             Padding(
               padding: EdgeInsets.only(left: 10.w),
               child: CustomText(
-                  message: 'Display',
+                  message: '${AppLocalizations.of(context)?.display ?? 'Display'}',
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primaryText),
             ),
-            customOptions(context, 'assets/icons/modeTheme.png', 'Mode Theme'),
+            customOptions(context, 'assets/icons/modeTheme.png', '${AppLocalizations.of(context)?.mode_theme ?? 'Mode Theme'}'),
             InkWell(
                 onTap: () {
                   _showBottomSheet(context);
@@ -164,9 +164,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           builder: (builder) => const ViewImageFacePage()));
                 },
                 child: customOptions(
-                    context, 'assets/icons/face_camera.png', 'View Face')),
+                    context, 'assets/icons/face_camera.png', '${AppLocalizations.of(context)?.view_face ?? 'View Face'}')),
 
-            customOptions(context, 'assets/icons/information.png', 'About us'),
+            customOptions(context, 'assets/icons/information.png', '${AppLocalizations.of(context)?.about_us ?? 'About us'}'),
             InkWell(
                 onTap: () {
                   showDialog(
@@ -206,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ));
                 },
                 child: customOptions(
-                    context, 'assets/icons/signout.png', 'Sign out')),
+                    context, 'assets/icons/signout.png', '${AppLocalizations.of(context)?.sign_out ?? 'Sign out'}')),
           ],
         ),
       ),
@@ -363,7 +363,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Center(
                     child: CustomText(
-                      message: 'Chọn ngôn ngữ',
+                      message: '${AppLocalizations.of(context)?.choose_language ?? 'Choose Language'}',
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w700,
                       color: AppColors.primaryButton,
@@ -384,7 +384,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 110,
                   ),
                   CustomButton(
-                    buttonName: 'Xác nhận',
+                    buttonName: '${AppLocalizations.of(context)?.confirm ?? 'Confirm'}',
                     backgroundColorButton: AppColors.primaryButton,
                     borderColor: Colors.transparent,
                     textColor: Colors.white,
@@ -430,7 +430,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: 10.w,
                   ),
                   CustomText(
-                    message: 'Tiếng Anh',
+                    message: '${AppLocalizations.of(context)?.english ?? 'English'}',
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                     color: AppColors.primaryText,
@@ -493,7 +493,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: 10.w,
                   ),
                   CustomText(
-                    message: 'Tiếng Việt',
+                    message: '${AppLocalizations.of(context)?.vietnamese ?? 'Vietnamese'}',
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                     color: AppColors.primaryText,

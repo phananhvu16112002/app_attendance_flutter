@@ -3,6 +3,47 @@
     "title_login": "Đăng nhập",
     "title_hi":"Chào, ",
     "title_student": "Sinh viên",
-    "title_profile_language": "Ngôn ngữ"
+    "title_profile_language": "Ngôn ngữ",
 
+    "btn_take_attendance" : "Điểm danh",
+    "btn_scan_qr": "Quét QR",
+
+    "field_course": "Môn",
+    "field_course_type": "Phương thức",
+    "field_course_id": "Mã môn",
+    "field_course_shift": "Ca",
+    "field_course_room": "Phòng",
+    "field_course_group": "Tổ",
+    "field_course_subGroup": "Nhóm",
+
+    "field_lecturer": "Giảng viên",
+
+    "stats_total_presence": "Tổng buổi đủ",
+    "stats_total_late": "Tổng buổi trễ",
+    "stats_total_absence": "Tổng buổi vắng",
+
+    "status": "Trạng thái",
+    "return_date": "Ngày phản hồi",
+    "created_date": "Ngày tạo",
+    "time": "Giờ",
+    "detail": "Chi tiết",
+    "day": "Ngày",
+    "week": "Tuần",
+    "report": "Báo cáo sự cố",
+
+    "setting_privacy": "Cài đặt và bảo mật",
+    "password": "Mật khẩu",
+    "display": "Cấu hình",
+    "mode_theme": "Chế độ nền",
+    "language": "Ngôn ngữ",
+    "app": "Thông tin ứng dụng",
+    "about_us": "Liên lạc",
+    "sign_out": "Đăng xuất",
+    "sound_notification": "Âm thanh thông báo",
+    "view_face": "Ảnh mặt được xác thực",
+
+    "confirm": "Xác nhận",
+    "choose_language": "Chọn ngôn ngữ",
+    "vietnamese": "Tiếng Việt",
+    "english": "Tiếng Anh"
 }
