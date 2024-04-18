@@ -6,6 +6,8 @@ import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/data_offline.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -57,14 +59,17 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: customAppbar(),
-        body: _builBody());
+        body: Column(
+          children: [
+            customAppBar(),
+            SingleChildScrollView(child: _builBody()),
+          ],
+        ));
   }
 
   Widget _builBody() {
     return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
+      width: double.infinity,
       child: dataOfflineBox.length != 0
           ? ListView.builder(
               itemCount: dataOfflineBox.length,
@@ -85,24 +90,22 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
               })
           : Center(
               child: Container(
-                width: 220,
-                height: 350,
+                width: 250.w,
+                height: 200.h,
                 child: Center(
                   child: Column(
                     children: [
-                      const SizedBox(
-                        height: 100,
+                       SizedBox(
+                        height: 100.h,
                       ),
                       Opacity(
                         opacity: 0.3,
                         child: Image.asset('assets/images/nodata.png'),
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      5.verticalSpace,
                       CustomText(
                           message: "No take attendance detail pending",
-                          fontSize: 11,
+                          fontSize: 11.sp,
                           fontWeight: FontWeight.w500,
                           color: AppColors.primaryText.withOpacity(0.5))
                     ],
@@ -289,79 +292,175 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
     }
   }
 
-  PreferredSize customAppbar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(120),
-      child: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            child: const Icon(Icons.arrow_back,
-                color: Colors.white), // Thay đổi icon và màu sắc tùy ý
-          ),
-        ),
-        backgroundColor: AppColors.colorAppbar,
-        flexibleSpace: Padding(
-          padding: const EdgeInsets.only(left: 50.0, top: 35, bottom: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: CustomText(
-                    message: classes.courseName,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              Row(
-                children: [
-                  CustomText(
-                      message: 'CourseID: ${classes.courseID}',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Container(height: 10, width: 1, color: Colors.white),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  CustomText(
-                      message: 'Room: ${classes.roomNumber}',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Container(height: 10, width: 1, color: Colors.white),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  CustomText(
-                      message: 'Shift: ${classes.shiftNumber}',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
-                ],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              CustomText(
-                  message: 'Lectuer: ${classes.teacherName}',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white),
-            ],
-          ),
+  Container customAppBar() {
+    return Container(
+      width: double.infinity,
+      // height: 130,
+      padding: EdgeInsets.symmetric(vertical: 30.h),
+      decoration: BoxDecoration(
+        color: AppColors.primaryButton,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20.r),
+          bottomRight: Radius.circular(20.r),
         ),
       ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 14.0.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 50.w,
+                    height: 50.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.arrow_back_ios_new_outlined,
+                        size: 18.sp,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 14.w,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      customText(
+                        classes.courseName,
+                        18.sp,
+                        FontWeight.w600,
+                        Colors.white,
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Row(
+                        children: [
+                          Row(
+                            children: [
+                              CustomText(
+                                message: 'CourseID: ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              CustomText(
+                                message: '${classes.courseID} ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 2.w,
+                          ),
+                          Container(
+                            width: 1.w,
+                            padding: EdgeInsets.symmetric(vertical: 8.h),
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          Row(
+                            children: [
+                              CustomText(
+                                message: ' Room: ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              CustomText(
+                                message: '${classes.roomNumber} ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomText(
+                                message: 'Shift: ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              CustomText(
+                                message: '${classes.shiftNumber} ',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          Container(
+                            width: 1.w,
+                            padding: EdgeInsets.symmetric(vertical: 8.h),
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          CustomText(
+                            message: ' Lecturer: ',
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                          CustomText(
+                            message: '${classes.teacherName} ',
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget customText(
+      String title, double fontSize, FontWeight fontWeight, Color color) {
+    return Text(
+      title,
+      style:
+          TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: color),
+      overflow: TextOverflow.ellipsis,
     );
   }
 

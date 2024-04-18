@@ -198,7 +198,7 @@ class _HomePageBodyState extends State<HomePageBody> {
           print(
               'JSON: ${jsonDecode(result!.code.toString())}'); // modify and get value here.
           var temp = jsonDecode(result!.code.toString());
-          if (isConnected) {
+          if (isInternetConnected) {
             if (temp['typeAttendanced'] == 0 || temp['typeAttendanced'] == 1) {
               controller.pauseCamera();
               Navigator.push(
@@ -219,12 +219,11 @@ class _HomePageBodyState extends State<HomePageBody> {
                               radius: 0.0),
                         )),
               );
-              //Send request(formid, classID, dateAttendanced, studentID, location, latitude, longitude)
             } else {
-              print('Send Request---------');
               final studentProvider = Provider.of<StudentDataProvider>(context);
               double latitude = studentProvider.userData.latitude;
               double longitude = studentProvider.userData.longtitude;
+              controller.pauseCamera();
               _progressDialog.show();
               String? location = await GetLocation()
                   .getAddressFromLatLongWithoutInternet(latitude, longitude);
@@ -240,10 +239,12 @@ class _HomePageBodyState extends State<HomePageBody> {
                       XFile(''),
                       int.parse(temp['typeAttendanced'].toString()));
               if (attendanceDetail != null) {
+                controller.pauseCamera();
                 _progressDialog.hide();
                 customDialog('Successfully Take Attendance',
                     'Please check your attendance in class!');
               } else {
+                controller.pauseCamera();
                 _progressDialog.hide();
                 customDialog(
                     'Failed Attendance', 'Please take attendance again!');

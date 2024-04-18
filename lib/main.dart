@@ -23,6 +23,7 @@ import 'package:attendance_system_nodejs/providers/studentClass_data_provider.da
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/flash_screen.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
+import 'package:attendance_system_nodejs/screens/DetailHome/detail_page_offline/detail_page_offline.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:face_camera/face_camera.dart';
@@ -66,6 +67,7 @@ void main() async {
   if (Platform.isAndroid) {
     print('I am Android');
     final token = await messaging.getToken();
+    print('Token: $token');
     await secureStorage.writeSecureData('tokenFirebase', token!);
   }
   if (Platform.isIOS) {
@@ -153,6 +155,33 @@ class _MyAppState extends State<MyApp> {
 }
 
 
+// DetailPageOffline(
+//                 classesStudent: ClassesStudent(
+//                     studentID: 'studentID',
+//                     classID: 'classID',
+//                     total: 10,
+//                     totalPresence: 10,
+//                     totalAbsence: 10,
+//                     totalLate: 10,
+//                     roomNumber: 'roomNumber',
+//                     shiftNumber: 3,
+//                     startTime: '2024-03-03T10:57:55.000Z',
+//                     endTime: '2024-03-03T10:57:55.000Z',
+//                     classType: 'classType',
+//                     group: 'group',
+//                     subGroup: 'subGroup',
+//                     courseID: 'courseID',
+//                     teacherID: 'teacherID',
+//                     courseName: 'courseName',
+//                     totalWeeks: 9,
+//                     requiredWeeks: 9,
+//                     credit: 9,
+//                     teacherEmail: 'teacherEmail',
+//                     teacherName: 'teacherName',
+//                     progress: 0.5),
+//               ),
+
+
 
 
 //  AttendanceFormPage( classesStudent: ClassesStudent(
@@ -178,6 +207,9 @@ class _MyAppState extends State<MyApp> {
 //               teacherEmail: 'teacherEmail',
 //               teacherName: 'teacherName',
 //               progress: 0.5),)
+
+
+
 
 
 
