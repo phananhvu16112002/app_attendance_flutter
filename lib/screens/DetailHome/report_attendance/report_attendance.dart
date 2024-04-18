@@ -15,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReportAttendance extends StatefulWidget {
   ReportAttendance(
@@ -130,7 +131,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   15.verticalSpace,
                   Center(
                       child: Text(
-                    'Report Attendance',
+                    AppLocalizations.of(context)?.report ?? 'Report Attendance',
                     style: GoogleFonts.inter(
                         color: AppColors.primaryButton,
                         fontSize: 18.sp,
@@ -138,7 +139,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   )),
                   18.verticalSpace,
                   CustomText(
-                      message: 'Send To:',
+                      message: AppLocalizations.of(context)?.send_to ?? 'Send To',
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText),
@@ -153,7 +154,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   }),
                   10.verticalSpace,
                   CustomText(
-                      message: 'Topic',
+                      message: AppLocalizations.of(context)?.topic ?? 'Topic',
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText),
@@ -168,7 +169,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   }),
                   10.verticalSpace,
                   CustomText(
-                      message: 'Type Of Problem',
+                      message: AppLocalizations.of(context)?.problem_type ?? 'Type of Problem',
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText),
@@ -211,7 +212,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   ),
                   10.verticalSpace,
                   CustomText(
-                      message: 'Message',
+                      message: AppLocalizations.of(context)?.message ?? 'Message',
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText),
@@ -230,7 +231,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   Row(
                     children: [
                       CustomText(
-                          message: 'Evidence of the problem: ',
+                          message: AppLocalizations.of(context)?.problem_evidence ?? 'Evidence of the problem',
                           fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
@@ -251,7 +252,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                               borderRadius: BorderRadius.circular(5.r)),
                           child: Center(
                             child: CustomText(
-                                message: 'Upload File',
+                                message: AppLocalizations.of(context)?.upload_file ?? 'Upload File',
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white),
@@ -296,7 +297,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 0),
                       child: CustomButton(
-                          buttonName: 'Send',
+                          buttonName: AppLocalizations.of(context)?.send ?? 'Send',
                           backgroundColorButton: _imageFiles.isNotEmpty
                               ? AppColors.primaryButton
                               : AppColors.primaryButton.withOpacity(0.3),

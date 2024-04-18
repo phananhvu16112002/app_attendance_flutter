@@ -5,6 +5,7 @@ import 'package:attendance_system_nodejs/models/ModelForAPI/ModelForAPI_ReportPa
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailReport extends StatefulWidget {
   const DetailReport({super.key, required this.reportModel});
@@ -58,8 +59,8 @@ class _DetailReportState extends State<DetailReport> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const CustomText(
-                              message: 'Class',
+                          CustomText(
+                              message: AppLocalizations.of(context)?.field_course ?? 'Class',
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryText),
@@ -71,8 +72,8 @@ class _DetailReportState extends State<DetailReport> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const CustomText(
-                              message: 'Lectuer',
+                          CustomText(
+                              message: AppLocalizations.of(context)?.field_lecturer ?? 'Lecturer',
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryText),
@@ -89,8 +90,8 @@ class _DetailReportState extends State<DetailReport> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const CustomText(
-                                      message: 'Room',
+                                  CustomText(
+                                      message: AppLocalizations.of(context)?.field_course_room ?? 'Room',
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
@@ -130,8 +131,8 @@ class _DetailReportState extends State<DetailReport> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const CustomText(
-                                      message: 'Shift',
+                                  CustomText(
+                                      message: AppLocalizations.of(context)?.field_course_shift ?? 'Shift',
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
@@ -175,8 +176,8 @@ class _DetailReportState extends State<DetailReport> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const CustomText(
-                                      message: 'Date Report',
+                                  CustomText(
+                                      message: AppLocalizations.of(context)?.created_date ?? 'Date Report',
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
@@ -216,8 +217,8 @@ class _DetailReportState extends State<DetailReport> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const CustomText(
-                                      message: 'Date Response',
+                                  CustomText(
+                                      message: AppLocalizations.of(context)?.return_date ?? 'Date Response',
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
@@ -264,8 +265,8 @@ class _DetailReportState extends State<DetailReport> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const CustomText(
-                                      message: 'Status',
+                                  CustomText(
+                                      message: AppLocalizations.of(context)?.status ?? 'Status',
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
@@ -305,8 +306,8 @@ class _DetailReportState extends State<DetailReport> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const CustomText(
-                                      message: 'Time Response',
+                                  CustomText(
+                                      message: AppLocalizations.of(context)?.time_response ?? 'Time Response',
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
@@ -348,8 +349,8 @@ class _DetailReportState extends State<DetailReport> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const CustomText(
-                              message: 'Type of problem',
+                          CustomText(
+                              message: AppLocalizations.of(context)?.problem_type ?? 'Type of problem',
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryText),
@@ -360,8 +361,8 @@ class _DetailReportState extends State<DetailReport> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const CustomText(
-                              message: 'Message',
+                          CustomText(
+                              message: AppLocalizations.of(context)?.message ?? 'Message',
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryText),
@@ -372,8 +373,8 @@ class _DetailReportState extends State<DetailReport> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const CustomText(
-                              message: 'Evidence of problem',
+                          CustomText(
+                              message: AppLocalizations.of(context)?.problem_evidence ?? 'Evidence of problem',
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryText),

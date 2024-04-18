@@ -45,5 +45,25 @@
     "confirm": "Xác nhận",
     "choose_language": "Chọn ngôn ngữ",
     "vietnamese": "Tiếng Việt",
-    "english": "Tiếng Anh"
+    "english": "Tiếng Anh",
+
+    "location": "Vị trí",
+    "end_time": "Kết thúc",
+    "start_time": "Bắt đầu",
+    "attendance_time": "Điểm danh",
+    "time_response": "Giờ phản hồi",
+
+    "send_to": "Gửi đến",
+    "topic": "Nội dung",
+    "problem_type": "Sự cố gặp phải",
+    "message": "Tin nhắn",
+
+    "problem_evidence": "Minh chứng",
+    "send": "Gửi",
+    "upload_file": "Lựa ảnh",
+
+    "total": "Tổng",
+    "present": "Đủ",
+    "absent": "Vắng",
+    "late": "Trễ"
 }

@@ -16,6 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailPageBody extends StatefulWidget {
   DetailPageBody({super.key, required this.classesStudent});
@@ -143,7 +144,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                             child: Center(
                                               child: CustomText(
                                                 message:
-                                                    'Total: ${classesStudent.total.ceil()}',
+                                                    '${AppLocalizations.of(context)?.total ?? 'Total'}: ${classesStudent.total.ceil()}',
                                                 fontSize: 13.sp,
                                                 fontWeight: FontWeight.w600,
                                                 color: AppColors.primaryText,
@@ -177,7 +178,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                             child: Center(
                                               child: CustomText(
                                                 message:
-                                                    'Present: ${classesStudent.totalPresence.ceil()}',
+                                                    '${AppLocalizations.of(context)?.present ?? 'Present'}: ${classesStudent.totalPresence.ceil()}',
                                                 fontSize: 13.sp,
                                                 fontWeight: FontWeight.w600,
                                                 color: AppColors.primaryText,
@@ -211,7 +212,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                             child: Center(
                                               child: CustomText(
                                                 message:
-                                                    'Absent: ${classesStudent.totalAbsence.ceil()}',
+                                                    '${AppLocalizations.of(context)?.absent ?? 'Absent'}: ${classesStudent.totalAbsence.ceil()}',
                                                 fontSize: 13.sp,
                                                 fontWeight: FontWeight.w600,
                                                 color: AppColors.primaryText,
@@ -245,7 +246,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                             child: Center(
                                               child: CustomText(
                                                 message:
-                                                    'Late: ${classesStudent.totalLate.ceil()}',
+                                                    '${AppLocalizations.of(context)?.late ?? 'Late'}: ${classesStudent.totalLate.ceil()}',
                                                 fontSize: 13.sp,
                                                 fontWeight: FontWeight.w600,
                                                 color: AppColors.primaryText,
@@ -741,7 +742,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       customRichText(
-                        'Start Time: ',
+                        '${AppLocalizations.of(context)?.start_time ?? 'Start Time'}: ',
                         startTime,
                         FontWeight.w600,
                         FontWeight.w500,
@@ -750,7 +751,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                       ),
                       10.verticalSpace,
                       customRichText(
-                        'End Time: ',
+                        '${AppLocalizations.of(context)?.end_time ?? 'End Time'}: ',
                         endTime,
                         FontWeight.w600,
                         FontWeight.w500,
@@ -759,7 +760,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                       ),
                       10.verticalSpace,
                       customRichText(
-                        'Location: ',
+                        '${AppLocalizations.of(context)?.location ?? 'Location'}: ',
                         location,
                         FontWeight.w600,
                         FontWeight.w500,
@@ -768,7 +769,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                       ),
                       10.verticalSpace,
                       customRichText(
-                        'Time Attendance: ',
+                        '${AppLocalizations.of(context)?.attendance_time ?? 'Attendance At'}: ',
                         timeAttendance.toString(),
                         FontWeight.w600,
                         FontWeight.w500,
@@ -777,7 +778,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                       ),
                       10.verticalSpace,
                       customRichText(
-                        'Status: ',
+                        '${AppLocalizations.of(context)?.status ?? 'Status'}: ',
                         status,
                         FontWeight.w600,
                         FontWeight.w500,

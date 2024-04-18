@@ -45,5 +45,25 @@
     "confirm": "Confirm",
     "choose_language": "Choose Language",
     "vietnamese": "Vietnamese",
-    "english": "English"
+    "english": "English",
+
+    "location": "Location",
+    "end_time": "End Time",
+    "start_time": "Start Time",
+    "attendance_time": "Attendance Time",
+    "time_response": "Time response",
+
+    "send_to": "Send To",
+    "topic": "Topic",
+    "problem_type": "Type of Problem",
+    "message": "Message",
+
+    "problem_evidence": "Evidence of the problem",
+    "send": "Send",
+    "upload_file": "Upload file",
+
+    "total": "Total",
+    "present": "Present",
+    "absent": "Absent",
+    "late": "Late"
 }
