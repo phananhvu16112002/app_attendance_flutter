@@ -1,8 +1,10 @@
 // import 'package:attendance_system_nodejs/common/bases/CustomText.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/upload_image.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
+import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +17,13 @@ class FlashScreen extends StatefulWidget {
 }
 
 class _FlashScreenState extends State<FlashScreen> {
+  String requiredImage = '';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     checkLocationService();
+    checkRequiredImage();
     Future.delayed(Duration(seconds: 5), () {
       if (mounted) {
         var studentDataProvider =
@@ -32,7 +36,17 @@ class _FlashScreenState extends State<FlashScreen> {
       }
       //Should call api to get location in flash
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (builder) => HomePage()));
+          context,
+          MaterialPageRoute(
+              builder: (builder) =>
+                  requiredImage == 'true' ? UploadImage() : HomePage()));
+    });
+  }
+
+  Future<void> checkRequiredImage() async {
+    var data = await SecureStorage().readSecureData('requiredImage');
+    setState(() {
+      requiredImage = data;
     });
   }
 
@@ -42,15 +56,15 @@ class _FlashScreenState extends State<FlashScreen> {
       if (!serviceEnabled) {
         await showSettingsAlert(context);
       } else {
-        break; 
+        break;
       }
     }
   }
+
   Future<void> showSettingsAlert(BuildContext context) async {
     return showDialog(
       context: context,
-      barrierDismissible:
-          false, 
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         title: const Text('Location Permission'),
@@ -60,16 +74,19 @@ class _FlashScreenState extends State<FlashScreen> {
             onPressed: () async {
               Navigator.pop(context);
             },
-            child: const Text('Cancel', style: TextStyle(color: AppColors.importantText),),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppColors.importantText),
+            ),
           ),
           TextButton(
             onPressed: () async {
               await Geolocator.openLocationSettings();
-              Navigator.pop(context); 
+              Navigator.pop(context);
             },
             child: const Text(
               'Open Settings',
-              style: TextStyle(color:AppColors.primaryButton),
+              style: TextStyle(color: AppColors.primaryButton),
             ),
           ),
         ],

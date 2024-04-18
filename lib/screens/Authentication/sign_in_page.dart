@@ -234,7 +234,6 @@ class _SignInPageState extends State<SignInPage> {
                                       .readSecureData('studentName');
                                   var requiredImage = await SecureStorage()
                                       .readSecureData('requiredImage');
-                                  print('RequiredImage: $requiredImage');
                                   // var requiredImage = sharedPreferences
                                   //     .getBool('requiredImage');
                                   studentDataProvider.setStudentID(studentID);
