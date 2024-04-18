@@ -65,5 +65,32 @@
     "total": "Tổng",
     "present": "Đủ",
     "absent": "Vắng",
-    "late": "Trễ"
+    "late": "Trễ",
+
+    "login_message": "Đăng nhập để sử dụng ứng dụng",
+    "password": "Mật khẩu",
+    "password_field": "Nhập mật khẩu",
+    "email_field": "Nhập email",
+    "forgot_password": "Quên mật khẩu ? ",
+    "forgot_your_password": "Quên mật khẩu?",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "register_account": "Chưa có tài khoản ? ", 
+
+    "forgot_password_message" : "Đừng lo! Vui lòng điền địa chỉ email của bạn để thiết lập lại mật khẩu",
+    "send_otp": "Gửi OTP",
+    "login_account": "Đã có tài khoản ? ",
+
+    "register_message" : "Nhập thông tin cá nhân",
+    "confirm_password" : "Xác nhận mật khẩu",
+    "confirm_password_message" : "Xác nhận mật khẩu",
+
+    "studentID_field" : "Mã sinh viên",
+    "studentID_field_message": "Nhập mã sinh viên",
+
+    "otp_verification": "Xác thực OTP",
+    "otp_verification_message": "Vui lòng nhập mã OTP vừa được gửi qua email",
+    "verify": "Xác thực",
+    "resend": "Gửi lại",
+    "resend_message": "Chưa nhận được mã ? "
 }

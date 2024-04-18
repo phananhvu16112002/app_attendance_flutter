@@ -65,5 +65,32 @@
     "total": "Total",
     "present": "Present",
     "absent": "Absent",
-    "late": "Late"
+    "late": "Late",
+
+    "login_message": "Login to continue using the app",
+    "password": "Password",
+    "password_field": "Enter your password",
+    "email_field": "Enter your email",
+    "forgot_password": "Forgot Password",
+    "forgot_your_password": "Forgot Your Password?",
+    "login": "Login",
+    "register": "Register",
+    "register_account": "Don't you have an account ? ",
+
+    "forgot_password_message" : "Don’t worry! If occurs. Please enter your email address or mobile number linked with your account!",
+    "send_otp": "Send OTP",
+    "login_account": "Already have an account ? ",
+    
+    "register_message" : "Enter your personal information",
+    "confirm_password" : "Confirm Password",
+    "confirm_password_message" : "Confirm your password",
+
+    "studentID_field" : "StudentID",
+    "studentID_field_message": "Enter your student ID",
+
+    "otp_verification": "OTP Verification",
+    "otp_verification_message": "Please enter the verification code we just sent on your email address.",
+    "verify": "Verify",
+    "resend": "Re-send",
+    "resend_message": "Didn't recieve the code ? "
 }

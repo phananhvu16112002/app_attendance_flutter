@@ -14,6 +14,7 @@ import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForgotPasswordOTPPage extends StatefulWidget {
   const ForgotPasswordOTPPage({super.key});
@@ -98,7 +99,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                      CustomText(
-                        message: "OTP Verification",
+                        message: AppLocalizations.of(context)?.otp_verification ?? "OTP Verification",
                         fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText),
@@ -107,7 +108,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                     // ),
                     10.verticalSpace,
                     CustomText(
-                        message: description,
+                        message: AppLocalizations.of(context)?.otp_verification_message ?? description,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.secondaryText),
@@ -145,7 +146,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                           fontSize: 20.sp,
                           // height: 60,
                           // width: 400,
-                          buttonName: "Verify",
+                          buttonName: AppLocalizations.of(context)?.verify ?? "Verify",
                           colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
                           borderColor: Colors.white,
@@ -218,8 +219,8 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const CustomText(
-                              message: "Didn't recieved code ? ",
+                          CustomText(
+                              message: AppLocalizations.of(context)?.resend_message ?? "Didn't recieved code ? ",
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                               color: AppColors.primaryText),

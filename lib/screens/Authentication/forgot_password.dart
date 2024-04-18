@@ -5,11 +5,13 @@ import 'package:attendance_system_nodejs/common/bases/custom_text_field.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/forgot_password_otp_page.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
 import 'package:attendance_system_nodejs/services/authentication_services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -77,7 +79,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                      CustomText(
-                        message: 'Forgot Your Password?',
+                        message: AppLocalizations.of(context)?.forgot_your_password ?? 'Forgot Your Password?',
                         fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText),
@@ -86,7 +88,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     // ),
                     10.verticalSpace,
                     CustomText(
-                        message: description,
+                        message: AppLocalizations.of(context)?.forgot_password_message ?? description,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.secondaryText),
@@ -111,7 +113,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       prefixIcon: const Icon(null),
                       suffixIcon:
                           IconButton(onPressed: () {}, icon: const Icon(null)),
-                      hintText: 'Enter your email address',
+                      hintText: AppLocalizations.of(context)?.email_field ?? 'Enter your email address',
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Email is required';
@@ -138,7 +140,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           fontSize: 18.sp,
                           // height: 60,
                           // width: 400,
-                          buttonName: "Send OTP",
+                          buttonName: AppLocalizations.of(context)?.send_otp ?? "Send OTP",
                           colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
                           borderColor: Colors.white,
@@ -182,17 +184,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                          CustomText(
-                            message: 'Already have an account ? ',
+                            message: AppLocalizations.of(context)?.login_account ?? 'Already have an account ? ',
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColors.primaryText),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, "/Login", (route) => false);
+                            Navigator.pushAndRemoveUntil(
+                                context, MaterialPageRoute(builder: (builder) => SignInPage()), (route) => false);
                           },
                           child:  CustomText(
-                              message: 'Log In',
+                              message: AppLocalizations.of(context)?.login ?? 'Log In',
                               fontSize: 13.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.importantText),
