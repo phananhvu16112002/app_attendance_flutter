@@ -85,9 +85,9 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
                       'startTime',
                       'endTime',
                       'date',
-                      dataOffline!.dateAttendanced,
+                      dataOffline?.dateAttendanced ?? '', 
                       'Pending',
-                      dataOffline!.location,
+                      dataOffline?.location ?? '',
                     ));
               })
           : Center(

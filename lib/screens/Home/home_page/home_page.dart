@@ -55,6 +55,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
+  
+
   List<BottomNavModel> listBottomNav = [
     BottomNavModel(title: 'Home', svgPath: 'assets/icons/home.svg'),
     BottomNavModel(title: 'Report', svgPath: 'assets/icons/report.svg'),

@@ -23,7 +23,8 @@ import 'package:attendance_system_nodejs/providers/studentClass_data_provider.da
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/flash_screen.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
-import 'package:attendance_system_nodejs/screens/DetailHome/detail_page_offline/detail_page_offline.dart';
+import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_offline/attendance_form_page_offline.dart';
+import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:face_camera/face_camera.dart';
@@ -36,9 +37,15 @@ import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:firebase_app_installations/firebase_app_installations.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
+}
+
+void _firebaseMessagingForegroundHandler(RemoteMessage message) {
+  print("Handling a foreground message: ${message.messageId}");
+  // Xử lý tin nhắn ở đây khi ứng dụng đang chạy
 }
 
 bool isInternetConnected = false;
@@ -54,6 +61,7 @@ void main() async {
       isInternetConnected = false;
     }
   });
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   await messaging.requestPermission(
@@ -69,6 +77,8 @@ void main() async {
     final token = await messaging.getToken();
     print('Token: $token');
     await secureStorage.writeSecureData('tokenFirebase', token!);
+    final id = await FirebaseInstallations.instance.getId();
+    print('ID: $id');
   }
   if (Platform.isIOS) {
     print('I am IOS');
@@ -77,8 +87,8 @@ void main() async {
   }
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen(_firebaseMessagingForegroundHandler);
 
-  await FaceCamera.initialize(); //Add this
   await Hive.initFlutter();
   Hive.registerAdapter(ClassAdapter());
   Hive.registerAdapter(TeacherAdapter());
@@ -153,6 +163,37 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+// AttendanceFormPageOffline(
+//                 attendanceForm: AttendanceForm(
+//                     formID: 'asd',
+//                     classes: '1',
+//                     startTime: '2024-03-03T10:57:55.000Z',
+//                     endTime: '2024-03-03T10:57:55.000Z',
+//                     dateOpen: '2024-03-03T10:57:55.000Z',
+//                     status: false,
+//                     typeAttendance: 0,
+//                     location: 'location',
+//                     latitude: 0,
+//                     longtitude: 0,
+//                     radius: 0),
+//               ),
+
+
+// AttendanceFormPageOffline(
+//                 attendanceForm: AttendanceForm(
+//                     formID: 'asd',
+//                     classes: '1',
+//                     startTime: 'startTime',
+//                     endTime: 'endTime',
+//                     dateOpen: 'dateOpen',
+//                     status: false,
+//                     typeAttendance: 0,
+//                     location: 'location',
+//                     latitude: 0,
+//                     longtitude: 0,
+//                     radius: 0),
+//               ),
 
 
 // DetailPageOffline(

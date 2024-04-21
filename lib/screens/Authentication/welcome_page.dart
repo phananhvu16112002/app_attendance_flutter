@@ -80,7 +80,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: CustomButton(
-                              fontSize: 20.sp,
+                              fontSize: 18.sp,
                               height: 60.h,
                               width: double.infinity,
                               buttonName: AppLocalizations.of(context)?.login ?? 'Login',
@@ -119,7 +119,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       Padding(
                         padding: const EdgeInsets.only(right: 0),
                         child: CustomButton(
-                            fontSize: 20.sp,
+                            fontSize: 18.sp,
                             height: 60.h,
                             width: double.infinity,
                             buttonName: AppLocalizations.of(context)?.register ?? 'Register',

@@ -17,6 +17,7 @@ import 'package:attendance_system_nodejs/services/smart_camera/smart_camera.dart
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -43,6 +44,8 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
   late ClassesStudent classesStudent;
   // late Classes classes;
 
+  late ProgressDialog _progressDialog;
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +55,33 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
     saveValue(widget.attendanceForm);
     openBox();
     getImage(); //avoid rebuild
+    _progressDialog = ProgressDialog(context,
+        isDismissible: false,
+        customBody: Container(
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
+              color: Colors.white),
+          child: Center(
+              child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(
+                color: AppColors.primaryButton,
+              ),
+              5.verticalSpace,
+              Text(
+                'Loading',
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    color: AppColors.primaryText,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          )),
+        ));
   }
 
   Future<void> getImage() async {
@@ -373,54 +403,61 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
                               await SecureStorage().readSecureData('latitude');
                           String longitude =
                               await SecureStorage().readSecureData('longitude');
+                          await SecureStorage().writeSecureData(
+                              'classes', attendanceForm.classes);
+                          await SecureStorage().writeSecureData(
+                              'formID', attendanceForm.formID);
+                          await SecureStorage().writeSecureData('time', dateTime);
 
-                          await boxDataOffline.put(
-                              'dataOffline',
-                              DataOffline(
-                                studentID: studentID,
-                                classID: attendanceForm.classes,
-                                formID: attendanceForm.formID,
-                                dateAttendanced: dateTime,
-                                location: '',
-                                latitude: double.parse(latitude.toString()),
-                                longitude: double.parse(longitude.toString()),
-                              ));
+                          // boxDataOffline
+                          //     .add(
+                          //   DataOffline(
+                          //     studentID: studentID,
+                          //     classID: attendanceForm.classes,
+                          //     formID: attendanceForm.formID,
+                          //     dateAttendanced: dateTime,
+                          //     location: '',
+                          //     latitude: double.parse(latitude.toString()),
+                          //     longitude: double.parse(longitude.toString()),
+                          //   ),
+                          // )
+                          // .then((_) {
                           if (mounted) {
                             showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  print(
-                                      'BoxData: ${boxDataOffline.get('dataOffline')}');
-                                  return AlertDialog(
-                                    backgroundColor: Colors.white,
-                                    title: const Text('Attendance Pending'),
-                                    content: const Text(
-                                        'The system has recorded attendance data. When there is a network, data will be sent.'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const HomePage()),
-                                          );
-                                        },
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
-                                  );
-                                });
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  title: const Text('Attendance Pending'),
+                                  content: const Text(
+                                    'The system has recorded attendance data. When there is a network, data will be sent.',
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const HomePage()),
+                                        );
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           }
+                          // });
 
                           await SecureStorage().deleteSecureData('image');
-                          // await SecureStorage()
-                          //     .deleteSecureData('imageOffline');
                         },
                         height: 55,
                         width: 400,
-                        fontSize: 20)
+                        fontSize: 20,
+                      )
                     : Container(),
               )
             ],

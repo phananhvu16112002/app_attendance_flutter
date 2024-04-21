@@ -41,6 +41,13 @@ class _SmartCameraState extends State<SmartCamera> {
     await FaceCamera.initialize();
     print('ákdasjdlasjdlkasjdskas');
   }
+  
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

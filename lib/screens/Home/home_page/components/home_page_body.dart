@@ -92,7 +92,8 @@ class _HomePageBodyState extends State<HomePageBody> {
       if (mounted) {
         setState(() {
           isConnected = result != ConnectivityResult.none;
-          if (isConnected) {
+          if (isConnected || result != ConnectivityResult.none || isInternetConnected) {
+            print('hre');
             sendDataToServer();
           } else {
             print('no internet');
@@ -132,33 +133,76 @@ class _HomePageBodyState extends State<HomePageBody> {
         ));
   }
 
+  // void sendDataToServer() async {
+  //   DataOffline? dataOffline = dataOfflineBox.getAt(0);
+  //   String xFile = await SecureStorage().readSecureData('imageOffline');
+  //   if (xFile.isNotEmpty && xFile != 'No Data Found' && dataOffline != null) {
+  //     String? location = await GetLocation()
+  //         .getAddressFromLatLongWithoutInternet(
+  //             dataOffline.latitude ?? 0.0, dataOffline.longitude ?? 0.0);
+  //     // print('location: $location');
+  //     bool check = await API(context).takeAttendanceOffline(
+  //         dataOffline.studentID ?? '',
+  //         dataOffline.classID ?? '',
+  //         dataOffline.formID ?? '',
+  //         dataOffline.dateAttendanced ?? '',
+  //         location ?? '',
+  //         dataOffline.latitude ?? 0.0,
+  //         dataOffline.longitude ?? 0.0,
+  //         XFile(xFile));
+  //     if (check) {
+  //       print('Successfully take attendance offline');
+  //       await dataOfflineBox.delete('dataOffline');
+  //       customDialog('Successfully', 'Take attendance offline successfully!');
+  //       if (dataOfflineBox.isEmpty) {
+  //         print('Delete ok');
+  //       } else {
+  //         print('No delele local storage');
+  //       }
+  //     } else {
+  //       customDialog('Failed', 'Take attendance offline failed!');
+  //       print('Failed take attendance offline');
+  //     }
+  //   } else {
+  //     print('Data is not available');
+  //   }
+  // }
+
   void sendDataToServer() async {
-    DataOffline? dataOffline = dataOfflineBox.get('dataOffline');
+    print('a;sldka;ldkasd');
+    // DataOffline? dataOffline = dataOfflineBox.getAt(0);
     String xFile = await SecureStorage().readSecureData('imageOffline');
-    if (xFile.isNotEmpty && xFile != 'No Data Found' && dataOffline != null) {
+    String studentID = await SecureStorage().readSecureData('studentID');
+    String latitude = await SecureStorage().readSecureData('latitude');
+    String longitude = await SecureStorage().readSecureData('longitude');
+    String classesOff = await SecureStorage().readSecureData('classes');
+    String formID = await SecureStorage().readSecureData('formID');
+    String time = await SecureStorage().readSecureData('time');
+
+    if (xFile != 'No Data Found' || formID != 'No Data Found' || xFile.isNotEmpty) {
       String? location = await GetLocation()
           .getAddressFromLatLongWithoutInternet(
-              dataOffline.latitude, dataOffline.longitude);
+              double.parse(latitude.toString()),
+              double.parse(longitude.toString()));
       // print('location: $location');
+      _progressDialog.show();
       bool check = await API(context).takeAttendanceOffline(
-          dataOffline.studentID,
-          dataOffline.classID,
-          dataOffline.formID,
-          dataOffline.dateAttendanced,
+          studentID,
+          classesOff,
+          formID,
+          time,
           location ?? '',
-          dataOffline.latitude,
-          dataOffline.longitude,
+          double.parse(latitude.toString()),
+          double.parse(longitude.toString()),
           XFile(xFile));
       if (check) {
+        await _progressDialog.hide();
+        await SecureStorage().deleteSecureData('imageOffline');
         print('Successfully take attendance offline');
-        await dataOfflineBox.delete('dataOffline');
+        // await dataOfflineBox.delete('dataOffline');
         customDialog('Successfully', 'Take attendance offline successfully!');
-        if (dataOfflineBox.isEmpty) {
-          print('Delete ok');
-        } else {
-          print('No delele local storage');
-        }
       } else {
+        await _progressDialog.hide();
         customDialog('Failed', 'Take attendance offline failed!');
         print('Failed take attendance offline');
       }
@@ -225,28 +269,28 @@ class _HomePageBodyState extends State<HomePageBody> {
               double longitude = studentProvider.userData.longtitude;
               controller.pauseCamera();
               _progressDialog.show();
-              String? location = await GetLocation()
-                  .getAddressFromLatLongWithoutInternet(latitude, longitude);
+              // String? location = await GetLocation()
+              //     .getAddressFromLatLongWithoutInternet(latitude, longitude);
               AttendanceDetail? attendanceDetail = await API(context)
                   .takeAttendance(
                       studentID,
                       temp['classID'],
                       temp['formID'],
                       DateTime.now().toString(),
-                      location ?? '',
+                      '',
                       latitude,
                       longitude,
                       XFile(''),
                       int.parse(temp['typeAttendanced'].toString()));
               if (attendanceDetail != null) {
                 controller.pauseCamera();
-                _progressDialog.hide();
-                customDialog('Successfully Take Attendance',
+                await _progressDialog.hide();
+                await customDialog('Successfully Take Attendance',
                     'Please check your attendance in class!');
               } else {
                 controller.pauseCamera();
-                _progressDialog.hide();
-                customDialog(
+                await _progressDialog.hide();
+                await customDialog(
                     'Failed Attendance', 'Please take attendance again!');
               }
             }

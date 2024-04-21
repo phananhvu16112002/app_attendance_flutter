@@ -214,8 +214,8 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       borderColor: Colors.transparent,
                       textColor: Colors.white,
                       function: () async {
-                        print(studentDataProvider.userData.latitude);
-                        print(studentDataProvider.userData.longtitude);
+                        print('take atte${studentDataProvider.userData.latitude}');
+                        print('Tae ${studentDataProvider.userData.longtitude}');
                         var studentID =
                             await SecureStorage().readSecureData('studentID');
                         _progressDialog.show();

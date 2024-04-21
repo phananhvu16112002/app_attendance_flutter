@@ -5,19 +5,17 @@ import 'package:attendance_system_nodejs/models/ModelForAPI/notification_model/n
 import 'package:attendance_system_nodejs/models/ModelForAPI/report_class/report_class.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_form_data_for_detail_page.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_detail_for_detail_page.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/report_data_for_detail_page.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelForAPI_ReportPage_Version1/report_model.dart';
-import 'package:attendance_system_nodejs/models/student_classes.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
-import 'package:attendance_system_nodejs/screens/DetailHome/report_class/report_class.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:attendance_system_nodejs/utils/constraints.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as img;
 
 class API {
   BuildContext context;
@@ -832,6 +830,74 @@ class API {
     }
   }
 
+  // Future<AttendanceDetail?> takeAttendance(
+  //     String studentID,
+  //     String classID,
+  //     String formID,
+  //     String dateAttendance,
+  //     String location,
+  //     double latitude,
+  //     double longitude,
+  //     XFile fileImage,
+  //     int typeAttendance) async {
+  //   var request;
+  //   var URL = 'http://$baseURL:8080/api/student/takeAttendance';
+  //   if (typeAttendance == 0 || typeAttendance == 1) {
+  //     var imageBytes = await fileImage.readAsBytes();
+  //     var imageFile = http.MultipartFile.fromBytes('file', imageBytes,
+  //         filename: 'image.jpg');
+  //     // var imageFile = await http.MultipartFile.fromPath('image', fileImage.path);
+  //     request = http.MultipartRequest('POST', Uri.parse(URL))
+  //       ..fields['studentID'] = studentID
+  //       ..fields['classID'] = classID
+  //       ..fields['formID'] = formID
+  //       ..fields['dateTimeAttendance'] = dateAttendance
+  //       ..fields['location'] = location
+  //       ..fields['latitude'] = latitude.toString()
+  //       ..fields['longitude'] = longitude.toString()
+  //       ..files.add(imageFile);
+  //   } else {
+  //     request = http.MultipartRequest('POST', Uri.parse(URL))
+  //       ..fields['studentID'] = studentID
+  //       ..fields['classID'] = classID
+  //       ..fields['formID'] = formID
+  //       ..fields['dateTimeAttendance'] = dateAttendance
+  //       ..fields['location'] = location
+  //       ..fields['latitude'] = latitude.toString()
+  //       ..fields['longitude'] = longitude.toString();
+  //   }
+
+  //   try {
+  //     var response = await request.send();
+  //     if (response.statusCode == 200) {
+  //       print('Take Attendance Successfully');
+  //       Map<String, dynamic> data =
+  //           json.decode(await response.stream.bytesToString());
+  //       AttendanceDetail attendanceDetail = AttendanceDetail.fromJson(data);
+  //       // print('data:$data');
+  //       return attendanceDetail;
+  //     } else if (response.statusCode == 403) {
+  //       Map<String, dynamic> data =
+  //           json.decode(await response.stream.bytesToString());
+  //       String message = data['message'];
+  //       print('data: $data');
+  //       print('message: ${data['message']}');
+
+  //       print('Failed to take attendance: $message');
+  //       return null;
+  //     } else {
+  //       Map<String, dynamic> data =
+  //           json.decode(await response.stream.bytesToString());
+  //       String message = data['message'];
+  //       print('Failed to take attendance. Status code: ${response.statusCode}');
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     print('Error sending request: $e');
+  //     return null;
+  //   }
+  // }
+
   Future<AttendanceDetail?> takeAttendance(
       String studentID,
       String classID,
@@ -846,9 +912,19 @@ class API {
     var URL = 'http://$baseURL:8080/api/student/takeAttendance';
     if (typeAttendance == 0 || typeAttendance == 1) {
       var imageBytes = await fileImage.readAsBytes();
-      var imageFile = http.MultipartFile.fromBytes('file', imageBytes,
+
+      // Đọc ảnh từ dữ liệu bytes
+      img.Image? image = img.decodeImage(imageBytes);
+      if (image == null) {
+        print('Failed to decode image.');
+        return null;
+      }
+      img.Image resizedImage = img.copyResize(image, width: 600, height: 600);
+
+      List<int> resizedImageBytes = img.encodeJpg(resizedImage);
+      var imageFile = http.MultipartFile.fromBytes('file', resizedImageBytes,
           filename: 'image.jpg');
-      // var imageFile = await http.MultipartFile.fromPath('image', fileImage.path);
+
       request = http.MultipartRequest('POST', Uri.parse(URL))
         ..fields['studentID'] = studentID
         ..fields['classID'] = classID
@@ -900,6 +976,54 @@ class API {
     }
   }
 
+  // Future<bool> takeAttendanceOffline(
+  //     String studentID,
+  //     String classID,
+  //     String formID,
+  //     String dateAttendance,
+  //     String location,
+  //     double latitude,
+  //     double longitude,
+  //     XFile fileImage) async {
+  //   var URL = 'http://$baseURL:8080/api/student/takeAttendanceOffline';
+  //   var imageBytes = await fileImage.readAsBytes();
+  //   var imageFile =
+  //       http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
+  //   // var imageFile = await http.MultipartFile.fromPath('image', fileImage.path);
+  //   var request = http.MultipartRequest('POST', Uri.parse(URL))
+  //     ..fields['studentID'] = studentID
+  //     ..fields['classID'] = classID
+  //     ..fields['formID'] = formID
+  //     ..fields['dateTimeAttendance'] = dateAttendance
+  //     ..fields['location'] = location
+  //     ..fields['latitude'] = latitude.toString()
+  //     ..fields['longitude'] = longitude.toString()
+  //     ..files.add(imageFile);
+  //   try {
+  //     var response = await request.send();
+  //     if (response.statusCode == 200) {
+  //       print('Take Attendance Successfully');
+  //       Map<String, dynamic> data =
+  //           json.decode(await response.stream.bytesToString());
+  //       // AttendanceDetail attendanceDetail = AttendanceDetail.fromJson(data);
+
+  //       return true;
+  //     } else if (response.statusCode == 403) {
+  //       Map<String, dynamic> data =
+  //           json.decode(await response.stream.bytesToString());
+  //       String message = data['message'];
+  //       print('Failed to take attendance: $message');
+  //       return false;
+  //     } else {
+  //       print('Failed to take attendance. Status code: ${response.statusCode}');
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     print('Error sending request: $e');
+  //     return false;
+  //   }
+  // }
+
   Future<bool> takeAttendanceOffline(
       String studentID,
       String classID,
@@ -910,20 +1034,35 @@ class API {
       double longitude,
       XFile fileImage) async {
     var URL = 'http://$baseURL:8080/api/student/takeAttendanceOffline';
-    var imageBytes = await fileImage.readAsBytes();
-    var imageFile =
-        http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
-    // var imageFile = await http.MultipartFile.fromPath('image', fileImage.path);
-    var request = http.MultipartRequest('POST', Uri.parse(URL))
-      ..fields['studentID'] = studentID
-      ..fields['classID'] = classID
-      ..fields['formID'] = formID
-      ..fields['dateTimeAttendance'] = dateAttendance
-      ..fields['location'] = location
-      ..fields['latitude'] = latitude.toString()
-      ..fields['longitude'] = longitude.toString()
-      ..files.add(imageFile);
+
     try {
+      var imageBytes = await fileImage.readAsBytes();
+
+      // Đọc ảnh từ dữ liệu bytes
+      img.Image? image = img.decodeImage(imageBytes);
+      if (image == null) {
+        print('Failed to decode image.');
+        return false;
+      }
+
+      // Thay đổi kích thước ảnh thành 600x600
+      img.Image resizedImage = img.copyResize(image, width: 600, height: 600);
+
+      // Tạo tệp ảnh đã thay đổi kích thước
+      List<int> resizedImageBytes = img.encodeJpg(resizedImage);
+      var imageFile = http.MultipartFile.fromBytes('file', resizedImageBytes,
+          filename: 'image.jpg');
+
+      var request = http.MultipartRequest('POST', Uri.parse(URL))
+        ..fields['studentID'] = studentID
+        ..fields['classID'] = classID
+        ..fields['formID'] = formID
+        ..fields['dateTimeAttendance'] = dateAttendance
+        ..fields['location'] = location
+        ..fields['latitude'] = latitude.toString()
+        ..fields['longitude'] = longitude.toString()
+        ..files.add(imageFile);
+
       var response = await request.send();
       if (response.statusCode == 200) {
         print('Take Attendance Successfully');

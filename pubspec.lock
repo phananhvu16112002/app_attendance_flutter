@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
-      sha256: "79b6452b4066fcbdd74c2aac354e80c591a727e0364bedccecdb5a5321784fa2"
+      sha256: "99b5dec989287c1aca71bf27339e0022b4dc3679225f442fb75790ef44535bf8"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.28"
+    version: "1.3.30"
   analyzer:
     dependency: transitive
     description:
@@ -417,14 +417,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+1"
+  firebase_app_installations:
+    dependency: "direct main"
+    description:
+      name: firebase_app_installations
+      sha256: bbe7d1a35d3c21a0fdceb017d37bf6cf49c4613100b0a95963b4d9a4d03a2612
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.5+2"
+  firebase_app_installations_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_app_installations_platform_interface
+      sha256: "95cd9b1eafc249047f365d70e1b5a4e1ab6bb11906de1a88d8ee6290653dd7a8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.4+30"
+  firebase_app_installations_web:
+    dependency: transitive
+    description:
+      name: firebase_app_installations_web
+      sha256: "756566c02be4eb5b533338a132ad604837cd38e821895d0556236f411ae0107d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.5+2"
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
-      sha256: "4b45655ec1b21a1783681f72f840a2e74d298046c2b7c286ab0e4f0efbf93d0a"
+      sha256: "6b1152a5af3b1cfe7e45309e96fc1aa14873f410f7aadb3878aa7812acfa7531"
       url: "https://pub.dev"
     source: hosted
-    version: "2.28.0"
+    version: "2.30.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -437,10 +461,26 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_web
-      sha256: "28e30e00748497b9a70db2025942a42c5d752534eb678e9b9b98db056cf404ba"
+      sha256: c8b02226e548f35aace298e2bb2e6c24e34e8a203d614e742bb1146e5a4ad3c8
       url: "https://pub.dev"
     source: hosted
-    version: "2.14.0"
+    version: "2.15.0"
+  firebase_in_app_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_in_app_messaging
+      sha256: "26a586a6330b3b1f0fdea9052e2b29ac27c5fd495823ec94ebdf41b9d06c7be4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.5+2"
+  firebase_in_app_messaging_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_in_app_messaging_platform_interface
+      sha256: "8f93336f2d5d2187870723d5f2941b59a9604255b00a8dfc13972e9c651c8ea9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.4+30"
   firebase_messaging:
     dependency: "direct main"
     description:
@@ -854,7 +894,7 @@ packages:
     source: hosted
     version: "4.0.2"
   image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image
       sha256: "4c68bfd5ae83e700b5204c1e74451e7bf3cf750e6843c6e158289cf56bda018e"

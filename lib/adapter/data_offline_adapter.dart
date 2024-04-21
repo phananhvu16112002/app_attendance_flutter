@@ -20,12 +20,12 @@ class DataOfflineAdatper extends TypeAdapter<DataOffline> {
 
   @override
   void write(BinaryWriter writer, DataOffline obj) {
-    writer.writeString(obj.studentID);
-    writer.writeString(obj.classID);
-    writer.writeString(obj.formID);
-    writer.writeString(obj.dateAttendanced);
-    writer.writeString(obj.location);
-    writer.writeDouble(obj.latitude);
-    writer.writeDouble(obj.longitude);
+    writer.writeString(obj.studentID ?? '');
+    writer.writeString(obj.classID ?? '');
+    writer.writeString(obj.formID ?? '');
+    writer.writeString(obj.dateAttendanced ?? '');
+    writer.writeString(obj.location ?? '');
+    writer.writeDouble(obj.latitude ?? 0);
+    writer.writeDouble(obj.longitude ?? 0);
   }
 }
