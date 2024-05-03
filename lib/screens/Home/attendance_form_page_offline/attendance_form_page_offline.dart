@@ -397,17 +397,18 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
                         textColor: Colors.white,
                         function: () async {
                           String dateTime = DateTime.now().toString();
-                          String studentID =
-                              await SecureStorage().readSecureData('studentID');
-                          String latitude =
-                              await SecureStorage().readSecureData('latitude');
-                          String longitude =
-                              await SecureStorage().readSecureData('longitude');
+                          // String studentID =
+                          //     await SecureStorage().readSecureData('studentID');
+                          // String latitude =
+                          //     await SecureStorage().readSecureData('latitude');
+                          // String longitude =
+                          //     await SecureStorage().readSecureData('longitude');
                           await SecureStorage().writeSecureData(
                               'classes', attendanceForm.classes);
-                          await SecureStorage().writeSecureData(
-                              'formID', attendanceForm.formID);
-                          await SecureStorage().writeSecureData('time', dateTime);
+                          await SecureStorage()
+                              .writeSecureData('formID', attendanceForm.formID);
+                          await SecureStorage()
+                              .writeSecureData('time', dateTime);
 
                           // boxDataOffline
                           //     .add(

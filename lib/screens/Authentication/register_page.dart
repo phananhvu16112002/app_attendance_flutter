@@ -46,9 +46,10 @@ class _RegisterPageState extends State<RegisterPage> {
     // TODO: implement initState
     super.initState();
     _progressDialog = ProgressDialog(context,
+        isDismissible: false,
         customBody: Container(
-          width: 200,
-          height: 150,
+          width: 200.w,
+          height: 150.h,
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.white),
@@ -102,7 +103,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                          message: AppLocalizations.of(context)?.register ?? 'Register',
+                          message: AppLocalizations.of(context)?.register ??
+                              'Register',
                           fontSize: 28.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
@@ -111,7 +113,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       // ),
                       5.verticalSpace,
                       CustomText(
-                          message: AppLocalizations.of(context)?.register_message ?? 'Enter your personal information',
+                          message:
+                              AppLocalizations.of(context)?.register_message ??
+                                  'Enter your personal information',
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.secondaryText),
@@ -120,7 +124,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       // ),
                       20.verticalSpace,
                       CustomText(
-                          message: AppLocalizations.of(context)?.studentID_field ?? 'Student ID',
+                          message:
+                              AppLocalizations.of(context)?.studentID_field ??
+                                  'Student ID',
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
@@ -136,7 +142,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         prefixIcon: const Icon(null),
                         suffixIcon:
                             const IconButton(onPressed: null, icon: Icon(null)),
-                        hintText: AppLocalizations.of(context)?.studentID_field_message ?? 'Enter your student ID',
+                        hintText: AppLocalizations.of(context)
+                                ?.studentID_field_message ??
+                            'Enter your student ID',
                         onChanged: (value) {
                           studentDataProvider.setStudentName(value);
                         },
@@ -170,7 +178,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         prefixIcon: const Icon(null),
                         suffixIcon:
                             const IconButton(onPressed: null, icon: Icon(null)),
-                        hintText: AppLocalizations.of(context)?.email_field ?? 'Enter your email',
+                        hintText: AppLocalizations.of(context)?.email_field ??
+                            'Enter your email',
                         onChanged: (value) {
                           studentDataProvider.setStudentEmail(value);
                         },
@@ -192,7 +201,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       // ),
                       15.verticalSpace,
                       CustomText(
-                        message: AppLocalizations.of(context)?.password ?? 'Password',
+                        message: AppLocalizations.of(context)?.password ??
+                            'Password',
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText,
@@ -216,7 +226,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             icon: isCheckPassword
                                 ? const Icon(Icons.visibility)
                                 : const Icon(Icons.visibility_off)),
-                        hintText: AppLocalizations.of(context)?.password_field ?? 'Enter your password',
+                        hintText:
+                            AppLocalizations.of(context)?.password_field ??
+                                'Enter your password',
                         onChanged: (value) {
                           studentDataProvider.setPassword(value);
                         },
@@ -236,11 +248,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           return null;
                         },
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
+                      15.verticalSpace,
                       CustomText(
-                          message: AppLocalizations.of(context)?.confirm_password ?? 'Confirm Password',
+                          message:
+                              AppLocalizations.of(context)?.confirm_password ??
+                                  'Confirm Password',
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
@@ -264,7 +276,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               icon: isCheckConfirmPassword
                                   ? const Icon(Icons.visibility)
                                   : const Icon(Icons.visibility_off)),
-                          hintText: AppLocalizations.of(context)?.confirm_password_message ?? 'Confirm your password',
+                          hintText: AppLocalizations.of(context)
+                                  ?.confirm_password_message ??
+                              'Confirm your password',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Confirm Password is required';
@@ -282,7 +296,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           fontSize: 18.sp,
                           height: 60,
                           width: double.infinity,
-                          buttonName: AppLocalizations.of(context)?.register ?? 'Register',
+                          buttonName: AppLocalizations.of(context)?.register ??
+                              'Register',
                           colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
                           borderColor: Colors.white,
@@ -345,22 +360,28 @@ class _RegisterPageState extends State<RegisterPage> {
                                   "Please complete the form property", 3);
                             }
                           }),
-                     10.verticalSpace,
+                      10.verticalSpace,
                       Padding(
                         padding: EdgeInsets.only(right: 20.w),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomText(
-                                message: AppLocalizations.of(context)?.login_account ?? 'Already have an account ? ',
+                                message: AppLocalizations.of(context)
+                                        ?.login_account ??
+                                    'Already have an account ? ',
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.primaryText),
                             GestureDetector(
-                              onTap: () =>
-                                  Navigator.push(context, MaterialPageRoute(builder: (builder) => SignInPage())),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) => SignInPage())),
                               child: CustomText(
-                                  message: AppLocalizations.of(context)?.login ?? 'Log In',
+                                  message:
+                                      AppLocalizations.of(context)?.login ??
+                                          'Log In',
                                   fontSize: 13.sp,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.importantText),

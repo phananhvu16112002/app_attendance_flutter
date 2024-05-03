@@ -83,9 +83,10 @@ class StudentDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateLocationData(double latitude, double longitude, String location) {
+  Future<void> updateLocationData(
+      double latitude, double longitude, String location) async {
     if (latitude == 0.0 && longitude == 0.0) {
-      GetLocation().updateLocation(this);
+      await GetLocation().updateLocation(this);
     } else {
       setLatitude(latitude);
       setLongtitude(longitude);

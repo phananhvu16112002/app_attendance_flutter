@@ -2,28 +2,28 @@ import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_
 import 'package:attendance_system_nodejs/models/ModelForAPI/report_image.dart';
 
 class ReportData {
-  int reportID;
-  String topic;
-  String problem;
-  String message;
-  String status;
-  String createdAt;
+  int? reportID;
+  String? topic;
+  String? problem;
+  String? message;
+  String? status;
+  String? createdAt;
   bool checkNew;
   bool important;
-  List<ReportImage?> reportImage;
+  List<ReportImage?>? reportImage;
   FeedBack? feedBack;
 
   ReportData(
-      {required this.reportID,
-      required this.topic,
-      required this.problem,
-      required this.message,
-      required this.status,
-      required this.createdAt,
-      required this.checkNew,
-      required this.important,
-      required this.reportImage,
-      required this.feedBack});
+      {this.reportID,
+      this.topic,
+      this.problem,
+      this.message,
+      this.status,
+      this.createdAt,
+      this.checkNew = false,
+      this.important = false,
+      this.reportImage,
+      this.feedBack});
 
   factory ReportData.fromJson(Map<String, dynamic> json) {
     // print('ReportImage: ${json['reportImage']}');

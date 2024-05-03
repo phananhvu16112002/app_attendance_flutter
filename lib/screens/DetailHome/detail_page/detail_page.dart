@@ -6,7 +6,7 @@ import 'package:attendance_system_nodejs/models/bottom_nav_model.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/DetailHome/class_room/class_room.dart';
 import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/components/detail_page_body.dart';
-import 'package:attendance_system_nodejs/screens/DetailHome/notification_class/notification_class.dart';
+import 'package:attendance_system_nodejs/screens/DetailHome/attendance_offline/attendance_offline.dart';
 import 'package:attendance_system_nodejs/screens/DetailHome/report_class/report_class.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,8 +55,9 @@ class _DetailPageState extends State<DetailPage> {
     List<BottomNavModel> listBottomNav = [
       BottomNavModel(title: 'Home', svgPath: 'assets/icons/home.svg'),
       BottomNavModel(title: 'Report', svgPath: 'assets/icons/report.svg'),
-      BottomNavModel(title: 'History', svgPath: 'assets/icons/notification.svg'),
-      BottomNavModel(title: 'Profile', svgPath: 'assets/icons/user.svg'),
+      BottomNavModel(
+          title: 'Offline', svgPath: 'assets/icons/notification.svg'),
+      BottomNavModel(title: 'Classroom', svgPath: 'assets/icons/user.svg'),
     ];
     return Scaffold(
         backgroundColor: Colors.white,
@@ -105,9 +106,13 @@ class _DetailPageState extends State<DetailPage> {
           classesStudent: widget.classesStudent,
         );
       case 2:
-        return const NotificationClass();
+        return AttendanceOffline(
+          classesStudent: widget.classesStudent,
+        );
       case 3:
-        return const Classroom();
+        return Classroom(
+          classesStudent: widget.classesStudent,
+        );
       default:
         return DetailPageBody(
           classesStudent: widget.classesStudent,

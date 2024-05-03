@@ -14,6 +14,7 @@ buildscript {
         // START: FlutterFire Configuration
         // AGP version is set in settings.gradle.
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        //add
         classpath 'com.google.gms:google-services:4.3.14'
         // AGP version is set in settings.gradle.
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

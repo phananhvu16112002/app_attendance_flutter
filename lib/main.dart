@@ -23,8 +23,6 @@ import 'package:attendance_system_nodejs/providers/studentClass_data_provider.da
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/flash_screen.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
-import 'package:attendance_system_nodejs/screens/Home/attendance_form_page_offline/attendance_form_page_offline.dart';
-import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:face_camera/face_camera.dart';
@@ -88,7 +86,7 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.onMessage.listen(_firebaseMessagingForegroundHandler);
-
+  await FaceCamera.initialize();
   await Hive.initFlutter();
   Hive.registerAdapter(ClassAdapter());
   Hive.registerAdapter(TeacherAdapter());

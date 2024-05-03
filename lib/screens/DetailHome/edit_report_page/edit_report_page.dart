@@ -99,9 +99,9 @@ class _EditReportPageState extends State<EditReportPage> {
     _fetchReport = API(context).viewReport(reportData.reportID);
     _fetchReport.then((value) {
       setState(() {
-        listReportImage = value!.reportImage;
-        _topicController.text = value.topic;
-        _message.text = value.message;
+        listReportImage = value!.reportImage ?? [];
+        _topicController.text = value.topic ?? '';
+        _message.text = value.message ?? '';
       });
     });
     for (int i = 0; i < listReportImage.length; i++) {
@@ -678,7 +678,7 @@ class _EditReportPageState extends State<EditReportPage> {
                               if (_formKey.currentState!.validate()) {
                                 _progressDialog.show();
                                 String result = await API(context).editReport(
-                                    reportData.reportID,
+                                    reportData.reportID ?? 0,
                                     _topicController.text,
                                     dropdownvalue,
                                     _message.text,

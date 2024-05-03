@@ -96,7 +96,8 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     5.verticalSpace,
                     CustomText(
-                      message: AppLocalizations.of(context)?.login_message ?? 'Login to continue using the app',
+                      message: AppLocalizations.of(context)?.login_message ??
+                          'Login to continue using the app',
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.secondaryText,
@@ -121,7 +122,8 @@ class _SignInPageState extends State<SignInPage> {
                       prefixIcon: const Icon(null),
                       suffixIcon:
                           const IconButton(onPressed: null, icon: Icon(null)),
-                      hintText: AppLocalizations.of(context)?.email_field ?? "Enter your email",
+                      hintText: AppLocalizations.of(context)?.email_field ??
+                          "Enter your email",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Email is required";
@@ -137,7 +139,8 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     15.verticalSpace,
                     CustomText(
-                      message: AppLocalizations.of(context)?.password ?? 'Password',
+                      message:
+                          AppLocalizations.of(context)?.password ?? 'Password',
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText,
@@ -158,7 +161,8 @@ class _SignInPageState extends State<SignInPage> {
                           icon: isCheckPassword
                               ? const Icon(Icons.visibility)
                               : const Icon(Icons.visibility_off)),
-                      hintText: AppLocalizations.of(context)?.password_field ?? "Enter your password",
+                      hintText: AppLocalizations.of(context)?.password_field ??
+                          "Enter your password",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Password is required";
@@ -195,7 +199,9 @@ class _SignInPageState extends State<SignInPage> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   CustomText(
-                                      message: AppLocalizations.of(context)?.forgot_password ?? 'Forgot Password?',
+                                      message: AppLocalizations.of(context)
+                                              ?.forgot_password ??
+                                          'Forgot Password?',
                                       fontSize: 13.sp,
                                       fontWeight: FontWeight.w600,
                                       color: AppColors.importantText),
@@ -210,7 +216,8 @@ class _SignInPageState extends State<SignInPage> {
                           fontSize: 18.sp,
                           // height: 60,
                           // width: 400,
-                          buttonName: AppLocalizations.of(context)?.login ?? 'Login',
+                          buttonName:
+                              AppLocalizations.of(context)?.login ?? 'Login',
                           colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
                           borderColor: Colors.white,
@@ -312,7 +319,9 @@ class _SignInPageState extends State<SignInPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomText(
-                          message: AppLocalizations.of(context)?.register_account ?? "Don't you have an account ? ",
+                          message:
+                              AppLocalizations.of(context)?.register_account ??
+                                  "Don't you have an account ? ",
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
                           color: AppColors.primaryText,
@@ -344,7 +353,8 @@ class _SignInPageState extends State<SignInPage> {
                             );
                           },
                           child: CustomText(
-                            message: AppLocalizations.of(context)?.register ?? 'Register',
+                            message: AppLocalizations.of(context)?.register ??
+                                'Register',
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.importantText,

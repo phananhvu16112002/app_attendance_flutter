@@ -2,12 +2,14 @@ import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/report_class/report_class.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
+import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/services/API.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class ReportClass extends StatefulWidget {
   const ReportClass({super.key, required this.classesStudent});
@@ -29,13 +31,15 @@ class _ReportClassState extends State<ReportClass> {
 
   @override
   Widget build(BuildContext context) {
+    SocketServerProvider socketServerProvider =
+        Provider.of<SocketServerProvider>(context);
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
-            customAppBar(),
+            customAppBar(socketServerProvider),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -339,7 +343,7 @@ class _ReportClassState extends State<ReportClass> {
     return '';
   }
 
-  Container customAppBar() {
+  Container customAppBar(SocketServerProvider socketServerProvider) {
     return Container(
       width: double.infinity,
       // height: 130,
@@ -362,6 +366,7 @@ class _ReportClassState extends State<ReportClass> {
               children: [
                 GestureDetector(
                   onTap: () {
+                    socketServerProvider.disconnectSocketServer();
                     Navigator.pop(context);
                   },
                   child: Container(

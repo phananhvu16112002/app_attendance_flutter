@@ -57,9 +57,8 @@ class GetLocation {
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         print('Location service are disabled');
-        await Future.delayed(
-            Duration(seconds: 1));
-        continue; 
+        await Future.delayed(Duration(seconds: 1));
+        continue;
       }
       permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
@@ -95,7 +94,7 @@ class GetLocation {
     var temp =
         '${place.street},${place.locality},${place.subAdministrativeArea},${place.administrativeArea},${place.country}';
     address = processAddress(temp);
-    // print('address $address');
+    print('address $address');
     return address;
   }
 
@@ -136,7 +135,7 @@ class GetLocation {
     String? address = await getAddressFromLatLong(position);
     provider.setLatitude(position.latitude);
     provider.setLongtitude(position.longitude);
-    provider.setLocation(address!);
+    provider.setLocation(address ?? '');
 
     if (provider.userData.latitude != 0 &&
         provider.userData.longtitude != 0 &&

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:attendance_system_nodejs/models/ModelForAPI/api_view_image/student_model.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_offline.dart/attendance_detail_offline.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/classroom/classroom.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/notification_model/notification_model.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/report_class/report_class.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
@@ -1122,6 +1124,177 @@ class API {
       return null;
     }
     return null;
+  }
+
+  Future<List<ClassRoom>> getRoommate(String classID) async {
+    final URL =
+        'http://$baseURL:8080/api/student/classes/detail/$classID/students';
+
+    var accessToken = await getAccessToken();
+    var headers = {'authorization': accessToken};
+    try {
+      final response = await http.get(Uri.parse(URL), headers: headers);
+      if (response.statusCode == 200) {
+        dynamic responseData = jsonDecode(response.body);
+        List<ClassRoom> data = [];
+
+        if (responseData is List) {
+          for (var temp in responseData) {
+            if (temp is Map<String, dynamic>) {
+              try {
+                data.add(ClassRoom.fromJson(temp));
+              } catch (e) {
+                print('Error parsing data: $e');
+              }
+            } else {
+              print('Invalid data type: $temp');
+            }
+          }
+        } else if (responseData is Map<String, dynamic>) {
+          try {
+            data.add(ClassRoom.fromJson(responseData));
+          } catch (e) {
+            print('Error parsing data: $e');
+          }
+        } else {
+          print('Unexpected data type: $responseData');
+        }
+        print('Data $data');
+        return data;
+      } else if (response.statusCode == 498 || response.statusCode == 401) {
+        var refreshToken = await SecureStorage().readSecureData('refreshToken');
+        var newAccessToken = await refreshAccessToken(refreshToken);
+        if (newAccessToken.isNotEmpty) {
+          headers['authorization'] = newAccessToken;
+          final retryResponse =
+              await http.get(Uri.parse(URL), headers: headers);
+          if (retryResponse.statusCode == 200) {
+            dynamic responseData = jsonDecode(retryResponse.body);
+            List<ClassRoom> data = [];
+
+            if (responseData is List) {
+              for (var temp in responseData) {
+                if (temp is Map<String, dynamic>) {
+                  try {
+                    data.add(ClassRoom.fromJson(temp));
+                  } catch (e) {
+                    print('Error parsing data: $e');
+                  }
+                } else {
+                  print('Invalid data type: $temp');
+                }
+              }
+            } else if (responseData is Map<String, dynamic>) {
+              try {
+                data.add(ClassRoom.fromJson(responseData));
+              } catch (e) {
+                print('Error parsing data: $e');
+              }
+            } else {
+              print('Unexpected data type: $responseData');
+            }
+            return data;
+          } else {
+            return [];
+          }
+        } else {
+          print('New Access Token is empty');
+          return [];
+        }
+      } else {
+        print('Failed to load data. Status code: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
+
+  Future<List<AttendanceDetailOffline>> getAttendanceDetailOffline(
+      String classID) async {
+    final URL =
+        'http://$baseURL:8080/api/student/classes/detail/offline/$classID';
+
+    var accessToken = await getAccessToken();
+    var headers = {'authorization': accessToken};
+    try {
+      final response = await http.get(Uri.parse(URL), headers: headers);
+      if (response.statusCode == 200) {
+        dynamic responseData = jsonDecode(response.body);
+        List<AttendanceDetailOffline> data = [];
+
+        if (responseData is List) {
+          for (var temp in responseData) {
+            if (temp is Map<String, dynamic>) {
+              try {
+                data.add(AttendanceDetailOffline.fromJson(temp));
+              } catch (e) {
+                print('Error parsing data: $e');
+              }
+            } else {
+              print('Invalid data type: $temp');
+            }
+          }
+        } else if (responseData is Map<String, dynamic>) {
+          try {
+            data.add(AttendanceDetailOffline.fromJson(responseData));
+          } catch (e) {
+            print('Error parsing data: $e');
+          }
+        } else {
+          print('Unexpected data type: $responseData');
+        }
+        print('Data $data');
+        return data;
+      } else if (response.statusCode == 498 || response.statusCode == 401) {
+        var refreshToken = await SecureStorage().readSecureData('refreshToken');
+        var newAccessToken = await refreshAccessToken(refreshToken);
+        if (newAccessToken.isNotEmpty) {
+          headers['authorization'] = newAccessToken;
+          final retryResponse =
+              await http.get(Uri.parse(URL), headers: headers);
+          if (retryResponse.statusCode == 200) {
+            dynamic responseData = jsonDecode(retryResponse.body);
+            List<AttendanceDetailOffline> data = [];
+
+            if (responseData is List) {
+              for (var temp in responseData) {
+                if (temp is Map<String, dynamic>) {
+                  try {
+                    data.add(AttendanceDetailOffline.fromJson(temp));
+                  } catch (e) {
+                    print('Error parsing data: $e');
+                  }
+                } else {
+                  print('Invalid data type: $temp');
+                }
+              }
+            } else if (responseData is Map<String, dynamic>) {
+              try {
+                data.add(AttendanceDetailOffline.fromJson(responseData));
+              } catch (e) {
+                print('Error parsing data: $e');
+              }
+            } else {
+              print('Unexpected data type: $responseData');
+            }
+            return data;
+          } else {
+            return [];
+          }
+        } else {
+          print('New Access Token is empty');
+          return [];
+        }
+      } else {
+        print('Failed to load data. Status code: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
   }
 
   Future<bool> testHello() async {

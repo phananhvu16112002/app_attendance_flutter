@@ -23,20 +23,24 @@ class _FlashScreenState extends State<FlashScreen> {
     // TODO: implement initState
     super.initState();
     checkLocationService();
-    Future.delayed(Duration(seconds: 10), () {
-      if (mounted) {
-        var studentDataProvider =
-            Provider.of<StudentDataProvider>(context, listen: false);
-        studentDataProvider.updateLocationData(
-          studentDataProvider.userData.latitude,
-          studentDataProvider.userData.longtitude,
-          studentDataProvider.userData.location,
-        );
-      }
+    update();
+    Future.delayed(Duration(seconds: 3), () {
       //Should call api to get location in flash
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (builder) => HomePage()));
     });
+  }
+
+  Future<void> update() async {
+    if (mounted) {
+      var studentDataProvider =
+          Provider.of<StudentDataProvider>(context, listen: false);
+      await studentDataProvider.updateLocationData(
+        studentDataProvider.userData.latitude,
+        studentDataProvider.userData.longtitude,
+        studentDataProvider.userData.location,
+      );
+    }
   }
 
   // Future<void> checkRequiredImage() async {

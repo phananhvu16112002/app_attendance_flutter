@@ -1,7 +1,10 @@
 import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/ModelForAPI_ReportPage_Version1/report_model.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/notification_model/notification_model.dart';
 import 'package:attendance_system_nodejs/screens/Home/after_attendance_form/after_attendance_form.dart';
+import 'package:attendance_system_nodejs/screens/Home/attendanceform_page/attendance_form_page.dart';
+import 'package:attendance_system_nodejs/screens/Home/detail_report/detail_report.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -67,7 +70,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                     data[index];
 
                                 return InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      if (notificationModel.type == 'report') {
+                                        print('report');
+                                      }
+                                      if (notificationModel.type ==
+                                          'attendance') {
+                                        print('attendance');
+                                      }
+                                    },
                                     child:
                                         _customNotification(notificationModel));
                               }),
@@ -122,7 +133,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 10.h),
-      color: AppColors.cardAttendance,
+      color: notificationModel.seen ? Colors.white : AppColors.cardAttendance,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         child: Row(
@@ -149,7 +160,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       )
                     : customRichText(
                         '${AppLocalizations.of(context)?.title_class_notification ?? ''}: ${notificationModel.course} ',
-                        '${AppLocalizations.of(context)?.title_report ?? ''} ${notificationModel.reportID} ${AppLocalizations.of(context)?.title_was_responsed ?? ''} ${formatDate(notificationModel.createdAt)} ${formatTime(notificationModel.createdAt)}',
+                        '${AppLocalizations.of(context)?.title_report ?? ''} ${notificationModel.report?.reportID ?? 1} ${AppLocalizations.of(context)?.title_was_responsed ?? ''} ${formatDate(notificationModel.createdAt)} ${formatTime(notificationModel.createdAt)}',
                         '${AppLocalizations.of(context)?.title_lecturer_notitication ?? ''}: ${notificationModel.lecturer}. ',
                         FontWeight.bold,
                         FontWeight.w500,

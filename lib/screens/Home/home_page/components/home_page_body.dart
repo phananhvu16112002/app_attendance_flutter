@@ -92,8 +92,9 @@ class _HomePageBodyState extends State<HomePageBody> {
       if (mounted) {
         setState(() {
           isConnected = result != ConnectivityResult.none;
-          if (isConnected || result != ConnectivityResult.none || isInternetConnected) {
-            print('hre');
+          if (isConnected ||
+              result != ConnectivityResult.none ||
+              isInternetConnected) {
             sendDataToServer();
           } else {
             print('no internet');
@@ -169,7 +170,6 @@ class _HomePageBodyState extends State<HomePageBody> {
   // }
 
   void sendDataToServer() async {
-    print('a;sldka;ldkasd');
     // DataOffline? dataOffline = dataOfflineBox.getAt(0);
     String xFile = await SecureStorage().readSecureData('imageOffline');
     String studentID = await SecureStorage().readSecureData('studentID');
@@ -179,7 +179,7 @@ class _HomePageBodyState extends State<HomePageBody> {
     String formID = await SecureStorage().readSecureData('formID');
     String time = await SecureStorage().readSecureData('time');
 
-    if (xFile != 'No Data Found' || formID != 'No Data Found' || xFile.isNotEmpty) {
+    if (xFile != 'No Data Found' || formID != 'No Data Found') {
       String? location = await GetLocation()
           .getAddressFromLatLongWithoutInternet(
               double.parse(latitude.toString()),

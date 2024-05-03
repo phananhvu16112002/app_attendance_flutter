@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/models/bottom_nav_model.dart';
+import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/welcome_page.dart';
 import 'package:attendance_system_nodejs/screens/Home/floating_button_map/floating_button_map.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/components/home_page_body.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,6 +41,19 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadToken();
   }
+
+
+  // Future<void> update() async {
+  //   if (mounted) {
+  //     var studentDataProvider =
+  //         Provider.of<StudentDataProvider>(context, listen: false);
+  //     await studentDataProvider.updateLocationData(
+  //       studentDataProvider.userData.latitude,
+  //       studentDataProvider.userData.longtitude,
+  //       studentDataProvider.userData.location,
+  //     );
+  //   }
+  // }
 
   Future<void> _loadToken() async {
     String? loadToken = await storage.readSecureData('accessToken');

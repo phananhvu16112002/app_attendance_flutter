@@ -4,11 +4,12 @@ import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelForAPI_ReportPage_Version1/report_model.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailReport extends StatefulWidget {
-  const DetailReport({super.key, required this.reportModel});
+  DetailReport({super.key, required this.reportModel});
   final ReportModel reportModel;
 
   @override
@@ -27,19 +28,20 @@ class _DetailReportState extends State<DetailReport> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon:
-                  const Icon(Icons.arrow_back, size: 25, color: Colors.white)),
+              icon: Icon(Icons.arrow_back, size: 23.sp, color: Colors.white)),
           backgroundColor: AppColors.primaryButton,
-          title: const Text(
+          title: Text(
             'Detail Report',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 23.sp),
           ),
           actions: [
             Image.asset(
               'assets/icons/garbage.png',
-              width: 30,
-              height: 30,
+              width: 30.w,
+              height: 30.h,
             ),
           ],
         ),
@@ -52,38 +54,36 @@ class _DetailReportState extends State<DetailReport> {
 
                   return SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          10.verticalSpace,
                           CustomText(
-                              message: AppLocalizations.of(context)?.field_course ?? 'Class',
-                              fontSize: 15,
+                              message:
+                                  AppLocalizations.of(context)?.field_course ??
+                                      'Class',
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryText),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          customCard(
-                              widget.reportModel.courseCourseName, 410, 50, 2),
-                          const SizedBox(
-                            height: 10,
+                          5.verticalSpace,
+                          customCard(widget.reportModel.courseCourseName, 410,
+                              50, 2, 20.h),
+                          SizedBox(
+                            height: 10.h,
                           ),
                           CustomText(
-                              message: AppLocalizations.of(context)?.field_lecturer ?? 'Lecturer',
-                              fontSize: 15,
+                              message: AppLocalizations.of(context)
+                                      ?.field_lecturer ??
+                                  'Lecturer',
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryText),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          5.verticalSpace,
                           customCard(
-                              widget.reportModel.teacherName, 410, 50, 2),
-                          const SizedBox(
-                            height: 10,
+                              widget.reportModel.teacherName, 410, 50, 2, 20.h),
+                          SizedBox(
+                            height: 10.h,
                           ),
                           Row(
                             children: [
@@ -91,13 +91,16 @@ class _DetailReportState extends State<DetailReport> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                      message: AppLocalizations.of(context)?.field_course_room ?? 'Room',
-                                      fontSize: 15,
+                                      message: AppLocalizations.of(context)
+                                              ?.field_course_room ??
+                                          'Room',
+                                      fontSize: 13.sp,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
+                                  5.verticalSpace,
                                   Container(
-                                    width: 150,
-                                    height: 50,
+                                    width: 140.w,
+                                    height: 50.h,
                                     decoration: const BoxDecoration(
                                         color:
                                             Color.fromARGB(139, 238, 246, 254),
@@ -117,7 +120,7 @@ class _DetailReportState extends State<DetailReport> {
                                       child: Text(
                                           widget.reportModel.classesRoomNumber,
                                           style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 13.sp,
                                             fontWeight: FontWeight.w500,
                                             color: Color.fromARGB(108, 0, 0, 0),
                                           )),
@@ -125,20 +128,22 @@ class _DetailReportState extends State<DetailReport> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                width: 20,
+                              SizedBox(
+                                width: 20.w,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                      message: AppLocalizations.of(context)?.field_course_shift ?? 'Shift',
-                                      fontSize: 15,
+                                      message: AppLocalizations.of(context)
+                                              ?.field_course_shift ??
+                                          'Shift',
+                                      fontSize: 13.sp,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
                                   Container(
-                                    width: 150,
-                                    height: 50,
+                                    width: 140.w,
+                                    height: 50.h,
                                     decoration: const BoxDecoration(
                                         color:
                                             Color.fromARGB(139, 238, 246, 254),
@@ -158,7 +163,7 @@ class _DetailReportState extends State<DetailReport> {
                                       child: Text(
                                           '${widget.reportModel.classesShiftNumber}',
                                           style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 13.sp,
                                             fontWeight: FontWeight.w500,
                                             color: Color.fromARGB(108, 0, 0, 0),
                                           )),
@@ -177,13 +182,16 @@ class _DetailReportState extends State<DetailReport> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                      message: AppLocalizations.of(context)?.created_date ?? 'Date Report',
-                                      fontSize: 15,
+                                      message: AppLocalizations.of(context)
+                                              ?.created_date ??
+                                          'Date Report',
+                                      fontSize: 13.sp,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
+                                  5.verticalSpace,
                                   Container(
-                                    width: 150,
-                                    height: 50,
+                                    width: 140.w,
+                                    height: 50.h,
                                     decoration: const BoxDecoration(
                                         color:
                                             Color.fromARGB(139, 238, 246, 254),
@@ -203,7 +211,7 @@ class _DetailReportState extends State<DetailReport> {
                                       child: Text(
                                           '${formatDate(widget.reportModel.createdAt)}',
                                           style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 13.sp,
                                             fontWeight: FontWeight.w500,
                                             color: Color.fromARGB(108, 0, 0, 0),
                                           )),
@@ -218,13 +226,16 @@ class _DetailReportState extends State<DetailReport> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                      message: AppLocalizations.of(context)?.return_date ?? 'Date Response',
-                                      fontSize: 15,
+                                      message: AppLocalizations.of(context)
+                                              ?.return_date ??
+                                          'Date Response',
+                                      fontSize: 13.sp,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
+                                  5.verticalSpace,
                                   Container(
-                                    width: 150,
-                                    height: 50,
+                                    width: 140.w,
+                                    height: 50.h,
                                     decoration: const BoxDecoration(
                                         color:
                                             Color.fromARGB(139, 238, 246, 254),
@@ -245,12 +256,12 @@ class _DetailReportState extends State<DetailReport> {
                                           ? Text(
                                               '${formatDate(reportData!.feedBack!.createdAtFeedBack)}',
                                               style: TextStyle(
-                                                fontSize: 15,
+                                                fontSize: 13.sp,
                                                 fontWeight: FontWeight.w500,
                                                 color: Color.fromARGB(
                                                     108, 0, 0, 0),
                                               ))
-                                          : Text(''),
+                                          : const Text(''),
                                     ),
                                   ),
                                 ],
@@ -266,13 +277,16 @@ class _DetailReportState extends State<DetailReport> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                      message: AppLocalizations.of(context)?.status ?? 'Status',
-                                      fontSize: 15,
+                                      message: AppLocalizations.of(context)
+                                              ?.status ??
+                                          'Status',
+                                      fontSize: 13.sp,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
+                                  5.verticalSpace,
                                   Container(
-                                    width: 150,
-                                    height: 50,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15.w, vertical: 15.h),
                                     decoration: const BoxDecoration(
                                         color:
                                             Color.fromARGB(139, 238, 246, 254),
@@ -291,7 +305,7 @@ class _DetailReportState extends State<DetailReport> {
                                     child: Center(
                                       child: Text('${reportData.status}',
                                           style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 13.sp,
                                             fontWeight: FontWeight.w500,
                                             color: getColor(
                                                 widget.reportModel.status),
@@ -300,20 +314,25 @@ class _DetailReportState extends State<DetailReport> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                width: 20,
+                              SizedBox(
+                                width: 20.w,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                      message: AppLocalizations.of(context)?.time_response ?? 'Time Response',
+                                      message: AppLocalizations.of(context)
+                                              ?.time_response ??
+                                          'Time Response',
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primaryText),
+                                  5.verticalSpace,
                                   Container(
-                                    width: 150,
-                                    height: 50,
+                                    width: 160.w,
+                                    height: 50.h,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15.w, vertical: 10.h),
                                     decoration: const BoxDecoration(
                                         color:
                                             Color.fromARGB(139, 238, 246, 254),
@@ -334,82 +353,95 @@ class _DetailReportState extends State<DetailReport> {
                                           ? Text(
                                               '${formatTime(reportData.feedBack!.createdAtFeedBack)}',
                                               style: TextStyle(
-                                                fontSize: 15,
+                                                fontSize: 13.sp,
                                                 fontWeight: FontWeight.w500,
                                                 color: Color.fromARGB(
                                                     108, 0, 0, 0),
                                               ))
-                                          : Text(''),
+                                          : const Text(''),
                                     ),
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
+                          SizedBox(
+                            height: 10.h,
                           ),
                           CustomText(
-                              message: AppLocalizations.of(context)?.problem_type ?? 'Type of problem',
+                              message:
+                                  AppLocalizations.of(context)?.problem_type ??
+                                      'Type of problem',
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryText),
-                          const SizedBox(
-                            height: 5,
+                          SizedBox(
+                            height: 5.h,
                           ),
-                          customCard('${reportData.problem}', 410, 50, 2),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          CustomText(
-                              message: AppLocalizations.of(context)?.message ?? 'Message',
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primaryText),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          customCard(reportData.message, 410, 150, 10),
-                          const SizedBox(
-                            height: 10,
+                          customCard('${reportData.problem}', 410, 50, 2, 20.h),
+                          SizedBox(
+                            height: 10.h,
                           ),
                           CustomText(
-                              message: AppLocalizations.of(context)?.problem_evidence ?? 'Evidence of problem',
-                              fontSize: 15,
+                              message: AppLocalizations.of(context)?.message ??
+                                  'Message',
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryText),
-                          const SizedBox(
-                            height: 5,
+                          SizedBox(
+                            height: 5.h,
                           ),
-                          reportData.reportImage.length >= 2
-                              ? SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: reportData.reportImage.map((e) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.network(
-                                          e!.imageURL,
-                                          width: 200,
-                                          height: 200,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                )
+                          customCard(
+                              reportData.message ?? '', 410, 150, 10, 20.h),
+                          10.verticalSpace,
+                          CustomText(
+                              message: AppLocalizations.of(context)
+                                      ?.problem_evidence ??
+                                  'Evidence of problem',
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryText),
+                          5.verticalSpace,
+                          reportData.reportImage != null
+                              ? reportData.reportImage!.length >= 2
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: reportData.reportImage
+                                                ?.map((e) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Image.network(
+                                                  e!.imageURL,
+                                                  width: 200.w,
+                                                  height: 200.h,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              );
+                                            }).toList() ??
+                                            [],
+                                      ),
+                                    )
+                                  : Center(
+                                      child: Image.network(
+                                        reportData
+                                                .reportImage?.first?.imageURL ??
+                                            '',
+                                        width: 150.w,
+                                        height: 150.h,
+                                      ),
+                                    )
                               : Center(
-                                  child: Image.network(
-                                    reportData.reportImage.first!.imageURL,
-                                    width: 150,
-                                    height: 150,
-                                  ),
+                                  child: CustomText(
+                                      message: 'Error',
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.primaryText),
                                 ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          10.verticalSpace,
                         ],
                       ),
                     ),
@@ -418,21 +450,18 @@ class _DetailReportState extends State<DetailReport> {
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.hasError}'));
               } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
-              return Text('alo alo');
+              return const Text('alo alo');
             }));
   }
 
-  Container customCard(
-    String message,
-    double width,
-    double height,
-    int maxLines,
-  ) {
+  Container customCard(String message, double width, double height,
+      int maxLines, double vertical) {
     return Container(
-      width: width,
-      height: height,
+      width: double.infinity,
+      // height: height,
+      padding: EdgeInsets.symmetric(vertical: vertical),
       decoration: const BoxDecoration(
           color: Color.fromARGB(139, 238, 246, 254),
           borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -442,13 +471,13 @@ class _DetailReportState extends State<DetailReport> {
               right: BorderSide(color: AppColors.secondaryText),
               bottom: BorderSide(color: AppColors.secondaryText))),
       child: Padding(
-        padding: const EdgeInsets.only(left: 15, top: 15),
+        padding: EdgeInsets.symmetric(horizontal: 15.w),
         child: Text(
           message,
-          style: const TextStyle(
-              fontSize: 15,
+          style: TextStyle(
+              fontSize: 13.sp,
               fontWeight: FontWeight.w500,
-              color: Color.fromARGB(108, 0, 0, 0)),
+              color: const Color.fromARGB(108, 0, 0, 0)),
           maxLines: maxLines,
           overflow: TextOverflow.ellipsis,
         ),

@@ -6,6 +6,7 @@ import 'package:attendance_system_nodejs/main.dart';
 import 'package:attendance_system_nodejs/providers/language_provider.dart';
 // import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart'
 import 'package:attendance_system_nodejs/screens/Authentication/sign_in_page.dart';
+import 'package:attendance_system_nodejs/screens/Home/profile_page/components/reset_password_screen.dart';
 import 'package:attendance_system_nodejs/screens/Home/profile_page/view_image_face/view_image_face.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
@@ -125,8 +126,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: AppColors.primaryText),
             ),
             5.verticalSpace,
-            customOptions(context, 'assets/icons/changePassword.png',
-                '${AppLocalizations.of(context)?.password ?? 'Password'}'),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (builder) => ResetPassword()));
+              },
+              child: customOptions(context, 'assets/icons/changePassword.png',
+                  '${AppLocalizations.of(context)?.password ?? 'Password'}'),
+            ),
             customOptions(context, 'assets/icons/notification.png',
                 '${AppLocalizations.of(context)?.sound_notification ?? 'Sound Notification'}'),
             10.verticalSpace,

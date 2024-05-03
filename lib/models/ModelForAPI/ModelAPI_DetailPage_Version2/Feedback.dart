@@ -6,13 +6,16 @@ class FeedBack {
   String? messageFeedback;
   String? confirmStatus;
   String? createdAtFeedBack;
+  bool seen;
 
   FeedBack(
-      {required this.feedbackID,
-      required this.topicFeedback,
-      required this.messageFeedback,
-      required this.confirmStatus,
-      required this.createdAtFeedBack});
+      { this.feedbackID,
+       this.topicFeedback,
+       this.messageFeedback,
+       this.confirmStatus,
+       this.createdAtFeedBack,
+       this.seen = false
+       });
 
   factory FeedBack.fromJson(Map<String, dynamic> json) {
     return FeedBack(
@@ -21,6 +24,7 @@ class FeedBack {
       messageFeedback: json['message'] ?? '',
       confirmStatus: json['confirmStatus'] ?? '',
       createdAtFeedBack: json['createdAt'] ?? '',
+      seen: json['seen']
     );
   }
 }
