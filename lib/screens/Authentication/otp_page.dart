@@ -14,6 +14,7 @@ import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OTPPage extends StatefulWidget {
   const OTPPage({super.key});
@@ -35,7 +36,7 @@ class _OTPPageState extends State<OTPPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-   _progressDialog = ProgressDialog(context,
+    _progressDialog = ProgressDialog(context,
         isDismissible: false,
         customBody: Container(
           width: double.infinity,
@@ -53,7 +54,7 @@ class _OTPPageState extends State<OTPPage> {
               ),
               5.verticalSpace,
               Text(
-                'Loading',
+              'Loading',
                 style: TextStyle(
                     fontSize: 16.sp,
                     color: AppColors.primaryText,
@@ -98,7 +99,9 @@ class _OTPPageState extends State<OTPPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                        message: "OTP Verification",
+                        message: AppLocalizations.of(context)
+                                ?.title_otp_verification ??
+                            "OTP Verification",
                         fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText),
@@ -107,7 +110,9 @@ class _OTPPageState extends State<OTPPage> {
                     // ),
                     10.verticalSpace,
                     CustomText(
-                        message: description,
+                        message: AppLocalizations.of(context)
+                                ?.title_otp_verification_description ??
+                            description,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.secondaryText),
@@ -143,7 +148,8 @@ class _OTPPageState extends State<OTPPage> {
                         fontSize: 18.sp,
                         // height: 60,
                         // width: 400,
-                        buttonName: "Verify",
+                        buttonName: AppLocalizations.of(context)?.btn_verify ??
+                            "Verify",
                         colorShadow: Colors.transparent,
                         backgroundColorButton: AppColors.primaryButton,
                         borderColor: Colors.white,
@@ -186,15 +192,23 @@ class _OTPPageState extends State<OTPPage> {
                               );
                               await _progressDialog.hide();
                               await Flushbar(
-                                title: "Successfully",
-                                message: "Login to use the app",
+                                title: AppLocalizations.of(context)
+                                        ?.title_successfully ??
+                                    "Successfully",
+                                message: AppLocalizations.of(context)
+                                        ?.title_success_otp ??
+                                    "Login to use the app",
                                 duration: const Duration(seconds: 5),
                               ).show(context);
                             } else {
                               await _progressDialog.hide();
                               await Flushbar(
-                                title: "Failed",
-                                message: "OTP is not valid",
+                                title: AppLocalizations.of(context)
+                                        ?.title_failed ??
+                                    "Failed",
+                                message: AppLocalizations.of(context)
+                                        ?.title_otp_invalid ??
+                                    "OTP is not valid",
                                 duration: const Duration(seconds: 5),
                               ).show(context);
                             }
@@ -214,7 +228,9 @@ class _OTPPageState extends State<OTPPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CustomText(
-                              message: "Didn't recieved code ? ",
+                              message: AppLocalizations.of(context)
+                                      ?.title_did_not_recive_code ??
+                                  "Didn't recieved code ? ",
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w500,
                               color: AppColors.primaryText),
@@ -231,20 +247,31 @@ class _OTPPageState extends State<OTPPage> {
                                   await _progressDialog.hide();
                                   showFlushBarNotification(
                                       context,
-                                      'Resend OTP',
-                                      "OTP has been sent your email",
+                                      AppLocalizations.of(context)
+                                              ?.title_resend_otp ??
+                                          'Resend OTP',
+                                      AppLocalizations.of(context)
+                                              ?.subT_resend_otp ??
+                                          "OTP has been sent your email",
                                       3);
                                 } else {
                                   // ignore: use_build_context_synchronously
-                                  showFlushBarNotification(context,
-                                      'Failed resend OTP', 'message', 3);
+                                  showFlushBarNotification(
+                                      context,
+                                      AppLocalizations.of(context)
+                                              ?.title_failed ??
+                                          'Failed resend OTP',
+                                      AppLocalizations.of(context)
+                                              ?.subT_resend_otp_1 ??
+                                          'Please try again!',
+                                      3);
                                 }
                               }
                             },
                             child: CustomText(
                                 message: canResend
-                                    ? "Re-send"
-                                    : "Resend in $secondsRemaining seconds",
+                                    ? AppLocalizations.of(context)?.title_resend ??  "Re-send"
+                                    : "${AppLocalizations.of(context)?.title_resend_in ?? 'Resend in'} $secondsRemaining ${AppLocalizations.of(context)?.seconds ?? 'seconds'}",
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.importantText),

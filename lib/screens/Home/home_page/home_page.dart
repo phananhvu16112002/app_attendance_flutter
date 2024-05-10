@@ -15,6 +15,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -41,7 +42,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadToken();
   }
-
 
   // Future<void> update() async {
   //   if (mounted) {
@@ -70,18 +70,17 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
-  
-
-  List<BottomNavModel> listBottomNav = [
-    BottomNavModel(title: 'Home', svgPath: 'assets/icons/home.svg'),
-    BottomNavModel(title: 'Report', svgPath: 'assets/icons/report.svg'),
-    BottomNavModel(
-        title: 'Notifications', svgPath: 'assets/icons/notification.svg'),
-    BottomNavModel(title: 'Profile', svgPath: 'assets/icons/user.svg'),
-  ];
   @override
   Widget build(BuildContext context) {
+    List<BottomNavModel> listBottomNav = [
+      BottomNavModel(
+          title: AppLocalizations.of(context)?.bottom_nav_home ?? 'Home',
+          svgPath: 'assets/icons/home.svg'),
+      BottomNavModel(title: AppLocalizations.of(context)?.bottom_nav_report ?? 'Report', svgPath: 'assets/icons/report.svg'),
+      BottomNavModel(
+          title: AppLocalizations.of(context)?.bottom_nav_noti ?? 'Notifications', svgPath: 'assets/icons/notification.svg'),
+      BottomNavModel(title: AppLocalizations.of(context)?.bottom_nav_profile ?? 'Profile', svgPath: 'assets/icons/user.svg'),
+    ];
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           shape: const CircleBorder(),

@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -21,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         centerTitle: true,
         title: CustomText(
-            message: 'Search',
+            message: AppLocalizations.of(context)?.search_class ?? 'Search',
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
             color: Colors.white),
@@ -45,7 +47,7 @@ class _SearchPageState extends State<SearchPage> {
                         size: 14.sp,
                         color: AppColors.primaryText.withOpacity(0.3),
                       )),
-                  hintText: 'Tìm kiếm',
+                  hintText: AppLocalizations.of(context)?.search_class ?? 'Tìm kiếm',
                   prefixIcon: const Icon(null),
                   readOnly: false),
               100.verticalSpace,
@@ -59,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
               10.verticalSpace,
               CustomText(
-                  message: 'Tìm kiếm những thứ bạn muốn',
+                  message: AppLocalizations.of(context)?.search_everything ?? 'Tìm kiếm những gì bạn muốn',
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
                   color: AppColors.primaryText.withOpacity(0.3))

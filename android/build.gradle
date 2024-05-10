@@ -3,6 +3,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()
+     
     }
 
     dependencies {
@@ -19,6 +21,7 @@ buildscript {
         // AGP version is set in settings.gradle.
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // END: FlutterFire Configuration
+        
     }
 }
 
@@ -26,6 +29,10 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        //    maven {
+        // url 'http://www.sparetimelabs.com/maven2'
+        // }  
+        jcenter()
     }
 }
 

@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class Classroom extends StatefulWidget {
   const Classroom({super.key, required this.classesStudent});
@@ -46,7 +48,7 @@ class _ClassroomState extends State<Classroom> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                        message: 'Lecturer',
+                        message: AppLocalizations.of(context)?.field_lecturer ?? 'Lecturer',
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryButton),
@@ -86,7 +88,7 @@ class _ClassroomState extends State<Classroom> {
                     ),
                     20.verticalSpace,
                     CustomText(
-                        message: 'Students',
+                        message: AppLocalizations.of(context)?.title_student ?? 'Students',
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryButton),

@@ -47,7 +47,7 @@ android {
         applicationId "com.example.attendance_system_nodejs"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+        minSdkVersion 24 //Change 24 to 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -58,6 +58,9 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+            minifyEnabled true //add
+            shrinkResources true //add
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),'proguard-rules.pro' //add
         }
     }
 }
@@ -72,4 +75,6 @@ dependencies {
     implementation "androidx.activity:activity:1.6.0-alpha05"
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" //add
+    
 }

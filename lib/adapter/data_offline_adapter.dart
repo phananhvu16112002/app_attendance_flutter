@@ -15,7 +15,9 @@ class DataOfflineAdatper extends TypeAdapter<DataOffline> {
         dateAttendanced: reader.readString(),
         location: reader.readString(),
         latitude: reader.readDouble(),
-        longitude: reader.readDouble());
+        longitude: reader.readDouble(),
+        startTime: reader.readString(),
+        endTime: reader.readString());
   }
 
   @override
@@ -27,5 +29,7 @@ class DataOfflineAdatper extends TypeAdapter<DataOffline> {
     writer.writeString(obj.location ?? '');
     writer.writeDouble(obj.latitude ?? 0);
     writer.writeDouble(obj.longitude ?? 0);
+    writer.writeString(obj.startTime ?? '');
+    writer.writeString(obj.endTime ?? '');
   }
 }

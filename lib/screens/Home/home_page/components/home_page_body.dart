@@ -134,75 +134,37 @@ class _HomePageBodyState extends State<HomePageBody> {
         ));
   }
 
-  // void sendDataToServer() async {
-  //   DataOffline? dataOffline = dataOfflineBox.getAt(0);
-  //   String xFile = await SecureStorage().readSecureData('imageOffline');
-  //   if (xFile.isNotEmpty && xFile != 'No Data Found' && dataOffline != null) {
-  //     String? location = await GetLocation()
-  //         .getAddressFromLatLongWithoutInternet(
-  //             dataOffline.latitude ?? 0.0, dataOffline.longitude ?? 0.0);
-  //     // print('location: $location');
-  //     bool check = await API(context).takeAttendanceOffline(
-  //         dataOffline.studentID ?? '',
-  //         dataOffline.classID ?? '',
-  //         dataOffline.formID ?? '',
-  //         dataOffline.dateAttendanced ?? '',
-  //         location ?? '',
-  //         dataOffline.latitude ?? 0.0,
-  //         dataOffline.longitude ?? 0.0,
-  //         XFile(xFile));
-  //     if (check) {
-  //       print('Successfully take attendance offline');
-  //       await dataOfflineBox.delete('dataOffline');
-  //       customDialog('Successfully', 'Take attendance offline successfully!');
-  //       if (dataOfflineBox.isEmpty) {
-  //         print('Delete ok');
-  //       } else {
-  //         print('No delele local storage');
-  //       }
-  //     } else {
-  //       customDialog('Failed', 'Take attendance offline failed!');
-  //       print('Failed take attendance offline');
-  //     }
-  //   } else {
-  //     print('Data is not available');
-  //   }
-  // }
-
   void sendDataToServer() async {
-    // DataOffline? dataOffline = dataOfflineBox.getAt(0);
+    DataOffline? dataOffline = dataOfflineBox.getAt(0);
     String xFile = await SecureStorage().readSecureData('imageOffline');
-    String studentID = await SecureStorage().readSecureData('studentID');
-    String latitude = await SecureStorage().readSecureData('latitude');
-    String longitude = await SecureStorage().readSecureData('longitude');
-    String classesOff = await SecureStorage().readSecureData('classes');
-    String formID = await SecureStorage().readSecureData('formID');
-    String time = await SecureStorage().readSecureData('time');
-
-    if (xFile != 'No Data Found' || formID != 'No Data Found') {
+    if (xFile.isNotEmpty && xFile != 'No Data Found' && dataOffline != null) {
+      _progressDialog.show();
       String? location = await GetLocation()
           .getAddressFromLatLongWithoutInternet(
-              double.parse(latitude.toString()),
-              double.parse(longitude.toString()));
+              dataOffline.latitude ?? 0.0, dataOffline.longitude ?? 0.0);
       // print('location: $location');
-      _progressDialog.show();
       bool check = await API(context).takeAttendanceOffline(
-          studentID,
-          classesOff,
-          formID,
-          time,
+          dataOffline.studentID ?? '',
+          dataOffline.classID ?? '',
+          dataOffline.formID ?? '',
+          dataOffline.dateAttendanced ?? '',
           location ?? '',
-          double.parse(latitude.toString()),
-          double.parse(longitude.toString()),
+          dataOffline.latitude ?? 0.0,
+          dataOffline.longitude ?? 0.0,
           XFile(xFile));
       if (check) {
-        await _progressDialog.hide();
-        await SecureStorage().deleteSecureData('imageOffline');
         print('Successfully take attendance offline');
-        // await dataOfflineBox.delete('dataOffline');
+        await dataOfflineBox.delete('dataOffline');
+        await _progressDialog.hide();
         customDialog('Successfully', 'Take attendance offline successfully!');
+        if (dataOfflineBox.isEmpty) {
+          print('Delete ok');
+        } else {
+          print('No delele local storage');
+        }
       } else {
         await _progressDialog.hide();
+
         customDialog('Failed', 'Take attendance offline failed!');
         print('Failed take attendance offline');
       }
@@ -210,6 +172,48 @@ class _HomePageBodyState extends State<HomePageBody> {
       print('Data is not available');
     }
   }
+
+  // void sendDataToServer() async {
+  //   // DataOffline? dataOffline = dataOfflineBox.getAt(0);
+  //   String xFile = await SecureStorage().readSecureData('imageOffline');
+  //   String studentID = await SecureStorage().readSecureData('studentID');
+  //   String latitude = await SecureStorage().readSecureData('latitude');
+  //   String longitude = await SecureStorage().readSecureData('longitude');
+  //   String classesOff = await SecureStorage().readSecureData('classes');
+  //   String formID = await SecureStorage().readSecureData('formID');
+  //   String time = await SecureStorage().readSecureData('time');
+
+  //   if (xFile != 'No Data Found' || formID != 'No Data Found') {
+  //     String? location = await GetLocation()
+  //         .getAddressFromLatLongWithoutInternet(
+  //             double.parse(latitude.toString()),
+  //             double.parse(longitude.toString()));
+  //     // print('location: $location');
+  //     _progressDialog.show();
+  //     bool check = await API(context).takeAttendanceOffline(
+  //         studentID,
+  //         classesOff,
+  //         formID,
+  //         time,
+  //         location ?? '',
+  //         double.parse(latitude.toString()),
+  //         double.parse(longitude.toString()),
+  //         XFile(xFile));
+  //     if (check) {
+  //       await _progressDialog.hide();
+  //       await SecureStorage().deleteSecureData('imageOffline');
+  //       print('Successfully take attendance offline');
+  //       // await dataOfflineBox.delete('dataOffline');
+  //       customDialog('Successfully', 'Take attendance offline successfully!');
+  //     } else {
+  //       await _progressDialog.hide();
+  //       customDialog('Failed', 'Take attendance offline failed!');
+  //       print('Failed take attendance offline');
+  //     }
+  //   } else {
+  //     print('Data is not available');
+  //   }
+  // }
 
   Future<dynamic> customDialog(String title, String content) {
     return showDialog(
@@ -264,20 +268,21 @@ class _HomePageBodyState extends State<HomePageBody> {
                         )),
               );
             } else {
-              final studentProvider = Provider.of<StudentDataProvider>(context);
+              final studentProvider =
+                  Provider.of<StudentDataProvider>(context, listen: false);
               double latitude = studentProvider.userData.latitude;
               double longitude = studentProvider.userData.longtitude;
               controller.pauseCamera();
               _progressDialog.show();
-              // String? location = await GetLocation()
-              //     .getAddressFromLatLongWithoutInternet(latitude, longitude);
+              String? location = await GetLocation()
+                  .getAddressFromLatLongWithoutInternet(latitude, longitude);
               AttendanceDetail? attendanceDetail = await API(context)
                   .takeAttendance(
                       studentID,
                       temp['classID'],
                       temp['formID'],
                       DateTime.now().toString(),
-                      '',
+                      location ?? '',
                       latitude,
                       longitude,
                       XFile(''),
@@ -673,7 +678,8 @@ class _HomePageBodyState extends State<HomePageBody> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomText(
-                  message: 'Search Class',
+                  message: AppLocalizations.of(context)?.search_class ??
+                      'Search Class',
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.primaryText.withOpacity(0.5)),
@@ -955,7 +961,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                               lineWidth: 5.w,
                               percent: progress,
                               center: Text(
-                                "$totalWeeks Weeks",
+                                "$totalWeeks ${AppLocalizations.of(context)?.weeks ?? 'Weeks'}",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12.sp,

@@ -7,6 +7,7 @@ import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/data_offline.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
+import 'package:attendance_system_nodejs/services/get_location/get_location_services.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -34,6 +36,7 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
   late Box<DataOffline> dataOfflineBox;
   late DataOffline? dataOffline;
   XFile? file;
+  late ProgressDialog _progressDialog;
 
   @override
   void initState() {
@@ -42,6 +45,7 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
     classesStudent = widget.classesStudent;
     openBox();
     getImage();
+    _progressDialog = _customLoading();
   }
 
   Future<void> getImage() async {
@@ -63,10 +67,98 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
     dataOffline = dataOfflineBox.get('dataOffline');
   }
 
+  ProgressDialog _customLoading() {
+    return ProgressDialog(context,
+        isDismissible: false,
+        customBody: Container(
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
+              color: Colors.white),
+          child: Center(
+              child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(
+                color: AppColors.primaryButton,
+              ),
+              5.verticalSpace,
+              Text(
+                'Loading',
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    color: AppColors.primaryText,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          )),
+        ));
+  }
+
+  void sendDataToServer() async {
+    DataOffline? dataOffline = dataOfflineBox.get('dataOffline');
+    String xFile = await SecureStorage().readSecureData('imageOffline');
+    if (xFile.isNotEmpty && xFile != 'No Data Found' && dataOffline != null) {
+      _progressDialog.show();
+      String? location = await GetLocation()
+          .getAddressFromLatLongWithoutInternet(
+              dataOffline.latitude ?? 0.0, dataOffline.longitude ?? 0.0);
+      // print('location: $location');
+      bool check = await API(context).takeAttendanceOffline(
+          dataOffline.studentID ?? '',
+          dataOffline.classID ?? '',
+          dataOffline.formID ?? '',
+          dataOffline.dateAttendanced ?? '',
+          location ?? '',
+          dataOffline.latitude ?? 0.0,
+          dataOffline.longitude ?? 0.0,
+          XFile(xFile));
+      if (check) {
+        print('Successfully take attendance offline');
+        await dataOfflineBox.delete('dataOffline');
+        await _progressDialog.hide();
+        customDialog('Successfully', 'Take attendance offline successfully!');
+        if (dataOfflineBox.isEmpty) {
+          print('Delete ok');
+        } else {
+          print('No delele local storage');
+        }
+      } else {
+        await _progressDialog.hide();
+
+        customDialog('Failed', 'Take attendance offline failed!');
+        print('Failed take attendance offline');
+      }
+    } else {
+      print('Data is not available');
+    }
+  }
+
+  Future<dynamic> customDialog(String title, String content) {
+    return showDialog(
+        context: context,
+        builder: (builder) => AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text(title),
+              content: Text(content),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'))
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     SocketServerProvider socketServerProvider =
         Provider.of<SocketServerProvider>(context);
+    // DataOffline? data = dataOfflineBox.getAt(0);
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,12 +176,12 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       child: customCard(
-                        classesStudent.startTime,
-                        classesStudent.endTime,
-                        formatDate(dataOffline?.dateAttendanced ?? ' '),
-                        dataOffline?.dateAttendanced ?? ' ',
+                        formatTime(dataOffline?.startTime) ?? '',
+                        formatTime(dataOffline?.endTime) ?? '',
+                        formatDate(dataOffline?.dateAttendanced ?? ''),
+                        formatTime(dataOffline?.dateAttendanced) ?? '',
                         'Pending',
-                        dataOffline?.location ?? ' ',
+                        dataOffline?.location ?? '',
                       ),
                     ),
                   FutureBuilder(
@@ -146,7 +238,7 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
                           return const Center(
                               child: CircularProgressIndicator());
                         }
-                        return const Text('Null');
+                        return Container();
                       })
                 ],
               ),
@@ -479,8 +571,8 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10.r)),
-        boxShadow: [
-          const BoxShadow(
+        boxShadow: const [
+          BoxShadow(
             color: Color.fromARGB(195, 190, 188, 188),
             blurRadius: 5.0,
             offset: Offset(2.0, 1.0),
@@ -560,18 +652,18 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
                             AppColors.primaryText,
                             getColorBasedOnStatus(status),
                           ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
                         ],
                       ),
                     ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
                     Container(
-                      margin: EdgeInsets.only(right: 10.w, top: 10.h),
                       height: 130.h,
-                      width: 130.w,
+                      width: 100.w,
                       child: file != null
                           ? Image.file(
+                              fit: BoxFit.fill,
                               File(file!.path),
                             )
                           : Container(),
@@ -582,7 +674,7 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
               ],
             ),
           ),
-          5.verticalSpace,
+          10.verticalSpace,
           Container(
             height: 1.h,
             width: double.infinity,
@@ -592,6 +684,7 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
           InkWell(
             onTap: () {
               //resend take attendance offline
+              sendDataToServer();
             },
             child: CustomText(
                 message: 'Resend',
@@ -618,8 +711,8 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10.r)),
-        boxShadow: [
-          const BoxShadow(
+        boxShadow: const[
+           BoxShadow(
             color: Color.fromARGB(195, 190, 188, 188),
             blurRadius: 5.0,
             offset: Offset(2.0, 1.0),
@@ -708,18 +801,19 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
                             AppColors.primaryText,
                             getColorBasedOnStatusOffline(status),
                           ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
+                          
                         ],
                       ),
                     ),
+                    SizedBox(
+                            width: 10.w,
+                          ),
                     Container(
-                      margin: EdgeInsets.only(right: 10.w, top: 10.h),
-                      height: 120.h,
-                      width: 120.w,
+                      height: 130.h,
+                      width: 100.w,
                       child: file != null
                           ? Image.file(
+                            fit: BoxFit.fill,
                               File(file!.path),
                             )
                           : Image.asset('assets/images/logo.png'),

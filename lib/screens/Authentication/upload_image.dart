@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UploadImage extends StatefulWidget {
   const UploadImage({Key? key}) : super(key: key);
@@ -141,7 +142,7 @@ class _UploadImageState extends State<UploadImage> {
             icon: Icon(Icons.arrow_back_ios, size: 20.sp, color: Colors.white)),
         centerTitle: true,
         title: Text(
-          'Upload Face',
+          AppLocalizations.of(context)?.title_upload_face ?? 'Upload Face',
           style: TextStyle(
             fontSize: 23.sp,
             color: Colors.white,
@@ -237,7 +238,9 @@ class _UploadImageState extends State<UploadImage> {
                         ),
                         child: Center(
                           child: CustomText(
-                            message: 'Upload Image',
+                            message:
+                                AppLocalizations.of(context)?.title_upload ??
+                                    'Upload Image',
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -259,7 +262,9 @@ class _UploadImageState extends State<UploadImage> {
                       ),
                       child: Center(
                         child: CustomText(
-                          message: 'Required 3 image Face',
+                          message: AppLocalizations.of(context)
+                                  ?.required_three_image ??
+                              'Required 3 image Face',
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -279,8 +284,10 @@ class _UploadImageState extends State<UploadImage> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Failed Upload'),
-        content: Text('Please check required'),
+        title:
+            Text(AppLocalizations.of(context)?.title_failed ?? 'Failed Upload'),
+        content: Text(AppLocalizations.of(context)?.title_check_required ??
+            'Please check required'),
         actions: [
           TextButton(
             onPressed: () async {
@@ -297,8 +304,11 @@ class _UploadImageState extends State<UploadImage> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Upload Sucessfully'),
-        content: Text('You can check image face in settings'),
+        title: Text(AppLocalizations.of(context)?.title_successfully ??
+            'Upload Sucessfully'),
+        content: Text(
+            AppLocalizations.of(context)?.title_check_image_settings ??
+                'You can check image face in settings'),
         actions: [
           TextButton(
             onPressed: () async {
@@ -339,7 +349,7 @@ class _UploadImageState extends State<UploadImage> {
                 color: AppColors.primaryButton,
               ),
               CustomText(
-                message: 'Add your face',
+                message: AppLocalizations.of(context)?.title_add_face ?? 'Add your face',
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
                 color: AppColors.primaryButton,

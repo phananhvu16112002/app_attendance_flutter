@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:attendance_system_nodejs/TestApp/Test.dart';
+import 'package:attendance_system_nodejs/TestApp/TestFace.dart';
 import 'package:attendance_system_nodejs/adapter/attendance_form_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/class_student_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/course_adapter.dart';
@@ -8,6 +11,10 @@ import 'package:attendance_system_nodejs/adapter/student_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/student_classes_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/teacher_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/class_adapter.dart';
+import 'package:attendance_system_nodejs/kbyAI/facedetectionview.dart';
+import 'package:attendance_system_nodejs/kbyAI/home_face.dart';
+import 'package:attendance_system_nodejs/kbyAI/person.dart';
+import 'package:attendance_system_nodejs/kbyAI/settings.dart';
 import 'package:attendance_system_nodejs/l10n/l10n.dart';
 import 'package:attendance_system_nodejs/models/attendance_form.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
@@ -21,18 +28,26 @@ import 'package:attendance_system_nodejs/providers/language_provider.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/create_new_password.dart';
 import 'package:attendance_system_nodejs/screens/Authentication/flash_screen.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:face_camera/face_camera.dart';
+import 'package:facesdk_plugin/facesdk_plugin.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqlite_api.dart';
 import 'firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:firebase_app_installations/firebase_app_installations.dart';
@@ -43,7 +58,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void _firebaseMessagingForegroundHandler(RemoteMessage message) {
   print("Handling a foreground message: ${message.messageId}");
-  // Xử lý tin nhắn ở đây khi ứng dụng đang chạy
 }
 
 bool isInternetConnected = false;
@@ -123,10 +137,18 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -152,7 +174,7 @@ class _MyAppState extends State<MyApp> {
                     ColorScheme.fromSeed(seedColor: AppColors.backgroundColor),
                 useMaterial3: false,
               ),
-              home: FlashScreen(),
+              home:TestApp(),
               debugShowCheckedModeBanner: false,
             );
           },

@@ -10,9 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateNewPassword extends StatefulWidget {
-   const CreateNewPassword({super.key});
+  const CreateNewPassword({super.key});
 
   @override
   State<CreateNewPassword> createState() => _CreateNewPasswordState();
@@ -37,25 +38,24 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
     super.initState();
     _progressDialog = ProgressDialog(context,
         customBody: Container(
-          width: 200,
-          height: 150,
-          decoration:  BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               color: Colors.white),
-          child:  Center(
+          child: Center(
               child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 color: AppColors.primaryButton,
               ),
-              SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -75,14 +75,16 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
             Image.asset('assets/images/forgot.png'),
             Container(
               child: Padding(
-                padding:  EdgeInsets.only(left: 15.w, top: 15.h, right: 15.w),
+                padding: EdgeInsets.only(left: 15.w, top: 15.h, right: 15.w),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       CustomText(
-                          message: "Create New Password",
+                      CustomText(
+                          message: AppLocalizations.of(context)
+                                  ?.create_new_password ??
+                              "Create New Password",
                           fontSize: 30.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
@@ -91,7 +93,9 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                       // ),
                       10.verticalSpace,
                       CustomText(
-                          message: description,
+                          message: AppLocalizations.of(context)
+                                  ?.sub_create_new_password ??
+                              description,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.secondaryText),
@@ -99,8 +103,9 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                       //   height: 20,
                       // ),
                       20.verticalSpace,
-                       CustomText(
-                          message: "New Password",
+                      CustomText(
+                          message: AppLocalizations.of(context)?.new_password ??
+                              "New Password",
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
@@ -113,7 +118,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                         controller: password,
                         textInputType: TextInputType.visiblePassword,
                         obscureText: isCheckNewPassword,
-                        prefixIcon:  Icon(null),
+                        prefixIcon: Icon(null),
                         suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
@@ -121,21 +126,29 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                               });
                             },
                             icon: isCheckNewPassword
-                                ?  Icon(Icons.visibility)
-                                :  Icon(Icons.visibility_off)),
+                                ? Icon(Icons.visibility)
+                                : Icon(Icons.visibility_off)),
                         hintText: "New Password",
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Password is required';
+                            return AppLocalizations.of(context)
+                                    ?.title_password_required ??
+                                'Password is required';
                           }
                           if (value.length < 8) {
-                            return 'Password must be at least 8 characters long';
+                            return AppLocalizations.of(context)
+                                    ?.title_check_password_1 ??
+                                'Password must be at least 8 characters long';
                           }
                           if (!upperCaseRegex.hasMatch(value)) {
-                            return 'Password must be contain at least one uppercase letter';
+                            return AppLocalizations.of(context)
+                                    ?.title_check_password_2 ??
+                                'Password must be contain at least one uppercase letter';
                           }
                           if (!digitRegex.hasMatch(value)) {
-                            return 'Password must be contain at least one digit number';
+                            return AppLocalizations.of(context)
+                                    ?.title_check_password_3 ??
+                                'Password must be contain at least one digit number';
                           }
                           return null;
                         },
@@ -144,8 +157,10 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                       //   height: 15,
                       // ),
                       15.verticalSpace,
-                       CustomText(
-                          message: "Confirm Password",
+                      CustomText(
+                          message:
+                              AppLocalizations.of(context)?.confirm_password ??
+                                  "Confirm Password",
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
@@ -158,7 +173,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                         controller: confirmPassword,
                         textInputType: TextInputType.visiblePassword,
                         obscureText: isCheckConfirmPassword,
-                        prefixIcon:  Icon(null),
+                        prefixIcon: Icon(null),
                         suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
@@ -167,14 +182,19 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                               });
                             },
                             icon: isCheckConfirmPassword
-                                ?  Icon(Icons.visibility)
-                                :  Icon(Icons.visibility_off)),
+                                ? Icon(Icons.visibility)
+                                : Icon(Icons.visibility_off)),
                         hintText: "Confirm Password",
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Confirm password is required";
-                          } else if (value != password.text) {
-                            return 'Confirm password is not match';
+                            return AppLocalizations.of(context)
+                                    ?.title_check_confirm_password_1 ??
+                                'Confirm Password is required';
+                          }
+                          if (value != password.text) {
+                            return AppLocalizations.of(context)
+                                    ?.title_check_confirm_password_2 ??
+                                'Passwords do not match!';
                           }
                           return null;
                         },
@@ -184,12 +204,14 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                       // ),
                       15.verticalSpace,
                       Padding(
-                        padding:  EdgeInsets.only(right: 0),
+                        padding: EdgeInsets.only(right: 0),
                         child: CustomButton(
                           fontSize: 18.sp,
                           // height: 60,
                           // width: 400,
-                          buttonName: "Reset Password",
+                          buttonName:
+                              AppLocalizations.of(context)?.reset_password ??
+                                  "Reset Password",
                           backgroundColorButton: AppColors.primaryButton,
                           colorShadow: Colors.transparent,
                           borderColor: Colors.white,
@@ -199,7 +221,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                               if (password.text == confirmPassword.text ||
                                   password.text
                                       .contains(confirmPassword.text)) {
-                                _progressDialog.show();
+                                // _progressDialog.show();
                                 String check = await Authenticate()
                                     .resetPassword(
                                         studentDataProvider
@@ -207,19 +229,19 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                                         password.text);
                                 if (check == '') {
                                   // ignore: use_build_context_synchronously
-                                  await Navigator.pushAndRemoveUntil(
+                                  Navigator.push(
                                     context,
                                     PageRouteBuilder(
                                       pageBuilder: (context, animation,
                                               secondaryAnimation) =>
-                                           SignInPage(),
+                                          SignInPage(),
                                       transitionDuration:
-                                           Duration(milliseconds: 1000),
+                                          Duration(milliseconds: 1000),
                                       transitionsBuilder: (context, animation,
                                           secondaryAnimation, child) {
                                         var curve = Curves.easeInOutCubic;
                                         var tween = Tween(
-                                                begin:  Offset(1.0, 0.0),
+                                                begin: Offset(1.0, 0.0),
                                                 end: Offset.zero)
                                             .chain(CurveTween(curve: curve));
                                         var offsetAnimation =
@@ -230,20 +252,28 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                                         );
                                       },
                                     ),
-                                    (route) => false,
                                   );
-                                  _progressDialog.hide();
+                                  // _progressDialog.hide();
                                   // ignore: use_build_context_synchronously
                                   showFlushBarNotification(
                                       context,
-                                      "Successfully",
-                                      "Updated password successfully",
+                                      AppLocalizations.of(context)
+                                              ?.title_successfully ??
+                                          "Successfully",
+                                      AppLocalizations.of(context)
+                                              ?.update_password_successfully ??
+                                          "Updated password successfully",
                                       3);
                                 } else {
-                                  await _progressDialog.hide();
+                                  // await _progressDialog.hide();
                                   // ignore: use_build_context_synchronously
                                   showFlushBarNotification(
-                                      context, "Failed updating", check, 3);
+                                      context,
+                                      AppLocalizations.of(context)
+                                              ?.title_failed ??
+                                          "Failed updating",
+                                      check,
+                                      3);
                                 }
                               }
                             }

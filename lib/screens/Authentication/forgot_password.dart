@@ -33,25 +33,24 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     super.initState();
     _progressDialog = ProgressDialog(context,
         customBody: Container(
-          width: 200,
-          height: 150,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               color: Colors.white),
-          child: const Center(
+          child: Center(
               child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 color: AppColors.primaryButton,
               ),
-              SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
-                'Loading',
+                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -72,14 +71,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           Image.asset('assets/images/forgot.png'),
           Container(
             child: Padding(
-              padding:  EdgeInsets.only(top: 15.h, left: 20.w, right: 20.w),
+              padding: EdgeInsets.only(top: 15.h, left: 20.w, right: 20.w),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     CustomText(
-                        message: AppLocalizations.of(context)?.forgot_your_password ?? 'Forgot Your Password?',
+                    CustomText(
+                        message: AppLocalizations.of(context)
+                                ?.forgot_your_password ??
+                            'Forgot Your Password?',
                         fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText),
@@ -88,7 +89,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     // ),
                     10.verticalSpace,
                     CustomText(
-                        message: AppLocalizations.of(context)?.forgot_password_message ?? description,
+                        message: AppLocalizations.of(context)
+                                ?.forgot_password_message ??
+                            description,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.secondaryText),
@@ -96,7 +99,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     //   height: 15,
                     // ),
                     15.verticalSpace,
-                     CustomText(
+                    CustomText(
                         message: "Email",
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
@@ -113,16 +116,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       prefixIcon: const Icon(null),
                       suffixIcon:
                           IconButton(onPressed: () {}, icon: const Icon(null)),
-                      hintText: AppLocalizations.of(context)?.email_field ?? 'Enter your email address',
+                      hintText: AppLocalizations.of(context)?.email_field ??
+                          'Enter your email address',
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email is required';
+                          return AppLocalizations.of(context)?.title_email_required ?? 'Email is required';
                         }
                         final RegExp tdtuEmailExp = RegExp(
                             r'^[0-9A-Z]+@(student\.)?tdtu\.edu\.vn$',
                             caseSensitive: false);
                         if (!tdtuEmailExp.hasMatch(value)) {
-                          return 'Please check your valid email TDTU';
+                          return AppLocalizations.of(context)?.title_email_tdtu ?? 'Please check your valid email TDTU';
                         }
                         return null;
                       },
@@ -140,7 +144,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           fontSize: 18.sp,
                           // height: 60,
                           // width: 400,
-                          buttonName: AppLocalizations.of(context)?.send_otp ?? "Send OTP",
+                          buttonName: AppLocalizations.of(context)?.send_otp ??
+                              "Send OTP",
                           colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
                           borderColor: Colors.white,
@@ -160,19 +165,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   await _progressDialog.hide();
                                   showFlushBarNotification(
                                       context,
-                                      'Verify OTP',
-                                      'OTP has been sent to your email',
+                                      AppLocalizations.of(context)?.otp_verification ?? 'Verify OTP',
+                                      AppLocalizations.of(context)?.subT_resend_otp?? 'OTP has been sent to your email',
                                       3);
                                 } else {
                                   await _progressDialog.hide();
                                   showFlushBarNotification(
-                                      context, 'Failed', check, 3);
+                                      context,AppLocalizations.of(context)?.title_failed ?? 'Failed', check, 3);
                                 }
                               } catch (e) {
-                                print(e);
-                              } finally {
                                 await _progressDialog.hide();
-                              }
+                                print(e);
+                              } 
                             }
                           }),
                     ),
@@ -183,18 +187,24 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                         CustomText(
-                            message: AppLocalizations.of(context)?.login_account ?? 'Already have an account ? ',
+                        CustomText(
+                            message:
+                                AppLocalizations.of(context)?.login_account ??
+                                    'Already have an account ? ',
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColors.primaryText),
                         GestureDetector(
                           onTap: () {
                             Navigator.pushAndRemoveUntil(
-                                context, MaterialPageRoute(builder: (builder) => SignInPage()), (route) => false);
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => SignInPage()),
+                                (route) => false);
                           },
-                          child:  CustomText(
-                              message: AppLocalizations.of(context)?.login ?? 'Log In',
+                          child: CustomText(
+                              message: AppLocalizations.of(context)?.login ??
+                                  'Log In',
                               fontSize: 13.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.importantText),

@@ -101,7 +101,78 @@
     "title_report": "Report",
     "title_no_notification": "No Notification",
     "title_was_responsed": "was responsed at",
-    "title_please_take_attendance": "Please take attendance!"
+    "title_please_take_attendance": "Please take attendance!",
+    "title_loading": "Loading",
+    "title_email_required": "Email is required",
+    "title_email_tdtu": "Please check your valid email TDTU",
+    "title_password_required": "Password is required",
+    "title_successfully": "Successfully",
+    "title_content_successfully": "Processing Data...",
+    "title_failed": "Failed",
+    "title_invalid_form": "Invalid Form",
+    "title_complete_form": "Please complete the form property",
+    "title_upload_face":"Upload Face",
+    "title_upload": "Upload Image", 
+    "required_three_image": "Required 3 image Face",
+    "title_check_required":"Please check required",
+    "title_check_image_settings": "You can check image face in settings",
+    "title_add_face": "Add your face",
+    "title_check_student_id": "Please check studentID",
+    "title_check_student_id_1": "must not 50 characters",
+    "title_check_password_1":"Password must be at least 8 characters long",
+    "title_check_password_2": "Password must be contain at least one uppercase letter",
+    "title_check_password_3":"Password must be contain at least one digit number",
+    "title_check_confirm_password_1": "Confirm Password is required",
+    "title_check_confirm_password_2": "Passwords do not match!",
+    "title_enter_otp": "Please enter your OTP",
+    "title_otp_verification": "OTP Verification",
+    "title_otp_verification_description":"Please enter the verification code we just sent to your email address.",
+    "btn_verify": "Verify",
+    "title_success_otp": "Login to use the app",
+    "title_otp_invalid":"OTP is not valid",
+    "title_did_not_recive_code":"Didn't recieved code ? ",
+    "title_resend_otp": "Resend OTP",
+    "subT_resend_otp":"OTP has been sent your email",
+    "subT_resend_otp_1": "Please try again",
+    "title_resend": "Resend",
+    "title_resend_in": "Resend in",
+    "seconds": "seconds",
+    "title_forgot_password_otp":"Please enter the verification code we just sent on your email address.",
+    "create_new_password":"Create new password",
+    "please_create_new_password":"Please create new password",
+
+    "sub_create_new_password": "Your new password must be unique from those previously used",
+    "new_password":"New Password",
+    "reset_password": "Reset Password",
+    "update_password_successfully": "Updated password successfully",
+    "bottom_nav_home": "Home",
+    "bottom_nav_report": "Reports",
+    "bottom_nav_noti": "Notifications",
+    "bottom_nav_profile": "Profile",
+    "search_class": "Search class",
+    "weeks": "weeks",
+    "search_everything": "Search everything you want",
+    "no_report": "No Report",
+    "bottom_nav_offline": "Offline",
+    "bottom_nav_classroom": "Classroom"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
