@@ -44,6 +44,7 @@ class _SmartCameraUploadImageState extends State<SmartCameraUploadImage> {
         ),
       ),
       body: SmartFaceCamera(
+        performanceMode: FaceDetectorMode.accurate,
         imageResolution: ImageResolution.veryHigh,
         showCaptureControl: true,
         showControls: true,

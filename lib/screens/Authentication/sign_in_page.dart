@@ -126,13 +126,17 @@ class _SignInPageState extends State<SignInPage> {
                           "Enter your email",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Email is required";
+                          return AppLocalizations.of(context)
+                                  ?.title_email_required ??
+                              "Email is required";
                         }
                         final RegExp tdtuEmailExp = RegExp(
                             r'^[0-9A-Z]+@(student\.)?tdtu\.edu\.vn$',
                             caseSensitive: false);
                         if (!tdtuEmailExp.hasMatch(value)) {
-                          return 'Please check your valid email TDTU';
+                          return AppLocalizations.of(context)
+                                  ?.title_email_tdtu ??
+                              'Please check your valid email TDTU';
                         }
                         return null;
                       },
@@ -165,7 +169,9 @@ class _SignInPageState extends State<SignInPage> {
                           "Enter your password",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Password is required";
+                          return AppLocalizations.of(context)
+                                  ?.title_password_required ??
+                              "Password is required";
                         }
                         return null;
                       },
@@ -281,8 +287,12 @@ class _SignInPageState extends State<SignInPage> {
 
                                   // ignore: use_build_context_synchronously
                                   await Flushbar(
-                                    title: "Successfully",
-                                    message: "Processing Data...",
+                                    title: AppLocalizations.of(context)
+                                            ?.title_successfully ??
+                                        'Successfully',
+                                    message: AppLocalizations.of(context)
+                                            ?.title_content_successfully ??
+                                        "Processing Data...",
                                     duration: const Duration(seconds: 3),
                                   ).show(context);
                                 } else {
@@ -290,7 +300,8 @@ class _SignInPageState extends State<SignInPage> {
                                   // ignore: use_build_context_synchronously
 
                                   await Flushbar(
-                                    title: "Failed",
+                                    title: AppLocalizations.of(context)
+                                        ?.title_failed,
                                     message: "$check",
                                     duration: const Duration(seconds: 3),
                                   ).show(context);
@@ -303,8 +314,12 @@ class _SignInPageState extends State<SignInPage> {
                             } else {
                               await _progressDialog.hide();
                               await Flushbar(
-                                title: "Invalid Form",
-                                message: "Please complete the form property",
+                                title: AppLocalizations.of(context)
+                                        ?.title_invalid_form ??
+                                    'Invalid Form',
+                                message: AppLocalizations.of(context)
+                                        ?.title_complete_form ??
+                                    "Please complete the form property",
                                 duration: const Duration(seconds: 10),
                               ).show(context); //CustomFlushBar Note in Facebook
                             }

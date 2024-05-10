@@ -13,11 +13,13 @@ import 'package:attendance_system_nodejs/models/teacher.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Home/home_page/home_page.dart';
+import 'package:attendance_system_nodejs/services/get_location/get_location_services.dart';
 import 'package:attendance_system_nodejs/services/smart_camera/smart_camera.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -45,10 +47,14 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
   // late Classes classes;
 
   late ProgressDialog _progressDialog;
+  double latitude = 0;
+  double longitude = 0;
+  String location = '';
 
   @override
   void initState() {
     super.initState();
+    getLocation();
     attendanceForm = widget.attendanceForm;
     boxDataOffline = Hive.box<DataOffline>('DataOfflineBoxes');
     attendanceFormBox = Hive.box<AttendanceForm>('AttendanceFormBoxes');
@@ -118,6 +124,19 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
   //     }
   //   }
   // }
+
+  Future<void> getLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      setState(() {
+        latitude = position.latitude;
+        longitude = position.longitude;
+      });
+    } catch (e) {
+      print('Error getting location: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -397,61 +416,52 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
                         textColor: Colors.white,
                         function: () async {
                           String dateTime = DateTime.now().toString();
-                          // String studentID =
-                          //     await SecureStorage().readSecureData('studentID');
-                          // String latitude =
-                          //     await SecureStorage().readSecureData('latitude');
-                          // String longitude =
-                          //     await SecureStorage().readSecureData('longitude');
-                          await SecureStorage().writeSecureData(
-                              'classes', attendanceForm.classes);
-                          await SecureStorage()
-                              .writeSecureData('formID', attendanceForm.formID);
-                          await SecureStorage()
-                              .writeSecureData('time', dateTime);
-
-                          // boxDataOffline
-                          //     .add(
-                          //   DataOffline(
-                          //     studentID: studentID,
-                          //     classID: attendanceForm.classes,
-                          //     formID: attendanceForm.formID,
-                          //     dateAttendanced: dateTime,
-                          //     location: '',
-                          //     latitude: double.parse(latitude.toString()),
-                          //     longitude: double.parse(longitude.toString()),
-                          //   ),
-                          // )
-                          // .then((_) {
-                          if (mounted) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  title: const Text('Attendance Pending'),
-                                  content: const Text(
-                                    'The system has recorded attendance data. When there is a network, data will be sent.',
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const HomePage()),
-                                        );
-                                      },
-                                      child: const Text('OK'),
+                          String studentID =
+                              await SecureStorage().readSecureData('studentID');
+                          boxDataOffline
+                              .put(
+                            'dataOffline',
+                            DataOffline(
+                                studentID: studentID,
+                                classID: attendanceForm.classes,
+                                formID: attendanceForm.formID,
+                                dateAttendanced: dateTime,
+                                location: '',
+                                latitude: latitude,
+                                longitude: longitude,
+                                startTime: attendanceForm.startTime,
+                                endTime: attendanceForm.endTime),
+                          )
+                              .then((_) {
+                            if (mounted) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    title: const Text('Attendance Pending'),
+                                    content: const Text(
+                                      'The system has recorded attendance data. When there is a network, data will be sent.',
                                     ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                          // });
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const HomePage()),
+                                          );
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          });
 
                           await SecureStorage().deleteSecureData('image');
                         },

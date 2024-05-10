@@ -119,7 +119,7 @@ class _ReportPageState extends State<ReportPage> {
                                 ),
                                 10.verticalSpace,
                                 CustomText(
-                                    message: 'No Report',
+                                    message: AppLocalizations.of(context)?.no_report ?? 'No Report',
                                     fontSize: 16.sp,
                                     fontWeight: FontWeight.w500,
                                     color:

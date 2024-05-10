@@ -62,60 +62,67 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
         body: Column(
           children: [
             customAppBar(),
-            SingleChildScrollView(child: _builBody()),
+            if (dataOfflineBox.length != 0)
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          itemCount: dataOfflineBox.length,
+                          shrinkWrap: true,
+                          controller: _controller,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 15, left: 10, right: 10),
+                                child: customCard(
+                                  formatTime(dataOffline?.startTime) ?? '',
+                                  formatTime(dataOffline?.endTime) ?? '',
+                                  formatDate(
+                                      dataOffline?.dateAttendanced ?? ''),
+                                  // '',
+                                  formatTime(dataOffline?.dateAttendanced) ??
+                                      '',
+                                  'Pending',
+                                  dataOffline?.location ?? '',
+                                ));
+                          }),
+                    ],
+                  ),
+                ),
+              )
+            else
+              Center(
+                child: Container(
+                  width: 250.w,
+                  height: 350.h,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 50.h,
+                        ),
+                        Opacity(
+                          opacity: 0.3,
+                          child: Image.asset('assets/images/nodata.png'),
+                        ),
+                        5.verticalSpace,
+                        CustomText(
+                            message: "No take attendance detail pending",
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primaryText.withOpacity(0.5))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             // customCard(classes.startTime, classes.endTime, classes.endTime,
             //     classes.endTime, 'Present', 'location')
           ],
         ));
-  }
-
-  Widget _builBody() {
-    return Container(
-      width: double.infinity,
-      child: dataOfflineBox.length != 0
-          ? ListView.builder(
-              itemCount: dataOfflineBox.length,
-              shrinkWrap: true,
-              controller: _controller,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-                    child: customCard(
-                      classes.startTime,
-                      classes.endTime,
-                      formatDate(dataOffline?.dateAttendanced ?? ''),
-                      dataOffline?.dateAttendanced ?? '',
-                      'Pending',
-                      dataOffline?.location ?? '',
-                    ));
-              })
-          : Center(
-              child: Container(
-                width: 250.w,
-                height: 350.h,
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 50.h,
-                      ),
-                      Opacity(
-                        opacity: 0.3,
-                        child: Image.asset('assets/images/nodata.png'),
-                      ),
-                      5.verticalSpace,
-                      CustomText(
-                          message: "No take attendance detail pending",
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primaryText.withOpacity(0.5))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-    );
   }
 
   // Container customCard(
@@ -249,7 +256,7 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10.r)),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Color.fromARGB(195, 190, 188, 188),
             blurRadius: 5.0,
@@ -328,22 +335,25 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
                         AppColors.primaryText,
                         getColorBasedOnStatus(status),
                       ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
                     ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(right: 10.w, top: 10.h),
-                  height: 130.h,
-                  width: 130.w,
-                  child: file != null
-                      ? Image.file(
-                          File(file!.path),
-                        )
-                      : Container(),
-                  // child: Image.network('https://i.imgur.com/8JhlwPy_d.webp?maxwidth=520&shape=thumb&fidelity=high'),
+                SizedBox(
+                  width: 10.w,
+                ),
+                Expanded(
+                  child: Container(
+                    // margin: EdgeInsets.only(right: 10.w, top: 10.h),
+                    height: 130.h,
+                    width: 100.w,
+                    child: file != null
+                        ? Image.file(
+                            fit: BoxFit.fill,
+                            File(file!.path),
+                          )
+                        : Container(),
+                    // child: Image.network('https://i.imgur.com/8JhlwPy_d.webp?maxwidth=520&shape=thumb&fidelity=high'),
+                  ),
                 ),
               ],
             ),
@@ -578,7 +588,7 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
   }
 
   String formatDate(String? date) {
-    if (date != null || date != '') {
+    if (date != null || date != "") {
       DateTime serverDateTime = DateTime.parse(date!).toLocal();
       String formattedDate = DateFormat('MMMM d, y').format(serverDateTime);
       return formattedDate;
@@ -587,7 +597,7 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
   }
 
   String formatTime(String? time) {
-    if (time != null || time != '') {
+    if (time != null || time != "") {
       DateTime serverDateTime = DateTime.parse(time!).toLocal();
       String formattedTime = DateFormat("HH:mm:ss a").format(serverDateTime);
       return formattedTime;

@@ -214,7 +214,8 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       borderColor: Colors.transparent,
                       textColor: Colors.white,
                       function: () async {
-                        print('take atte${studentDataProvider.userData.latitude}');
+                        print(
+                            'take atte${studentDataProvider.userData.latitude}');
                         print('Tae ${studentDataProvider.userData.longtitude}');
                         var studentID =
                             await SecureStorage().readSecureData('studentID');
@@ -492,12 +493,14 @@ class _AttendancePageState extends State<AttendanceFormPage> {
       ClassesStudent classesStudent) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 80.h,
+      // height: 80.h,
+      padding: EdgeInsets.symmetric(vertical: 5.h),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10.r), topRight: Radius.circular(10.r))),
       margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
             'Choose Your Photo',

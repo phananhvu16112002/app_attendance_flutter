@@ -27,7 +27,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
   OtpFieldController otpController = OtpFieldController();
   String description =
       "Please enter the verification code we just sent on your email address.";
-  int secondsRemaining = 59; // Initial value for 1 minute
+  int secondsRemaining = 5; // Initial value for 1 minute
   bool canResend = false;
   late ProgressDialog _progressDialog;
   late Timer _timer;
@@ -38,25 +38,24 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
     super.initState();
     _progressDialog = ProgressDialog(context,
         customBody: Container(
-          width: 200,
-          height: 150,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+          width: double.infinity,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               color: Colors.white),
-          child: const Center(
+          child: Center(
               child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 color: AppColors.primaryButton,
               ),
-              SizedBox(
-                height: 5,
-              ),
+              5.verticalSpace,
               Text(
                 'Loading',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w500),
               ),
@@ -76,7 +75,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
 
   void restartTimer() {
     setState(() {
-      secondsRemaining = 10;
+      secondsRemaining = 5;
       canResend = false;
     });
     startTimer(); // Start the timer again
@@ -94,12 +93,14 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
             Container(
               height: MediaQuery.of(context).size.height,
               child: Padding(
-                padding:  EdgeInsets.only(top: 15.h, left: 20.w),
+                padding: EdgeInsets.only(top: 15.h, left: 20.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     CustomText(
-                        message: AppLocalizations.of(context)?.otp_verification ?? "OTP Verification",
+                    CustomText(
+                        message:
+                            AppLocalizations.of(context)?.otp_verification ??
+                                "OTP Verification",
                         fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryText),
@@ -108,7 +109,9 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                     // ),
                     10.verticalSpace,
                     CustomText(
-                        message: AppLocalizations.of(context)?.otp_verification_message ?? description,
+                        message: AppLocalizations.of(context)
+                                ?.otp_verification_message ??
+                            description,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.secondaryText),
@@ -117,7 +120,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                     // ),
                     20.verticalSpace,
                     Padding(
-                      padding:  EdgeInsets.only(right: 20.w),
+                      padding: EdgeInsets.only(right: 20.w),
                       child: OTPTextField(
                         inputFormatter: [
                           FilteringTextInputFormatter.digitsOnly
@@ -141,73 +144,130 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                     // ),
                     20.verticalSpace,
                     Padding(
-                      padding:  EdgeInsets.only(right: 18.0),
+                      padding: EdgeInsets.only(right: 18.0),
                       child: CustomButton(
                           fontSize: 20.sp,
                           // height: 60,
                           // width: 400,
-                          buttonName: AppLocalizations.of(context)?.verify ?? "Verify",
+                          buttonName:
+                              AppLocalizations.of(context)?.verify ?? "Verify",
                           colorShadow: Colors.transparent,
                           backgroundColorButton: AppColors.primaryButton,
                           borderColor: Colors.white,
                           textColor: Colors.white,
                           function: () async {
-                            try {
-                              _progressDialog.show();
-                              bool checkLogin = await Authenticate()
-                                  .verifyForgotPassword(
-                                      studentDataProvider.userData.studentEmail,
-                                      studentDataProvider.userData.hashedOTP);
-                              if (checkLogin == true) {
-                                // ignore: use_build_context_synchronously
-                                await Navigator.pushAndRemoveUntil(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                         CreateNewPassword(),
-                                    transitionDuration:
-                                        const Duration(milliseconds: 1000),
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      var curve = Curves.easeInOutCubic;
-                                      var tween = Tween(
-                                              begin: const Offset(1.0, 0.0),
-                                              end: Offset.zero)
-                                          .chain(CurveTween(curve: curve));
-                                      var offsetAnimation =
-                                          animation.drive(tween);
-                                      return SlideTransition(
-                                        position: offsetAnimation,
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                  (route) => false,
-                                );
-                                await _progressDialog.hide();
-                                // ignore: use_build_context_synchronously
-                                await Flushbar(
-                                  title: "Successfully",
-                                  message: "Create new password",
-                                  duration: const Duration(seconds: 5),
-                                ).show(context);
-                              } else {
-                                await _progressDialog.hide();
-                                // ignore: use_build_context_synchronously
-                                Flushbar(
-                                  title: "Failed",
-                                  message: "OTP is not valid",
-                                  duration: const Duration(seconds: 5),
-                                ).show(context);
-                              }
-                            } catch (e) {
-                              // ignore: avoid_print
-                              await _progressDialog.hide();
-                              print(e);
-                            } finally {
-                              await _progressDialog.hide();
+                            bool check = await Authenticate()
+                                .verifyForgotPassword(
+                                    studentDataProvider.userData.studentEmail,
+                                    studentDataProvider.userData.hashedOTP);
+                            if (check) {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const CreateNewPassword(),
+                                  transitionDuration:
+                                      const Duration(milliseconds: 1000),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var curve = Curves.easeInOutCubic;
+                                    var tween = Tween(
+                                            begin: const Offset(1.0, 0.0),
+                                            end: Offset.zero)
+                                        .chain(CurveTween(curve: curve));
+                                    var offsetAnimation =
+                                        animation.drive(tween);
+                                    return SlideTransition(
+                                      position: offsetAnimation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                              Flushbar(
+                                title: AppLocalizations.of(context)
+                                        ?.title_successfully ??
+                                    "Successfully",
+                                message: AppLocalizations.of(context)
+                                        ?.please_create_new_password ??
+                                    "Login to use the app",
+                                duration: const Duration(seconds: 5),
+                              ).show(context);
+                            } else {
+                               Flushbar(
+                                title: AppLocalizations.of(context)
+                                        ?.title_failed ??
+                                    "Failed",
+                                message: AppLocalizations.of(context)
+                                        ?.title_otp_invalid ??
+                                    "OTP is not valid",
+                                duration: const Duration(seconds: 5),
+                              ).show(context);
+                              // print('Failed');
                             }
+                            //   try {
+                            //   _progressDialog.show();
+                            //   bool checkLogin = await Authenticate().verifyForgotPassword(
+                            //       studentDataProvider.userData.studentEmail,
+                            //       studentDataProvider.userData.hashedOTP);
+                            //   // bool checkLogin = await Authenticate().verifyOTP(
+                            //   //     studentDataProvider.userData.studentEmail,
+                            //   //     otpController.toString());
+                            //   if (checkLogin == true) {
+                            //     // ignore: use_build_context_synchronously
+                            //     await Navigator.pushAndRemoveUntil(
+                            //       context,
+                            //       PageRouteBuilder(
+                            //         pageBuilder: (context, animation,
+                            //                 secondaryAnimation) =>
+                            //             const CreateNewPassword(),
+                            //         transitionDuration:
+                            //             const Duration(milliseconds: 1000),
+                            //         transitionsBuilder: (context, animation,
+                            //             secondaryAnimation, child) {
+                            //           var curve = Curves.easeInOutCubic;
+                            //           var tween = Tween(
+                            //                   begin: const Offset(1.0, 0.0),
+                            //                   end: Offset.zero)
+                            //               .chain(CurveTween(curve: curve));
+                            //           var offsetAnimation =
+                            //               animation.drive(tween);
+                            //           return SlideTransition(
+                            //             position: offsetAnimation,
+                            //             child: child,
+                            //           );
+                            //         },
+                            //       ),
+                            //       (route) => false,
+                            //     );
+                            //     await _progressDialog.hide();
+                            //     await Flushbar(
+                            //       title: AppLocalizations.of(context)
+                            //               ?.title_successfully ??
+                            //           "Successfully",
+                            //       message: AppLocalizations.of(context)
+                            //               ?.title_success_otp ??
+                            //           "Login to use the app",
+                            //       duration: const Duration(seconds: 5),
+                            //     ).show(context);
+                            //   } else {
+                            //     await _progressDialog.hide();
+                            //     await Flushbar(
+                            //       title: AppLocalizations.of(context)
+                            //               ?.title_failed ??
+                            //           "Failed",
+                            //       message: AppLocalizations.of(context)
+                            //               ?.title_otp_invalid ??
+                            //           "OTP is not valid",
+                            //       duration: const Duration(seconds: 5),
+                            //     ).show(context);
+                            //   }
+                            // } catch (e) {
+                            //   print(e);
+                            // } finally {
+                            //   await _progressDialog.hide();
+                            // }
                           }),
                     ),
                     // const SizedBox(
@@ -215,42 +275,88 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                     // ),
                     15.verticalSpace,
                     Padding(
-                      padding:  EdgeInsets.only(right: 20.w),
+                      padding: EdgeInsets.only(right: 20.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CustomText(
-                              message: AppLocalizations.of(context)?.resend_message ?? "Didn't recieved code ? ",
+                              message: AppLocalizations.of(context)
+                                      ?.resend_message ??
+                                  "Didn't recieved code ? ",
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                               color: AppColors.primaryText),
                           GestureDetector(
                             onTap: () async {
+                              // _progressDialog.show();
+
                               if (canResend) {
                                 _progressDialog.show();
                                 String check = await Authenticate().resendOTP(
                                     studentDataProvider.userData.studentEmail);
-                                if (check == '') {
+                                if (check.isEmpty || check == '') {
                                   restartTimer();
-                                  await _progressDialog.hide();
+                                  // await _progressDialog.hide();
+                                  showFlushBarNotification(
+                                      context,
+                                      AppLocalizations.of(context)
+                                              ?.title_resend_otp ??
+                                          'Resend OTP',
+                                      AppLocalizations.of(context)
+                                              ?.subT_resend_otp ??
+                                          "OTP has been sent your email",
+                                      3);
+                                } else {
                                   // ignore: use_build_context_synchronously
                                   showFlushBarNotification(
                                       context,
-                                      'Resend OTP',
-                                      "OTP has been sent your email",
+                                      AppLocalizations.of(context)
+                                              ?.title_failed ??
+                                          'Failed resend OTP',
+                                      AppLocalizations.of(context)
+                                              ?.subT_resend_otp_1 ??
+                                          'Please try again!',
                                       3);
-                                } else {
-                                  await _progressDialog.hide();
-                                  // ignore: use_build_context_synchronously
-                                  showFlushBarNotification(context,
-                                      'Failed resend OTP', 'message', 3);
                                 }
                               }
+                              // if (canResend) {
+                              //   _progressDialog.show();
+                              //   String check = await Authenticate().resendOTP(
+                              //       studentDataProvider.userData.studentEmail);
+                              //   if (check == '') {
+                              //     restartTimer();
+                              //     await _progressDialog.hide();
+                              //     // ignore: use_build_context_synchronously
+                              //     showFlushBarNotification(
+                              //         context,
+                              //         AppLocalizations.of(context)
+                              //                 ?.title_resend_otp ??
+                              //             'Resend OTP',
+                              //         AppLocalizations.of(context)
+                              //                 ?.subT_resend_otp ??
+                              //             "OTP has been sent your email",
+                              //         3);
+                              //   } else {
+                              //     await _progressDialog.hide();
+                              //     // ignore: use_build_context_synchronously
+                              //     showFlushBarNotification(
+                              //         context,
+                              //         AppLocalizations.of(context)
+                              //                 ?.title_failed ??
+                              //             'Failed resend OTP',
+                              //         AppLocalizations.of(context)
+                              //                 ?.subT_resend_otp_1 ??
+                              //             'Please try again',
+                              //         3);
+                              //   }
+                              // }
                             },
                             child: CustomText(
-                                message: canResend // true
-                                    ? "Re-send"
-                                    : "Resend in $secondsRemaining seconds",
+                                message: canResend
+                                    ? AppLocalizations.of(context)
+                                            ?.title_resend ??
+                                        "Re-send"
+                                    : "${AppLocalizations.of(context)?.title_resend_in ?? 'Resend in'} $secondsRemaining ${AppLocalizations.of(context)?.seconds ?? 'seconds'}",
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.importantText),

@@ -17,6 +17,10 @@ class DataOffline {
   double? latitude;
   @HiveField(6)
   double? longitude;
+  @HiveField(7)
+  String? startTime;
+  @HiveField(8)
+  String? endTime;
 
 
   DataOffline(
@@ -27,5 +31,8 @@ class DataOffline {
        this.location = '',
        this.latitude = 0.0,
        this.longitude = 0.0,
+       this.startTime = '',
+       this.endTime =  '',
+
       });
 }

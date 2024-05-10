@@ -101,7 +101,73 @@
     "title_report": "Báo cáo",
     "title_no_notification": "Không có thông báo",
     "title_was_responsed": "được phản hồi vào lúc",
-    "title_please_take_attendance": "Điểm danh ngay nào!"
+    "title_please_take_attendance": "Điểm danh ngay nào!",
+    "title_loading": "Đang chờ",
+    "title_email_required": "Địa chỉ email là bắt buộc",
+    "title_email_tdtu": "Kiểm tra lại email TDTU",
+    "title_password_required": "Mật khẩu là bắt buộc",
+    "title_successfully": "Thành công",
+    "title_content_successfully": "Đang load dữ liệu...",
+    "title_failed": "Thất bại", 
+    "title_invalid_form": "Dữ liệu không hợp lệ",
+    "title_complete_form": "Hoàn thành các trường không hợp lệ", 
+    "title_upload_face": "Đăng tải khuôn mặt",
+    "title_upload": "Tải lên",
+    "required_three_image": "Yêu cầu 3 ảnh mặt",
+    "title_check_required": "Kiểm tra các ràng buộc", 
+    "title_check_image_settings": "Bạn có thể kiểm tra lại tại cài đặt",
+    "title_add_face": "Thêm khuôn mặt",
+    "title_check_student_id": "Kiểm tra lại studentID",
+    "title_check_student_id_1": "Không vượt quá 50 kí tự",
+    "title_check_password_1":"Mật khẩu ít nhất là 8 kí tự",
+    "title_check_password_2": "Mật khẩu phải có ít nhất một chữ hoa",
+    "title_check_password_3": "Mật khẩu phải có ít nhất một chữ số", 
+    "title_check_confirm_password_1": "Bắt buộc xác nhận mật khẩu",
+    "title_check_confirm_password_2": "Mật khẩu không trùng khớp",
+    "title_enter_otp": "OTP đã được gửi",
+    "title_otp_verification": "Xác thực OTP", 
+    "title_otp_verification_description": "Xin vui lòng nhập mã xác minh chúng tôi vừa gửi đến địa chỉ email của bạn.",
+    "btn_verify": "Xác thực",
+    "title_success_otp": "Đăng nhập để sử dụng ứng dụng",
+    "title_otp_invalid": "Mã OTP không hợp lệ",
+    "title_did_not_recive_code":"Không nhận được mã OTP ? ",
+    "title_resend_otp": "Gửi lại mã",
+    "subT_resend_otp":"Mã đã được gửi đến email của bạn",
+    "subT_resend_otp_1": "Làm ơn hãy thử lại",
+    "title_resend": "Gửi lại",
+    "title_resend_in": "Gửi lại trong",
+    "seconds": "giây",
+    "title_forgot_password_otp":"Xin vui lòng nhập mã xác minh chúng tôi vừa gửi vào địa chỉ email của bạn.",
+    "create_new_password":"Tạo mới mật khẩu",
+    "please_create_new_password":"Hãy tiến hành nhập mật khẩu mới",
+
+    "sub_create_new_password": "Mật khẩu mới của bạn phải là duy nhất so với mật khẩu đã sử dụng trước đó",
+    "new_password":"Mật khẩu mới",
+    "reset_password": "Đặt lại mật khẩu",
+    "update_password_successfully": "Đặt lại mật khẩu thành công",
+    "bottom_nav_home": "Trang chủ",
+    "bottom_nav_report": "Báo cáo",
+    "bottom_nav_noti": "Thông báo",
+    "bottom_nav_profile": "Tôi",
+    "search_class": "Tìm kiếm lớp học",
+    "weeks": "tuần",
+    "search_everything": "Tìm kiếm những thứ bạn muốn",
+    "no_report": "Hiện tại chưa có báo cáo nào",
+    "bottom_nav_offline": "Ngoại tuyến",
+    "bottom_nav_classroom": "Lớp học"
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
 

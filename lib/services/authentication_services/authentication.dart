@@ -112,11 +112,11 @@ class Authenticate {
   Future<bool> verifyForgotPassword(String email, String otp) async {
     final response = await http.post(
         Uri.parse('http://${baseURl}:8080/api/student/verifyForgotPassword'),
-        headers: <String, String>{
+        headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'Accept': 'application/json',
         },
-        body: jsonEncode(<String, String>{'email': email, 'OTP': otp}));
+        body: jsonEncode({'email': email, 'OTP': otp}));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);

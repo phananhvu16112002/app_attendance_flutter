@@ -52,6 +52,10 @@ class _ProfilePageState extends State<ProfilePage> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    setState(() {
+      isEngland = languageProvider.isEnglish;
+    });
   }
 
   void updateIsEngland(bool newValue) {

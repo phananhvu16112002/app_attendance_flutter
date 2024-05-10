@@ -969,7 +969,7 @@ class API {
         Map<String, dynamic> data =
             json.decode(await response.stream.bytesToString());
         String message = data['message'];
-        print('Failed to take attendance. Status code: ${response.statusCode}');
+        print('Failed to take attendance. Status code: ${message}');
         return null;
       }
     } catch (e) {

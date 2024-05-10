@@ -152,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           if (value == null ||
                               value.isEmpty ||
                               value.length > 50) {
-                            return 'Please check studentID(must not 50 characters) ';
+                            return '${AppLocalizations.of(context)?.title_check_student_id}(${AppLocalizations.of(context)?.title_check_student_id_1}) ';
                           }
                           return null;
                         },
@@ -185,13 +185,17 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Email is required';
+                            return AppLocalizations.of(context)
+                                    ?.title_email_required ??
+                                'Email is required';
                           }
                           final RegExp tdtuEmailExp = RegExp(
                               r'^[0-9A-Z]+@(student\.)?tdtu\.edu\.vn$',
                               caseSensitive: false);
                           if (!tdtuEmailExp.hasMatch(value)) {
-                            return 'Please check your valid email TDTU';
+                            return AppLocalizations.of(context)
+                                    ?.title_email_tdtu ??
+                                'Please check your valid email TDTU';
                           }
                           return null;
                         },
@@ -234,16 +238,24 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Password is required';
+                            return AppLocalizations.of(context)
+                                    ?.title_password_required ??
+                                'Password is required';
                           }
                           if (value.length < 8) {
-                            return 'Password must be at least 8 characters long';
+                            return AppLocalizations.of(context)
+                                    ?.title_check_password_1 ??
+                                'Password must be at least 8 characters long';
                           }
                           if (!upperCaseRegex.hasMatch(value)) {
-                            return 'Password must be contain at least one uppercase letter';
+                            return AppLocalizations.of(context)
+                                    ?.title_check_password_2 ??
+                                'Password must be contain at least one uppercase letter';
                           }
                           if (!digitRegex.hasMatch(value)) {
-                            return 'Password must be contain at least one digit number';
+                            return AppLocalizations.of(context)
+                                    ?.title_check_password_3 ??
+                                'Password must be contain at least one digit number';
                           }
                           return null;
                         },
@@ -281,10 +293,14 @@ class _RegisterPageState extends State<RegisterPage> {
                               'Confirm your password',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Confirm Password is required';
+                              return AppLocalizations.of(context)
+                                      ?.title_check_confirm_password_1 ??
+                                  'Confirm Password is required';
                             }
                             if (value != password.text) {
-                              return 'Passwords do not match!';
+                              return AppLocalizations.of(context)
+                                      ?.title_check_confirm_password_2 ??
+                                  'Passwords do not match!';
                             }
                             return null;
                           }),
@@ -339,14 +355,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                     // ignore: use_build_context_synchronously
                                     showFlushBarNotification(
                                         context,
-                                        "Successfully",
-                                        "Please enter your OTP",
+                                        AppLocalizations.of(context)
+                                                ?.title_successfully ??
+                                            'Successfully',
+                                        AppLocalizations.of(context)
+                                                ?.title_enter_otp ??
+                                            "Please enter your OTP",
                                         3);
                                   } else {
                                     await _progressDialog.hide();
                                     // ignore: use_build_context_synchronously
                                     showFlushBarNotification(
-                                        context, "Failed", check, 3);
+                                        context,AppLocalizations.of(context)?.title_failed  ?? "Failed", check, 3);
                                   }
                                 }
                               } catch (e) {
@@ -356,8 +376,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 await _progressDialog.hide();
                               }
                             } else {
-                              showFlushBarNotification(context, "Invalid Form",
-                                  "Please complete the form property", 3);
+                              showFlushBarNotification(context,AppLocalizations.of(context)?.title_invalid_form ?? "Invalid Form",
+                                 AppLocalizations.of(context)?.title_complete_form?? "Please complete the form property", 3);
                             }
                           }),
                       10.verticalSpace,
