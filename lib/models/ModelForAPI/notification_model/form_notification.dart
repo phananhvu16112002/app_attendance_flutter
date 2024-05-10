@@ -31,7 +31,7 @@ class FormNotification {
         type: json["type"],
         latitude: json["latitude"],
         longitude: json["longitude"],
-        radius: json["radius"],
+        radius: double.parse(json["radius"].toString()),
       );
 
   Map<String, dynamic> toJson() => {

@@ -16,7 +16,7 @@ class AttendanceDetailNoti {
         studentDetail: json["studentDetail"],
         classDetail: json["classDetail"],
         attendanceForm: json["attendanceForm"],
-        result: json["result"],
+        result: double.parse(json["result"].toString()),
       );
 
   Map<String, dynamic> toJson() => {

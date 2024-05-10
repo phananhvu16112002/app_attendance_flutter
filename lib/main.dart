@@ -34,20 +34,15 @@ import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:face_camera/face_camera.dart';
-import 'package:facesdk_plugin/facesdk_plugin.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 import 'firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:firebase_app_installations/firebase_app_installations.dart';
@@ -174,7 +169,7 @@ class MyAppState extends State<MyApp> {
                     ColorScheme.fromSeed(seedColor: AppColors.backgroundColor),
                 useMaterial3: false,
               ),
-              home:TestApp(),
+              home:FlashScreen(),
               debugShowCheckedModeBanner: false,
             );
           },

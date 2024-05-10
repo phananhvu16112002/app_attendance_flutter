@@ -203,7 +203,7 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
                     ),
                     Container(
                       height: 1,
-                      width: 405,
+                      width: double.infinity,
                       color: const Color.fromARGB(105, 190, 188, 188),
                     ),
                     Row(

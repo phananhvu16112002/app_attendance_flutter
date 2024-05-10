@@ -99,7 +99,7 @@ class _TestAppState extends State<TestApp> {
           SmartFaceCamera(
             performanceMode: FaceDetectorMode.accurate,
             imageResolution: ImageResolution.veryHigh,
-            showCaptureControl: true,
+            showCaptureControl: false,
             showControls: true,
             onCapture: onCapture,
             onFaceDetected: onFaceDetected,

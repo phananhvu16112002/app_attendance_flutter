@@ -96,7 +96,7 @@ dependencies:
   sqflite:
   flutter_exif_rotation: ^0.5.1
   ekyc_id_flutter: ^1.0.34
-  flutter_camera_ml_vision: ^2.2.1
+  flutter_camera_ml_vision: ^2.2.4
   
 
 
