@@ -76,7 +76,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   progress_dialog_null_safe: ^2.0.0
-  flutter_native_splash: ^2.3.9
+  # flutter_native_splash: ^2.3.9
   camera: ^0.10.5+9
   shared_preferences: ^2.2.2
   carousel_slider: ^4.2.1
@@ -86,7 +86,8 @@ dependencies:
   firebase_in_app_messaging: ^0.7.5+2
   firebase_app_installations: ^0.2.5+2
   google_ml_kit: ^0.16.3
-  image: ^4.1.7
+  # image: ^4.1.7
+  image: ^3.0.1
   settings_ui: ^2.0.2
   fluttertoast:
   flutter_localizations:
@@ -96,7 +97,8 @@ dependencies:
   sqflite:
   flutter_exif_rotation: ^0.5.1
   ekyc_id_flutter: ^1.0.34
-  flutter_camera_ml_vision: ^2.2.4
+  # flutter_camera_ml_vision: ^2.2.4
+  # tflite_flutter: ^0.10.4
   
 
 

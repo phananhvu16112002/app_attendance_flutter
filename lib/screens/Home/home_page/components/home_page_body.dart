@@ -531,7 +531,7 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   Container scanQR(BuildContext context) {
     return Container(
-      height: 500.h,
+      // height: 500.h,
       // padding: EdgeInsets.symmetric(vertical: 200),
       width: MediaQuery.of(context).size.width,
       child: Column(
