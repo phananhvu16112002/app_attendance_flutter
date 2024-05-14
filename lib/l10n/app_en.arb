@@ -154,7 +154,13 @@
     "search_everything": "Search everything you want",
     "no_report": "No Report",
     "bottom_nav_offline": "Offline",
-    "bottom_nav_classroom": "Classroom"
+    "bottom_nav_classroom": "Classroom",
+    "no_inside_tdtu": "You are not in TDTU's area.",
+    "btn_hide": "Hide",
+    "no_time_attendance": "It's not time for roll call yet",
+    "time_yet": "The roll call time hasn't come yet.",
+    "btn_close": "Close",
+    "content_no_inside": "Come to TDTU campus!"
 
 
 

@@ -11,6 +11,7 @@ import 'package:attendance_system_nodejs/models/attendance_form.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/data_offline.dart';
 import 'package:attendance_system_nodejs/models/student_classes.dart';
+import 'package:attendance_system_nodejs/providers/check_location_provider.dart';
 import 'package:attendance_system_nodejs/providers/classesStudent_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
@@ -30,6 +31,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -71,11 +73,16 @@ class _HomePageBodyState extends State<HomePageBody> {
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   final ScrollController _controller = ScrollController();
   late ProgressDialog _progressDialog;
-
+  late LocationCheckProvider locationCheckProvider;
+  late StudentDataProvider studentDataProvider;
+  bool check = false;
   @override
   void initState() {
     print('initSate');
     super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      checkLocationAndShowSnackbar();
+    });
     getInfor().then((value) {
       setState(() {
         studentName = value[0];
@@ -102,6 +109,11 @@ class _HomePageBodyState extends State<HomePageBody> {
         });
       }
     });
+
+    locationCheckProvider =
+        Provider.of<LocationCheckProvider>(context, listen: false);
+    studentDataProvider =
+        Provider.of<StudentDataProvider>(context, listen: false);
   }
 
   ProgressDialog _customLoading() {
@@ -267,7 +279,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                               radius: 0.0),
                         )),
               );
-            } else {
+            } else if (temp['typeAttendanced'] == 2) {
               final studentProvider =
                   Provider.of<StudentDataProvider>(context, listen: false);
               double latitude = studentProvider.userData.latitude;
@@ -298,6 +310,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                 await customDialog(
                     'Failed Attendance', 'Please take attendance again!');
               }
+            } else {
+              customDialog('Failed Attendance',
+                  'Please check type attendance again!'); 
             }
           } else {
             controller.pauseCamera();
@@ -363,6 +378,37 @@ class _HomePageBodyState extends State<HomePageBody> {
       }
     }
     return false;
+  }
+
+  void checkLocationAndShowSnackbar() {
+    final studentDataProvider =
+        Provider.of<StudentDataProvider>(context, listen: false);
+    locationCheckProvider.updateIsInsideLocation(LatLng(
+      studentDataProvider.userData.latitude,
+      studentDataProvider.userData.longtitude,
+    ));
+
+    if (!locationCheckProvider.isInsideLocation &&
+        !locationCheckProvider.showSnackBar) {
+      locationCheckProvider.setShowSnackBar(true);
+      _showContinuousSnackbar();
+    }
+  }
+
+  void _showContinuousSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)?.no_inside_tdtu ??
+            'You are not in TDTUs area'),
+        duration: Duration(days: 365),
+        action: SnackBarAction(
+          label: AppLocalizations.of(context)?.btn_hide ?? 'Ẩn',
+          onPressed: () {
+            locationCheckProvider.setShowSnackBar(false);
+          },
+        ),
+      ),
+    );
   }
 
   @override

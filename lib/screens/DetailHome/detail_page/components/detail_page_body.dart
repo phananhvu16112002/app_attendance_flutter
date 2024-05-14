@@ -72,8 +72,8 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                 FutureBuilder(
                   future: API(context)
                       .getAttendanceDetailForDetailPage(classesStudent.classID),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                  builder: (context, snapshot1) {
+                    if (snapshot1.connectionState == ConnectionState.waiting) {
                       return Center(
                           child: Column(
                         children: [
@@ -84,10 +84,10 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                           customLoading()
                         ],
                       ));
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (snapshot.hasData) {
-                      if (snapshot.data != null) {
+                    } else if (snapshot1.hasError) {
+                      return Text('Error: ${snapshot1.error}');
+                    } else if (snapshot1.hasData) {
+                      if (snapshot1.data != null) {
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           // height: MediaQuery.of(context).size.height,
@@ -272,6 +272,8 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                                 padding: EdgeInsets.only(
                                                     left: 10.w, right: 10.w),
                                                 child: customCardStream(
+                                                    snapshot1.data?.length ??
+                                                        0 + 2,
                                                     formatTime(data!.startTime),
                                                     formatTime(data.endTime),
                                                     formatDate(data.dateOpen),
@@ -297,29 +299,28 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                     10.verticalSpace,
                                     ListView.builder(
                                       padding: const EdgeInsets.all(0),
-                                      itemCount: snapshot.data!.length,
+                                      itemCount: snapshot1.data!.length,
                                       shrinkWrap: true,
                                       controller: _controller,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        var data = snapshot.data![index];
+                                        var data = snapshot1.data![index];
+                                        var reversedIndex =
+                                            snapshot1.data!.length - 1 - index;
                                         if ((activePresent &&
-                                                data.result ==
-                                                    1) || // Lọc theo trạng thái Present
+                                                data.result == 1) ||
                                             (activeAbsent &&
-                                                data.result ==
-                                                    0) || // Lọc theo trạng thái Absent
+                                                data.result == 0) ||
                                             (activeLate &&
-                                                data.result ==
-                                                    0.5) || // Lọc theo trạng thái Late
+                                                data.result == 0.5) ||
                                             activeTotal) {
-                                          // Hiển thị tất cả dữ liệu khi trạng thái là All
                                           return Padding(
                                             padding: EdgeInsets.only(
                                                 bottom: 15.h,
                                                 left: 10.w,
                                                 right: 10.w),
                                             child: customCard(
+                                              reversedIndex + 1,
                                               formatTime(data
                                                   .attendanceForm.startTime),
                                               formatTime(
@@ -534,6 +535,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
   }
 
   Container customCard(
+    int day,
     String startTime,
     String endTime,
     String date,
@@ -555,7 +557,6 @@ class _DetailPageBodyState extends State<DetailPageBody> {
     var tempDateParse =
         DateTime(dateParse.year, dateParse.month, dateParse.day);
     var tempNowParse = DateTime(now.year, now.month, now.day);
-
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -575,7 +576,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
         children: [
           Center(
             child: CustomText(
-              message: date.toString(),
+              message: 'Day $day, ${date.toString()}',
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.primaryText,
@@ -673,28 +674,59 @@ class _DetailPageBodyState extends State<DetailPageBody> {
               onTap: () {
                 attendanceFormDataForDetailPageProvider
                     .setAttendanceFormData(attendanceFormForDetailPage);
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        AttendanceFormPage(
-                      classesStudent: classesStudent,
+                print(
+                    'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
+                DateTime startTimeParse = DateTime.parse(
+                        attendanceFormDataForDetailPageProvider
+                            .attendanceFormData.startTime)
+                    .toLocal();
+                if (DateTime.now().isAfter(startTimeParse)) {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          AttendanceFormPage(
+                        classesStudent: classesStudent,
+                      ),
+                      transitionDuration: const Duration(milliseconds: 1000),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var curve = Curves.easeInOutCubic;
+                        var tween = Tween(
+                                begin: const Offset(1.0, 0.0), end: Offset.zero)
+                            .chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
                     ),
-                    transitionDuration: const Duration(milliseconds: 1000),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      var curve = Curves.easeInOutCubic;
-                      var tween =
-                          Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
-                              .chain(CurveTween(curve: curve));
-                      var offsetAnimation = animation.drive(tween);
-                      return SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                            AppLocalizations.of(context)?.no_time_attendance ??
+                                "Chưa tới thời gian điểm danh"),
+                        content: Text(AppLocalizations.of(context)?.time_yet ??
+                            "Thời gian điểm danh chưa đến."),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text(
+                                AppLocalizations.of(context)?.btn_close ??
+                                    "Đóng"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
                       );
                     },
-                  ),
-                );
+                  );
+                }
               },
               child: Center(
                 child: CustomText(
@@ -784,6 +816,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
   }
 
   Container customCardStream(
+    int day,
     String startTime,
     String endTime,
     String date,
@@ -814,7 +847,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
       child: Column(
         children: [
           CustomText(
-            message: date.toString(),
+            message: "Day $day ,${date.toString()}",
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
             color: AppColors.primaryText,
@@ -906,27 +939,58 @@ class _DetailPageBodyState extends State<DetailPageBody> {
             onTap: () {
               attendanceFormDataForDetailPageProvider
                   .setAttendanceFormData(attendanceFormForDetailPage!);
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      AttendanceFormPage(
-                    classesStudent: classesStudent,
+              print(
+                  'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
+              DateTime startTimeParse = DateTime.parse(
+                      attendanceFormDataForDetailPageProvider
+                          .attendanceFormData.startTime)
+                  .toLocal();
+              if (DateTime.now().isAfter(startTimeParse)) {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        AttendanceFormPage(
+                      classesStudent: classesStudent,
+                    ),
+                    transitionDuration: Duration(milliseconds: 1000),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var curve = Curves.easeInOutCubic;
+                      var tween =
+                          Tween(begin: Offset(1.0, 0.0), end: Offset.zero)
+                              .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
                   ),
-                  transitionDuration: Duration(milliseconds: 1000),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    var curve = Curves.easeInOutCubic;
-                    var tween = Tween(begin: Offset(1.0, 0.0), end: Offset.zero)
-                        .chain(CurveTween(curve: curve));
-                    var offsetAnimation = animation.drive(tween);
-                    return SlideTransition(
-                      position: offsetAnimation,
-                      child: child,
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(
+                          AppLocalizations.of(context)?.no_time_attendance ??
+                              "Chưa tới thời gian điểm danh"),
+                      content: Text(AppLocalizations.of(context)?.time_yet ??
+                          "Thời gian điểm danh chưa đến."),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(AppLocalizations.of(context)?.btn_close ??
+                              "Đóng"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     );
                   },
-                ),
-              );
+                );
+              }
             },
             child: CustomText(
               message: 'Take Attendance',

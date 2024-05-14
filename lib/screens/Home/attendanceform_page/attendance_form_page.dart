@@ -12,6 +12,7 @@ import 'package:attendance_system_nodejs/models/student_classes.dart';
 import 'package:attendance_system_nodejs/providers/attendanceDetail_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/attendanceFormForDetailPage_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/attendanceForm_data_provider.dart';
+import 'package:attendance_system_nodejs/providers/check_location_provider.dart';
 import 'package:attendance_system_nodejs/providers/classesStudent_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
@@ -26,10 +27,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AttendanceFormPage extends StatefulWidget {
   AttendanceFormPage({super.key, required this.classesStudent});
@@ -45,11 +48,21 @@ class _AttendancePageState extends State<AttendanceFormPage> {
   final ImagePicker _picker = ImagePicker();
   late ProgressDialog _progressDialog;
   late ClassesStudent classesStudent;
+  late LocationCheckProvider locationCheckProvider;
+  late StudentDataProvider studentDataProvider;
+  late Timer timer;
+  String countdown = '';
+  late DateTime endTime;
+  late AttendanceFormDataForDetailPageProvider
+      attendanceFormDataForDetailPageProvider;
 
   @override
   void initState() {
     super.initState();
     // attendanceForm = widget.attendanceForm;
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      checkLocationAndShowSnackbar();
+    });
     getImage(); //avoid rebuild
     _progressDialog = ProgressDialog(context,
         isDismissible: false,
@@ -79,6 +92,19 @@ class _AttendancePageState extends State<AttendanceFormPage> {
           )),
         ));
     classesStudent = widget.classesStudent;
+
+    locationCheckProvider =
+        Provider.of<LocationCheckProvider>(context, listen: false);
+    studentDataProvider =
+        Provider.of<StudentDataProvider>(context, listen: false);
+    attendanceFormDataForDetailPageProvider =
+        Provider.of<AttendanceFormDataForDetailPageProvider>(context,
+            listen: false);
+    endTime = DateTime.parse(
+            attendanceFormDataForDetailPageProvider.attendanceFormData.endTime)
+        .toLocal();
+    timer =
+        Timer.periodic(Duration(seconds: 1), (Timer t) => updateCountdown());
   }
 
   Future<void> getImage() async {
@@ -95,6 +121,63 @@ class _AttendancePageState extends State<AttendanceFormPage> {
     }
   }
 
+  void checkLocationAndShowSnackbar() {
+    final studentDataProvider =
+        Provider.of<StudentDataProvider>(context, listen: false);
+    locationCheckProvider.updateIsInsideLocation(LatLng(
+      studentDataProvider.userData.latitude,
+      studentDataProvider.userData.longtitude,
+    ));
+
+    if (!locationCheckProvider.isInsideLocation &&
+        !locationCheckProvider.showSnackBar) {
+      locationCheckProvider.setShowSnackBar(true);
+      _showContinuousSnackbar();
+    }
+  }
+
+  void _showContinuousSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)?.no_inside_tdtu ??
+            'You are not in TDTUs area'),
+        duration: Duration(days: 365),
+        action: SnackBarAction(
+          label: AppLocalizations.of(context)?.btn_hide ?? 'Ẩn',
+          onPressed: () {
+            locationCheckProvider.setShowSnackBar(false);
+          },
+        ),
+      ),
+    );
+  }
+
+  void updateCountdown() {
+    DateTime now = DateTime.now();
+    Duration remainingTime = endTime.difference(now);
+
+    if (remainingTime <= Duration(seconds: 0)) {
+      setState(() {
+        countdown = 'Time Out';
+      });
+    } else {
+      String minutes =
+          remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0');
+      String seconds =
+          remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0');
+
+      setState(() {
+        countdown = '$minutes:${seconds} seconds';
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     final studentDataProvider =
@@ -106,6 +189,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
         Provider.of<AttendanceDetailDataProvider>(context, listen: false);
     final socketServerDataProvider =
         Provider.of<SocketServerProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -214,71 +298,98 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       borderColor: Colors.transparent,
                       textColor: Colors.white,
                       function: () async {
-                        print(
-                            'take atte${studentDataProvider.userData.latitude}');
-                        print('Tae ${studentDataProvider.userData.longtitude}');
-                        var studentID =
-                            await SecureStorage().readSecureData('studentID');
-                        _progressDialog.show();
-                        AttendanceDetail? data = await API(context)
-                            .takeAttendance(
-                                studentID,
-                                classesStudent.classID,
-                                attendanceFormDataForDetailPageProvider
-                                    .attendanceFormData.formID,
-                                DateTime.now().toString(),
-                                studentDataProvider.userData.location,
-                                studentDataProvider.userData.latitude,
-                                studentDataProvider.userData.longtitude,
-                                file!,
-                                attendanceFormDataForDetailPageProvider
-                                    .attendanceFormData.type);
-                        if (data != null) {
-                          print('Take Attendance Successfully');
-                          socketServerProvider.takeAttendance(
-                              data.studentDetail,
-                              data.classDetail,
-                              data.attendanceForm.formID,
-                              data.dateAttendanced,
-                              data.location,
-                              data.latitude,
-                              data.longitude,
-                              data.result,
-                              data.url);
-                          if (mounted) {
-                            await Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        AfterAttendance(
-                                  attendanceDetail: data,
-                                  classesStudent: classesStudent,
+                        //add 12/5
+                        if (locationCheckProvider.isInsideLocation) {
+                          var studentID =
+                              await SecureStorage().readSecureData('studentID');
+                          _progressDialog.show();
+                          AttendanceDetail? data = await API(context)
+                              .takeAttendance(
+                                  studentID,
+                                  classesStudent.classID,
+                                  attendanceFormDataForDetailPageProvider
+                                      .attendanceFormData.formID,
+                                  DateTime.now().toString(),
+                                  studentDataProvider.userData.location,
+                                  studentDataProvider.userData.latitude,
+                                  studentDataProvider.userData.longtitude,
+                                  file!,
+                                  attendanceFormDataForDetailPageProvider
+                                      .attendanceFormData.type);
+                          if (data != null) {
+                            print('Take Attendance Successfully');
+                            socketServerProvider.takeAttendance(
+                                data.studentDetail,
+                                data.classDetail,
+                                data.attendanceForm.formID,
+                                data.dateAttendanced,
+                                data.location,
+                                data.latitude,
+                                data.longitude,
+                                data.result,
+                                data.url);
+                            if (mounted) {
+                              await Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      AfterAttendance(
+                                    attendanceDetail: data,
+                                    classesStudent: classesStudent,
+                                  ),
+                                  transitionDuration:
+                                      const Duration(milliseconds: 200),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return ScaleTransition(
+                                      scale: animation,
+                                      child: child,
+                                    );
+                                  },
                                 ),
-                                transitionDuration:
-                                    const Duration(milliseconds: 200),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return ScaleTransition(
-                                    scale: animation,
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
+                              );
+                              await _progressDialog.hide();
+                            }
+                          } else {
                             await _progressDialog.hide();
+                            await Flushbar(
+                              title: "Failed",
+                              message:
+                                  "Please check and take attendance again!",
+                              duration: const Duration(seconds: 3),
+                            ).show(context);
                           }
-                        } else {
+                          await SecureStorage().deleteSecureData('image');
+                          await SecureStorage()
+                              .deleteSecureData('imageOffline');
                           await _progressDialog.hide();
-                          await Flushbar(
-                            title: "Failed",
-                            message: "Please check and take attendance again!",
-                            duration: const Duration(seconds: 3),
-                          ).show(context);
+                        } else {
+                          //add 12/5
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(AppLocalizations.of(context)
+                                        ?.no_inside_tdtu ??
+                                    "Bạn không ở trong khuôn viên TDTU"),
+                                content: Text(AppLocalizations.of(context)
+                                        ?.content_no_inside ??
+                                    "Come to TDTU campus!."),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(AppLocalizations.of(context)
+                                            ?.btn_close ??
+                                        "Đóng"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         }
-                        await SecureStorage().deleteSecureData('image');
-                        await SecureStorage().deleteSecureData('imageOffline');
-                        await _progressDialog.hide();
                       },
                       fontSize: 18.sp)
                   : Container(),
@@ -420,14 +531,14 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                           FontWeight.w500,
                           AppColors.primaryText,
                           AppColors.primaryText),
-                      // 10.verticalSpace,
-                      // customRichText(
-                      //     'Duration: ',
-                      //     '',
-                      //     FontWeight.bold,
-                      //     FontWeight.w500,
-                      //     AppColors.primaryText,
-                      //     AppColors.primaryText),
+                      10.verticalSpace,
+                      customRichText(
+                          'Duration: ',
+                          countdown,
+                          FontWeight.bold,
+                          FontWeight.w500,
+                          AppColors.primaryText,
+                          AppColors.primaryText),
                     ],
                   ),
                 ),

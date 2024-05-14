@@ -139,7 +139,8 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   )),
                   18.verticalSpace,
                   CustomText(
-                      message: AppLocalizations.of(context)?.send_to ?? 'Send To',
+                      message:
+                          AppLocalizations.of(context)?.send_to ?? 'Send To',
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText),
@@ -169,7 +170,8 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   }),
                   10.verticalSpace,
                   CustomText(
-                      message: AppLocalizations.of(context)?.problem_type ?? 'Type of Problem',
+                      message: AppLocalizations.of(context)?.problem_type ??
+                          'Type of Problem',
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText),
@@ -212,7 +214,8 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   ),
                   10.verticalSpace,
                   CustomText(
-                      message: AppLocalizations.of(context)?.message ?? 'Message',
+                      message:
+                          AppLocalizations.of(context)?.message ?? 'Message',
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryText),
@@ -231,7 +234,9 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                   Row(
                     children: [
                       CustomText(
-                          message: AppLocalizations.of(context)?.problem_evidence ?? 'Evidence of the problem',
+                          message:
+                              AppLocalizations.of(context)?.problem_evidence ??
+                                  'Evidence of the problem',
                           fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryText),
@@ -252,7 +257,9 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                               borderRadius: BorderRadius.circular(5.r)),
                           child: Center(
                             child: CustomText(
-                                message: AppLocalizations.of(context)?.upload_file ?? 'Upload File',
+                                message:
+                                    AppLocalizations.of(context)?.upload_file ??
+                                        'Upload File',
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white),
@@ -297,7 +304,8 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 0),
                       child: CustomButton(
-                          buttonName: AppLocalizations.of(context)?.send ?? 'Send',
+                          buttonName:
+                              AppLocalizations.of(context)?.send ?? 'Send',
                           backgroundColorButton: _imageFiles.isNotEmpty
                               ? AppColors.primaryButton
                               : AppColors.primaryButton.withOpacity(0.3),
@@ -523,37 +531,42 @@ class _ReportAttendanceState extends State<ReportAttendance> {
         return Container(
           height: 150,
           width: 200,
-          child: AlertDialog(
-            backgroundColor: Colors.white,
-            title: Text(
-              "Successfully",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25),
-            ),
-            content: Text(message,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15)),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  // Future.delayed( Duration(seconds: 30), () {
-                  //   Navigator.of(context).pop();
-                  // });
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-
-                },
-                child: Text("OK",
+          child: StatefulBuilder(
+            builder: (BuildContext context,
+                void Function(void Function()) setState) {
+              return AlertDialog(
+                backgroundColor: Colors.white,
+                title: Text(
+                  "Successfully",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25),
+                ),
+                content: Text(message,
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.normal,
                         fontSize: 15)),
-              ),
-            ],
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      // Future.delayed( Duration(seconds: 30), () {
+                      //   Navigator.of(context).pop();
+                      // });
+                      setState(() {});
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: Text("OK",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15)),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
