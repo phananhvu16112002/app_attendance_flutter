@@ -154,7 +154,15 @@
     "search_everything": "Tìm kiếm những thứ bạn muốn",
     "no_report": "Hiện tại chưa có báo cáo nào",
     "bottom_nav_offline": "Ngoại tuyến",
-    "bottom_nav_classroom": "Lớp học"
+    "bottom_nav_classroom": "Lớp học",
+    "no_inside_tdtu": "Bạn không trong khu vực TDTU",
+    "btn_hide": "Ẩn",
+    "no_time_attendance": "Chưa tới thời gian điểm danh",
+    "time_yet": "Thời gian điểm danh chưa đến.",
+    "btn_close": "Đóng",
+    "content_no_inside": "Hãy vào khuôn khuôn viên TDTU"
+
+
 
 
 

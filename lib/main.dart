@@ -23,6 +23,7 @@ import 'package:attendance_system_nodejs/models/student_classes.dart';
 import 'package:attendance_system_nodejs/providers/attendanceDetail_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/attendanceFormForDetailPage_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/attendanceForm_data_provider.dart';
+import 'package:attendance_system_nodejs/providers/check_location_provider.dart';
 import 'package:attendance_system_nodejs/providers/classesStudent_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/language_provider.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
@@ -54,7 +55,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void _firebaseMessagingForegroundHandler(RemoteMessage message) {
   print("Handling a foreground message: ${message.messageId}");
 }
-
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 bool isInternetConnected = false;
 bool isEngland = true;
 void main() async {
@@ -121,7 +123,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ClassesStudentProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
         ChangeNotifierProvider(
-            create: (_) => AttendanceFormDataForDetailPageProvider())
+            create: (_) => AttendanceFormDataForDetailPageProvider()),
+        ChangeNotifierProvider(create: (_) => LocationCheckProvider())
       ],
       child: const MyApp(),
     ),
@@ -136,13 +139,13 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
 
+  
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +172,7 @@ class MyAppState extends State<MyApp> {
                     ColorScheme.fromSeed(seedColor: AppColors.backgroundColor),
                 useMaterial3: false,
               ),
-              home:FlashScreen(),
+              home: FlashScreen(),
               debugShowCheckedModeBanner: false,
             );
           },
