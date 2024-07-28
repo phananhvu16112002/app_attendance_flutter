@@ -166,12 +166,14 @@ class _AfterAttendanceState extends State<AfterAttendance> {
                   fontWeight: FontWeight.w700,
                   color: AppColors.secondaryText),
               10.verticalSpace,
-              Image.network(
-                data.url,
-                // 'https://i.imgur.com/8JhlwPy_d.webp?maxwidth=520&shape=thumb&fidelity=high',
-                fit: BoxFit.fill,
-                width: 300.w,
-                height: 400.h,
+              Center(
+                child: Image.network(
+                  data.url,
+                  // 'https://i.imgur.com/8JhlwPy_d.webp?maxwidth=520&shape=thumb&fidelity=high',
+                  fit: BoxFit.fill,
+                  width: 300.w,
+                  height: 400.h,
+                ),
               ),
             ],
           ),

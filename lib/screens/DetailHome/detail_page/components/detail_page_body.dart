@@ -284,7 +284,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                                     data.status,
                                                     data,
                                                     attendanceFormDataForDetailPageProvider,
-                                                    null),
+                                                    null, data.type),
                                               );
                                             } else {
                                               return const Text('Data is null');
@@ -340,6 +340,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                               data.attendanceForm,
                                               attendanceFormDataForDetailPageProvider,
                                               data.report,
+                                              data.attendanceForm.type,
                                             ),
                                           );
                                         } else {
@@ -548,6 +549,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
     AttendanceFormDataForDetailPageProvider
         attendanceFormDataForDetailPageProvider,
     ReportData? reportData,
+    int type
   ) {
     DateTime endTimeParse =
         DateTime.parse(attendanceFormForDetailPage.endTime).toLocal();
@@ -671,7 +673,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
               tempDateParse.isAtSameMomentAs(tempNowParse) &&
               timeAttendance == "null")
             InkWell(
-              onTap: () {
+              onTap: type != 2 ? () {
                 attendanceFormDataForDetailPageProvider
                     .setAttendanceFormData(attendanceFormForDetailPage);
                 print(
@@ -727,13 +729,13 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                     },
                   );
                 }
-              },
+              } : null,
               child: Center(
                 child: CustomText(
-                  message: 'Take Attendance',
+                  message: type != 2 ? 'Take Attendance' : 'Scan QR',
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primaryButton,
+                  color: type != 2 ? AppColors.primaryButton : AppColors.secondaryText ,
                 ),
               ),
             )
@@ -829,6 +831,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
     AttendanceFormDataForDetailPageProvider
         attendanceFormDataForDetailPageProvider,
     ReportData? reportData,
+    int type,
   ) {
     return Container(
       width: double.infinity,
@@ -936,7 +939,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
           ),
           15.verticalSpace,
           InkWell(
-            onTap: () {
+            onTap: type != 2 ? () {
               attendanceFormDataForDetailPageProvider
                   .setAttendanceFormData(attendanceFormForDetailPage!);
               print(
@@ -991,9 +994,9 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                   },
                 );
               }
-            },
+            } : null,
             child: CustomText(
-              message: 'Take Attendance',
+              message:type != 2 ? 'Take Attendance' : 'Scan QR',
               fontSize: 14.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.primaryButton,

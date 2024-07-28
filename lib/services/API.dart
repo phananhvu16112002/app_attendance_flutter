@@ -5,6 +5,7 @@ import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_offline.d
 import 'package:attendance_system_nodejs/models/ModelForAPI/classroom/classroom.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/notification_model/notification_model.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/report_class/report_class.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/semester.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_detail_for_detail_page.dart';
@@ -100,8 +101,8 @@ class API {
     }
   }
 
-  Future<List<ClassesStudent>> getClassesStudent() async {
-    var URL = 'http://$baseURL:8080/api/student/classes'; //$baseURL
+  Future<List<ClassesStudent>> getClassesStudent(int? semesterID) async {
+    var URL = 'http://$baseURL:8080/api/student/classes?semester=$semesterID'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -547,6 +548,7 @@ class API {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.fields['studentID'] = studentID;
     request.headers['authorization'] = accessToken;
+    print('length images ${images.length}');
     for (var image in images) {
       var stream = http.ByteStream(image.openRead());
       var length = await image.length();
@@ -1289,6 +1291,96 @@ class API {
         }
       } else {
         print('Failed to load data. Status code: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
+
+
+  Future<List<Semester>> getSemester() async {
+    var URL = 'http://$baseURL:8080/api/student/semester';
+
+    var accessToken = await getAccessToken();
+    var headers = {'authorization': accessToken};
+    try {
+      final response = await http.get(Uri.parse(URL), headers: headers);
+      if (response.statusCode == 200) {
+        dynamic responseData = jsonDecode(response.body);
+        List<Semester> data = [];
+
+        if (responseData is List) {
+          for (var temp in responseData) {
+            if (temp is Map<String, dynamic>) {
+              try {
+                data.add(Semester.fromJson(temp));
+              } catch (e) {
+                print('Error parsing data: $e');
+              }
+            } else {
+              print('Invalid data type: $temp');
+            }
+          }
+        } else if (responseData is Map<String, dynamic>) {
+          try {
+            data.add(Semester.fromJson(responseData));
+          } catch (e) {
+            print('Error parsing data: $e');
+          }
+        } else {
+          print('Unexpected data type: $responseData');
+        }
+        // print('Data $data');
+        return data;
+      } else if (response.statusCode == 498 || response.statusCode == 401) {
+        var refreshToken = await SecureStorage().readSecureData('refreshToken');
+        var newAccessToken = await refreshAccessToken(refreshToken);
+        if (newAccessToken.isNotEmpty) {
+          headers['authorization'] = newAccessToken;
+          final retryResponse =
+              await http.get(Uri.parse(URL), headers: headers);
+          if (retryResponse.statusCode == 200) {
+            // print('-- RetryResponse.body ${retryResponse.body}');
+            // print('-- Retry JsonDecode:${jsonDecode(retryResponse.body)}');
+            dynamic responseData = jsonDecode(retryResponse.body);
+            List<Semester> data = [];
+
+            if (responseData is List) {
+              for (var temp in responseData) {
+                if (temp is Map<String, dynamic>) {
+                  try {
+                    data.add(Semester.fromJson(temp));
+                  } catch (e) {
+                    print('Error parsing data: $e');
+                  }
+                } else {
+                  print('Invalid data type: $temp');
+                }
+              }
+            } else if (responseData is Map<String, dynamic>) {
+              try {
+                data.add(Semester.fromJson(responseData));
+              } catch (e) {
+                print('Error parsing data: $e');
+              }
+            } else {
+              print('Unexpected data type: $responseData');
+            }
+
+            // print('Data $data');
+            return data;
+          } else {
+            return [];
+          }
+        } else {
+          print('New Access Token is empty');
+          return [];
+        }
+      } else {
+        print(
+            'Failed to load reports data. Status code: ${response.statusCode}');
         return [];
       }
     } catch (e) {

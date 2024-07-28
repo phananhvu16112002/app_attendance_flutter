@@ -26,7 +26,7 @@ class ClassesStudentAdapter extends TypeAdapter<ClassesStudent> {
         teacherID: reader.readString(),
         courseName: reader.readString(),
         totalWeeks: reader.readInt(),
-        requiredWeeks: reader.readInt(),
+        requiredWeeks: reader.readDouble(),
         credit: reader.readInt(),
         teacherEmail: reader.readString(),
         teacherName: reader.readString(),
@@ -53,7 +53,7 @@ class ClassesStudentAdapter extends TypeAdapter<ClassesStudent> {
     writer.writeString(obj.teacherID);
     writer.writeString(obj.courseName);
     writer.writeInt(obj.totalWeeks);
-    writer.writeInt(obj.requiredWeeks);
+    writer.writeDouble(obj.requiredWeeks);
     writer.writeInt(obj.credit);
     writer.writeString(obj.teacherEmail);
     writer.writeString(obj.teacherName);

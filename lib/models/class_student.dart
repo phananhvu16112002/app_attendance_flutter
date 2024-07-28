@@ -54,7 +54,7 @@ class ClassesStudent {
   final int totalWeeks;
 
   @HiveField(17)
-  final int requiredWeeks;
+  final double requiredWeeks;
 
   @HiveField(18)
   final int credit;
@@ -103,8 +103,8 @@ class ClassesStudent {
       totalLate: json['totalLate'],
       roomNumber: json['roomNumber'],
       shiftNumber: json['shiftNumber'],
-      startTime: json['startTime'],
-      endTime: json['endTime'],
+      startTime: json['startDate'],
+      endTime: json['endDate'],
       classType: json['classType'],
       group: json['group'],
       subGroup: json['subGroup'],
@@ -112,11 +112,11 @@ class ClassesStudent {
       teacherID: json['teacherID'],
       courseName: json['courseName'],
       totalWeeks: json['totalWeeks'],
-      requiredWeeks: json['requiredWeeks'],
+      requiredWeeks: double.parse(json['requiredWeeks'].toString()),
       credit: json['credit'],
       teacherEmail: json['teacherEmail'],
       teacherName: json['teacherName'],
-      progress: double.parse(json['progress'].toString()),
+      progress: json['progress'] != null ? double.parse(json['progress'].toString()) : 0.0,
     );
   }
 }

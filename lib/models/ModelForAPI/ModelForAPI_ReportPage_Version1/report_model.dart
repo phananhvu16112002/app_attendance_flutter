@@ -12,7 +12,6 @@ class ReportModel {
   String courseCourseID;
   String courseCourseName;
   int? courseTotalWeeks;
-  int? courseRequiredWeeks;
   int? courseCredit;
   int? feedbackFeedbackID;
   String? feedbackTopic;
@@ -49,7 +48,6 @@ class ReportModel {
     required this.courseCourseID,
     required this.courseCourseName,
     required this.courseTotalWeeks,
-    required this.courseRequiredWeeks,
     required this.courseCredit,
     required this.feedbackFeedbackID,
     required this.feedbackTopic,
@@ -76,10 +74,10 @@ class ReportModel {
   factory ReportModel.fromJson(Map<String, dynamic> json) {
     return ReportModel(
       classesClassID: json['classes_classID'],
-      classesRoomNumber: json['classes_roomNumber'],
-      classesShiftNumber: json['classes_shiftNumber'],
-      classesStartTime: json['classes_startTime'],
-      classesEndTime: json['classes_endTime'],
+      classesRoomNumber: json['roomNumber'],
+      classesShiftNumber: json['shiftNumber'],
+      classesStartTime: json['classes_startDate'],
+      classesEndTime: json['classes_endDate'],
       classesClassType: json['classes_classType'],
       classesGroup: json['classes_group'],
       classesSubGroup: json['classes_subGroup'],
@@ -87,9 +85,8 @@ class ReportModel {
       classesTeacherID: json['classes_teacherID'],
       courseCourseID: json['course_courseID'],
       courseCourseName: json['course_courseName'],
-      courseTotalWeeks: json['course_totalWeeks'] ?? 0,
-      courseRequiredWeeks: json['course_requiredWeeks'] ?? 0,
-      courseCredit: json['course_credit'] ?? 0,
+      courseTotalWeeks: int.parse(json['totalWeeks'].toString()),
+      courseCredit: int.parse(json['course_credit'].toString()),
       feedbackFeedbackID: json['feedback_feedbackID'] ?? 0,
       feedbackTopic: json['feedback_topic'] ?? '',
       feedbackMessage: json['feedback_message'] ?? '',

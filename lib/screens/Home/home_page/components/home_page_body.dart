@@ -6,6 +6,7 @@ import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/bases/custom_text_field.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/main.dart';
+import 'package:attendance_system_nodejs/models/ModelForAPI/semester.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/attendance_form.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
@@ -13,6 +14,7 @@ import 'package:attendance_system_nodejs/models/data_offline.dart';
 import 'package:attendance_system_nodejs/models/student_classes.dart';
 import 'package:attendance_system_nodejs/providers/check_location_provider.dart';
 import 'package:attendance_system_nodejs/providers/classesStudent_data_provider.dart';
+import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/DetailHome/detail_page/detail_page.dart';
@@ -76,6 +78,11 @@ class _HomePageBodyState extends State<HomePageBody> {
   late LocationCheckProvider locationCheckProvider;
   late StudentDataProvider studentDataProvider;
   bool check = false;
+  String dropdownvalue = '';
+  int? selectedSemesterID;
+  List<Semester> semesters = [];
+  late Future<List<Semester>> _fetchSemester;
+
   @override
   void initState() {
     print('initSate');
@@ -109,11 +116,23 @@ class _HomePageBodyState extends State<HomePageBody> {
         });
       }
     });
+    fetchSemester();
 
     locationCheckProvider =
         Provider.of<LocationCheckProvider>(context, listen: false);
     studentDataProvider =
         Provider.of<StudentDataProvider>(context, listen: false);
+  }
+
+  void fetchSemester() async {
+    _fetchSemester = API(context).getSemester();
+    _fetchSemester.then((value) {
+      setState(() {
+        semesters = value;
+        dropdownvalue = semesters.first.semesterName ?? '';
+        selectedSemesterID = semesters.first.semesterID;
+      });
+    });
   }
 
   ProgressDialog _customLoading() {
@@ -237,6 +256,9 @@ class _HomePageBodyState extends State<HomePageBody> {
               actions: [
                 TextButton(
                     onPressed: () {
+                      setState(() {
+                        activeQR = false;
+                      });
                       Navigator.pop(context);
                     },
                     child: const Text('OK'))
@@ -280,6 +302,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                         )),
               );
             } else if (temp['typeAttendanced'] == 2) {
+              var socketServerDataProvider =
+                  Provider.of<SocketServerProvider>(context, listen: false);
+              socketServerDataProvider.connectToSocketServer(temp['classID']);
               final studentProvider =
                   Provider.of<StudentDataProvider>(context, listen: false);
               double latitude = studentProvider.userData.latitude;
@@ -288,6 +313,7 @@ class _HomePageBodyState extends State<HomePageBody> {
               _progressDialog.show();
               String? location = await GetLocation()
                   .getAddressFromLatLongWithoutInternet(latitude, longitude);
+
               AttendanceDetail? attendanceDetail = await API(context)
                   .takeAttendance(
                       studentID,
@@ -299,8 +325,19 @@ class _HomePageBodyState extends State<HomePageBody> {
                       longitude,
                       XFile(''),
                       int.parse(temp['typeAttendanced'].toString()));
+
               if (attendanceDetail != null) {
                 controller.pauseCamera();
+                socketServerDataProvider.takeAttendance(
+                    attendanceDetail.studentDetail,
+                    attendanceDetail.classDetail,
+                    attendanceDetail.attendanceForm.formID,
+                    attendanceDetail.dateAttendanced,
+                    attendanceDetail.location,
+                    attendanceDetail.latitude,
+                    attendanceDetail.longitude,
+                    attendanceDetail.result,
+                    attendanceDetail.url);
                 await _progressDialog.hide();
                 await customDialog('Successfully Take Attendance',
                     'Please check your attendance in class!');
@@ -311,8 +348,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                     'Failed Attendance', 'Please take attendance again!');
               }
             } else {
-              customDialog('Failed Attendance',
-                  'Please check type attendance again!'); 
+              customDialog(
+                  'Failed Attendance', 'Please check type attendance again!');
             }
           } else {
             controller.pauseCamera();
@@ -550,21 +587,14 @@ class _HomePageBodyState extends State<HomePageBody> {
                 top: 285.h,
                 left: 25.w,
                 right: 25.w,
-                child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) => const SearchPage()));
-                    },
-                    child: searchClass()),
+                child: semesterValue(),
               ),
               //Body 2
               checkQR()
             ]),
             if (!activeQR)
               isInternetConnected
-                  ? callAPI(context, classesStudentDataProvider)
+                  ? callAPI(context, classesStudentDataProvider,selectedSemesterID)
                   : noInternetWithHive()
             else
               scanQR(context),
@@ -705,44 +735,113 @@ class _HomePageBodyState extends State<HomePageBody> {
     );
   }
 
-  Container searchClass() {
+  // Container searchClass() {
+  //   return Container(
+  //       padding: EdgeInsets.symmetric(vertical: 18.h),
+  //       decoration: BoxDecoration(
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.circular(15.r),
+  //           boxShadow: [
+  //             BoxShadow(
+  //                 color: AppColors.secondaryText,
+  //                 blurRadius: 5.r,
+  //                 offset: const Offset(0.0, 0.0))
+  //           ]),
+  //       //Fix PrefixIcon
+  //       child: Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: 20.w),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             CustomText(
+  //                 message: AppLocalizations.of(context)?.search_class ??
+  //                     'Search Class',
+  //                 fontSize: 12.sp,
+  //                 fontWeight: FontWeight.w500,
+  //                 color: AppColors.primaryText.withOpacity(0.5)),
+  //             Icon(
+  //               Icons.search,
+  //               color: AppColors.primaryText.withOpacity(0.5),
+  //               size: 15.sp,
+  //             )
+  //           ],
+  //         ),
+  //       ));
+  // }
+
+  Widget semesterValue() {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 18.h),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15.r),
-            boxShadow: [
-              BoxShadow(
-                  color: AppColors.secondaryText,
-                  blurRadius: 5.r,
-                  offset: const Offset(0.0, 0.0))
-            ]),
-        //Fix PrefixIcon
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomText(
-                  message: AppLocalizations.of(context)?.search_class ??
-                      'Search Class',
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15.r),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.secondaryText,
+            blurRadius: 5.r,
+            offset: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: DropdownButton<String>(
+                menuMaxHeight: 150.h,
+                borderRadius: BorderRadius.circular(10.r),
+                value: dropdownvalue,
+                icon: Icon(
+                  Icons.arrow_downward,
+                  color: Colors.transparent,
+                  size: 15.sp,
+                ),
+                iconSize: 24.sp,
+                elevation: 16,
+                style: TextStyle(
+                  color: AppColors.primaryText.withOpacity(0.5),
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.primaryText.withOpacity(0.5)),
-              Icon(
-                Icons.search,
-                color: AppColors.primaryText.withOpacity(0.5),
-                size: 15.sp,
-              )
-            ],
-          ),
-        ));
+                ),
+                underline: Container(
+                  height: 2,
+                  color: Colors.transparent,
+                ),
+                onChanged: (newValue) {
+                  setState(() {
+                    dropdownvalue = newValue!;
+                  });
+                  selectedSemesterID = semesters
+                      .firstWhere(
+                          (semester) => semester.semesterName == newValue)
+                      .semesterID;
+                },
+                items:
+                    semesters.map<DropdownMenuItem<String>>((Semester value) {
+                  return DropdownMenuItem<String>(
+                    value: value.semesterName,
+                    child: Text(value.semesterName ?? ''),
+                  );
+                }).toList(),
+              ),
+            ),
+            Icon(
+              Icons.arrow_drop_down,
+              color: AppColors.primaryText.withOpacity(0.5),
+              size: 15.sp,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   FutureBuilder<List<ClassesStudent>> callAPI(
-      BuildContext context, ClassesStudentProvider classDataProvider) {
+      BuildContext context, ClassesStudentProvider classDataProvider,int? semesterID) {
     return FutureBuilder(
-      future: API(context).getClassesStudent(), //Chinh parameter
+      future: API(context).getClassesStudent(semesterID), //Chinh parameter
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Padding(
