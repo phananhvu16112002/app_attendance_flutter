@@ -127,11 +127,13 @@ class _HomePageBodyState extends State<HomePageBody> {
   void fetchSemester() async {
     _fetchSemester = API(context).getSemester();
     _fetchSemester.then((value) {
-      setState(() {
-        semesters = value;
-        dropdownvalue = semesters.first.semesterName ?? '';
-        selectedSemesterID = semesters.first.semesterID;
-      });
+      if (value.isNotEmpty) {
+        setState(() {
+          semesters = value;
+          dropdownvalue = semesters.first.semesterName ?? '';
+          selectedSemesterID = semesters.first.semesterID;
+        });
+      }
     });
   }
 
@@ -166,7 +168,7 @@ class _HomePageBodyState extends State<HomePageBody> {
   }
 
   void sendDataToServer() async {
-    DataOffline? dataOffline = dataOfflineBox.getAt(0);
+    DataOffline? dataOffline = dataOfflineBox.get('dataOffline');
     String xFile = await SecureStorage().readSecureData('imageOffline');
     if (xFile.isNotEmpty && xFile != 'No Data Found' && dataOffline != null) {
       _progressDialog.show();
@@ -561,8 +563,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                                 borderRadius: BorderRadius.circular(25.r),
                                 child: Image.asset(
                                   'assets/images/avatar.png',
-                                  height: 55.h,
-                                  width: 55.w,
+                                  height: 50.h,
+                                  width: 45.w,
                                   fit: BoxFit.cover,
                                 ),
                               )),
@@ -594,7 +596,8 @@ class _HomePageBodyState extends State<HomePageBody> {
             ]),
             if (!activeQR)
               isInternetConnected
-                  ? callAPI(context, classesStudentDataProvider,selectedSemesterID)
+                  ? callAPI(
+                      context, classesStudentDataProvider, selectedSemesterID)
                   : noInternetWithHive()
             else
               scanQR(context),
@@ -838,8 +841,8 @@ class _HomePageBodyState extends State<HomePageBody> {
     );
   }
 
-  FutureBuilder<List<ClassesStudent>> callAPI(
-      BuildContext context, ClassesStudentProvider classDataProvider,int? semesterID) {
+  FutureBuilder<List<ClassesStudent>> callAPI(BuildContext context,
+      ClassesStudentProvider classDataProvider, int? semesterID) {
     return FutureBuilder(
       future: API(context).getClassesStudent(semesterID), //Chinh parameter
       builder: (context, snapshot) {

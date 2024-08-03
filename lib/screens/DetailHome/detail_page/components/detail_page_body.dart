@@ -284,7 +284,8 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                                     data.status,
                                                     data,
                                                     attendanceFormDataForDetailPageProvider,
-                                                    null, data.type),
+                                                    null,
+                                                    data.type),
                                               );
                                             } else {
                                               return const Text('Data is null');
@@ -297,6 +298,59 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                           }
                                         }),
                                     10.verticalSpace,
+                                    // ListView.builder(
+                                    //   padding: const EdgeInsets.all(0),
+                                    //   itemCount: snapshot1.data!.length,
+                                    //   shrinkWrap: true,
+                                    //   controller: _controller,
+                                    //   itemBuilder:
+                                    //       (BuildContext context, int index) {
+                                    //     var data = snapshot1.data![index];
+                                    //     var reversedIndex =
+                                    //         snapshot1.data!.length - 1 - index;
+                                    //     if ((activePresent &&
+                                    //             data.result == 1) ||
+                                    //         (activeAbsent &&
+                                    //             data.result == 0) ||
+                                    //         (activeLate &&
+                                    //             data.result == 0.5) ||
+                                    //         activeTotal) {
+                                    //       return Padding(
+                                    //         padding: EdgeInsets.only(
+                                    //             bottom: 15.h,
+                                    //             left: 10.w,
+                                    //             right: 10.w),
+                                    //         child: customCard(
+                                    //           reversedIndex + 1,
+                                    //           formatTime(data
+                                    //               .attendanceForm.startTime),
+                                    //           formatTime(
+                                    //               data.attendanceForm.endTime),
+                                    //           formatDate(
+                                    //               data.attendanceForm.dateOpen),
+                                    //           data.dateAttendanced != ''
+                                    //               ? formatTime(
+                                    //                   data.dateAttendanced)
+                                    //               : 'null',
+                                    //           getResult(data.result),
+                                    //           data.dateAttendanced != ''
+                                    //               ? data.location
+                                    //               : 'null',
+                                    //           data.url ?? '',
+                                    //           data.attendanceForm.status,
+                                    //           data.attendanceForm,
+                                    //           attendanceFormDataForDetailPageProvider,
+                                    //           data.report,
+                                    //           data.attendanceForm.type,
+                                    //         ),
+                                    //       );
+                                    //     } else {
+                                    //       return SizedBox
+                                    //           .shrink();
+                                    //     }
+                                    //   },
+                                    // ),
+
                                     ListView.builder(
                                       padding: const EdgeInsets.all(0),
                                       itemCount: snapshot1.data!.length,
@@ -304,9 +358,11 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                       controller: _controller,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        var data = snapshot1.data![index];
                                         var reversedIndex =
                                             snapshot1.data!.length - 1 - index;
+                                        var data =
+                                            snapshot1.data![reversedIndex];
+
                                         if ((activePresent &&
                                                 data.result == 1) ||
                                             (activeAbsent &&
@@ -349,6 +405,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                         }
                                       },
                                     ),
+
                                     25.verticalSpace
                                   ],
                                 ),
@@ -536,21 +593,20 @@ class _DetailPageBodyState extends State<DetailPageBody> {
   }
 
   Container customCard(
-    int day,
-    String startTime,
-    String endTime,
-    String date,
-    String timeAttendance,
-    String status,
-    String location,
-    String? url,
-    bool statusForm,
-    AttendanceFormDataForDetailPage attendanceFormForDetailPage,
-    AttendanceFormDataForDetailPageProvider
-        attendanceFormDataForDetailPageProvider,
-    ReportData? reportData,
-    int type
-  ) {
+      int day,
+      String startTime,
+      String endTime,
+      String date,
+      String timeAttendance,
+      String status,
+      String location,
+      String? url,
+      bool statusForm,
+      AttendanceFormDataForDetailPage attendanceFormForDetailPage,
+      AttendanceFormDataForDetailPageProvider
+          attendanceFormDataForDetailPageProvider,
+      ReportData? reportData,
+      int type) {
     DateTime endTimeParse =
         DateTime.parse(attendanceFormForDetailPage.endTime).toLocal();
     DateTime dateParse =
@@ -673,69 +729,77 @@ class _DetailPageBodyState extends State<DetailPageBody> {
               tempDateParse.isAtSameMomentAs(tempNowParse) &&
               timeAttendance == "null")
             InkWell(
-              onTap: type != 2 ? () {
-                attendanceFormDataForDetailPageProvider
-                    .setAttendanceFormData(attendanceFormForDetailPage);
-                print(
-                    'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
-                DateTime startTimeParse = DateTime.parse(
-                        attendanceFormDataForDetailPageProvider
-                            .attendanceFormData.startTime)
-                    .toLocal();
-                if (DateTime.now().isAfter(startTimeParse)) {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          AttendanceFormPage(
-                        classesStudent: classesStudent,
-                      ),
-                      transitionDuration: const Duration(milliseconds: 1000),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        var curve = Curves.easeInOutCubic;
-                        var tween = Tween(
-                                begin: const Offset(1.0, 0.0), end: Offset.zero)
-                            .chain(CurveTween(curve: curve));
-                        var offsetAnimation = animation.drive(tween);
-                        return SlideTransition(
-                          position: offsetAnimation,
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(
-                            AppLocalizations.of(context)?.no_time_attendance ??
-                                "Chưa tới thời gian điểm danh"),
-                        content: Text(AppLocalizations.of(context)?.time_yet ??
-                            "Thời gian điểm danh chưa đến."),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text(
-                                AppLocalizations.of(context)?.btn_close ??
-                                    "Đóng"),
-                            onPressed: () {
-                              Navigator.of(context).pop();
+              onTap: type != 2
+                  ? () {
+                      attendanceFormDataForDetailPageProvider
+                          .setAttendanceFormData(attendanceFormForDetailPage);
+                      print(
+                          'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
+                      DateTime startTimeParse = DateTime.parse(
+                              attendanceFormDataForDetailPageProvider
+                                  .attendanceFormData.startTime)
+                          .toLocal();
+                      if (DateTime.now().isAfter(startTimeParse)) {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    AttendanceFormPage(
+                              classesStudent: classesStudent,
+                            ),
+                            transitionDuration:
+                                const Duration(milliseconds: 1000),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              var curve = Curves.easeInOutCubic;
+                              var tween = Tween(
+                                      begin: const Offset(1.0, 0.0),
+                                      end: Offset.zero)
+                                  .chain(CurveTween(curve: curve));
+                              var offsetAnimation = animation.drive(tween);
+                              return SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              );
                             },
                           ),
-                        ],
-                      );
-                    },
-                  );
-                }
-              } : null,
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(AppLocalizations.of(context)
+                                      ?.no_time_attendance ??
+                                  "Chưa tới thời gian điểm danh"),
+                              content: Text(
+                                  AppLocalizations.of(context)?.time_yet ??
+                                      "Thời gian điểm danh chưa đến."),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text(
+                                      AppLocalizations.of(context)?.btn_close ??
+                                          "Đóng"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    }
+                  : null,
               child: Center(
                 child: CustomText(
                   message: type != 2 ? 'Take Attendance' : 'Scan QR',
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
-                  color: type != 2 ? AppColors.primaryButton : AppColors.secondaryText ,
+                  color: type != 2
+                      ? AppColors.primaryButton
+                      : AppColors.secondaryText,
                 ),
               ),
             )
@@ -939,64 +1003,69 @@ class _DetailPageBodyState extends State<DetailPageBody> {
           ),
           15.verticalSpace,
           InkWell(
-            onTap: type != 2 ? () {
-              attendanceFormDataForDetailPageProvider
-                  .setAttendanceFormData(attendanceFormForDetailPage!);
-              print(
-                  'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
-              DateTime startTimeParse = DateTime.parse(
-                      attendanceFormDataForDetailPageProvider
-                          .attendanceFormData.startTime)
-                  .toLocal();
-              if (DateTime.now().isAfter(startTimeParse)) {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        AttendanceFormPage(
-                      classesStudent: classesStudent,
-                    ),
-                    transitionDuration: Duration(milliseconds: 1000),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      var curve = Curves.easeInOutCubic;
-                      var tween =
-                          Tween(begin: Offset(1.0, 0.0), end: Offset.zero)
-                              .chain(CurveTween(curve: curve));
-                      var offsetAnimation = animation.drive(tween);
-                      return SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      );
-                    },
-                  ),
-                );
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(
-                          AppLocalizations.of(context)?.no_time_attendance ??
-                              "Chưa tới thời gian điểm danh"),
-                      content: Text(AppLocalizations.of(context)?.time_yet ??
-                          "Thời gian điểm danh chưa đến."),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text(AppLocalizations.of(context)?.btn_close ??
-                              "Đóng"),
-                          onPressed: () {
-                            Navigator.of(context).pop();
+            onTap: type != 2
+                ? () {
+                    attendanceFormDataForDetailPageProvider
+                        .setAttendanceFormData(attendanceFormForDetailPage!);
+                    print(
+                        'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
+                    DateTime startTimeParse = DateTime.parse(
+                            attendanceFormDataForDetailPageProvider
+                                .attendanceFormData.startTime)
+                        .toLocal();
+                    if (DateTime.now().isAfter(startTimeParse)) {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  AttendanceFormPage(
+                            classesStudent: classesStudent,
+                          ),
+                          transitionDuration: Duration(milliseconds: 1000),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            var curve = Curves.easeInOutCubic;
+                            var tween =
+                                Tween(begin: Offset(1.0, 0.0), end: Offset.zero)
+                                    .chain(CurveTween(curve: curve));
+                            var offsetAnimation = animation.drive(tween);
+                            return SlideTransition(
+                              position: offsetAnimation,
+                              child: child,
+                            );
                           },
                         ),
-                      ],
-                    );
-                  },
-                );
-              }
-            } : null,
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)
+                                    ?.no_time_attendance ??
+                                "Chưa tới thời gian điểm danh"),
+                            content: Text(
+                                AppLocalizations.of(context)?.time_yet ??
+                                    "Thời gian điểm danh chưa đến."),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text(
+                                    AppLocalizations.of(context)?.btn_close ??
+                                        "Đóng"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                : null,
             child: CustomText(
-              message:type != 2 ? 'Take Attendance' : 'Scan QR',
+              message: type != 2 ? 'Take Attendance' : 'Scan QR',
               fontSize: 14.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.primaryButton,

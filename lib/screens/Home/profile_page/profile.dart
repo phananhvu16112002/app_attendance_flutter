@@ -88,11 +88,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Row(
                   children: [
                     Container(
-                        width: 60.w,
+                        width: 55.w,
                         height: 60.h,
                         decoration: const BoxDecoration(
                             color: Colors.white, shape: BoxShape.circle),
-                        child: Image.asset('assets/images/logo.png')),
+                        child: Image.asset('assets/images/avatar.png')),
                     Padding(
                       padding: EdgeInsets.only(top: 10.h, left: 15.w),
                       child: Column(
