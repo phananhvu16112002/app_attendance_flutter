@@ -45,6 +45,9 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
   SecureStorage secureStorage = SecureStorage();
   late ClassesStudent classesStudent;
   // late Classes classes;
+  String countdown = '';
+  late DateTime endTime;
+  late Timer timer;
 
   late ProgressDialog _progressDialog;
   double latitude = 0;
@@ -58,8 +61,12 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
     attendanceForm = widget.attendanceForm;
     boxDataOffline = Hive.box<DataOffline>('DataOfflineBoxes');
     attendanceFormBox = Hive.box<AttendanceForm>('AttendanceFormBoxes');
+
     saveValue(widget.attendanceForm);
     openBox();
+    endTime = DateTime.parse(attendanceForm.endTime);
+    timer =
+        Timer.periodic(Duration(seconds: 1), (Timer t) => updateCountdown());
     getImage(); //avoid rebuild
     _progressDialog = ProgressDialog(context,
         isDismissible: false,
@@ -88,6 +95,26 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
             ],
           )),
         ));
+  }
+
+  void updateCountdown() {
+    DateTime now = DateTime.now();
+    Duration remainingTime = endTime.difference(now);
+
+    if (remainingTime <= Duration(seconds: 0)) {
+      setState(() {
+        countdown = 'Time Out';
+      });
+    } else {
+      String minutes =
+          remainingTime.inMinutes.remainder(60).toString().padLeft(2, '0');
+      String seconds =
+          remainingTime.inSeconds.remainder(60).toString().padLeft(2, '0');
+
+      setState(() {
+        countdown = '$minutes:${seconds} seconds';
+      });
+    }
   }
 
   Future<void> getImage() async {
@@ -136,6 +163,12 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
     } catch (e) {
       print('Error getting location: $e');
     }
+  }
+
+   @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
   }
 
   @override
@@ -282,7 +315,7 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
                                 ),
                                 customRichText(
                                     'Duration: ',
-                                    '',
+                                    countdown,
                                     FontWeight.bold,
                                     FontWeight.w500,
                                     AppColors.primaryText,
@@ -415,7 +448,7 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
                         borderColor: Colors.transparent,
                         textColor: Colors.white,
                         function: () async {
-                          String dateTime = DateTime.now().toString();
+                          String dateTime = DateTime.now().toLocal().toString();
                           String studentID =
                               await SecureStorage().readSecureData('studentID');
                           boxDataOffline

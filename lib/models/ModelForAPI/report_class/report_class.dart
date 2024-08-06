@@ -34,7 +34,7 @@ class ReportModelClass {
       createdAt: json['createdAt'],
       isNew: json['new'],
       isImportant: json['important'],
-      feedback: json['feedBack'] != null ? FeedbackClass.fromJson(json['feedback']) : null,
+      feedback:  json['feedback'] != null ? FeedbackClass.fromJson(json['feedback']) : null ,
     );
   }
 }

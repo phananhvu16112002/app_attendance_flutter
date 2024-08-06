@@ -299,7 +299,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       textColor: Colors.white,
                       function: () async {
                         //add 12/5
-                        if (locationCheckProvider.isInsideLocation == false) {
+                        if (locationCheckProvider.isInsideLocation == false) { //edit lại thành true
                           var studentID =
                               await SecureStorage().readSecureData('studentID');
                           _progressDialog.show();

@@ -6,6 +6,7 @@ import 'package:attendance_system_nodejs/models/ModelForAPI/attendance_offline.d
 import 'package:attendance_system_nodejs/models/class_student.dart';
 import 'package:attendance_system_nodejs/models/data_offline.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
+import 'package:attendance_system_nodejs/screens/Home/after_attendance_form/after_attendance_form.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:attendance_system_nodejs/services/get_location/get_location_services.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
@@ -210,12 +211,12 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
                                         attendanceDetailOffline = data[index];
 
                                     return customBox(
-                                        classesStudent.startTime,
-                                        classesStudent.endTime,
+                                        formatTime(classesStudent.startTime),
+                                        formatTime(classesStudent.endTime),
                                         formatDate(
-                                            attendanceDetailOffline.createdAt),
+                                            attendanceDetailOffline.dateAttendanced),
                                         formatTime(
-                                            attendanceDetailOffline.createdAt),
+                                            attendanceDetailOffline.dateAttendanced),
                                         getResult(attendanceDetailOffline.result
                                                 ?.toDouble() ??
                                             0),
@@ -684,6 +685,7 @@ class _AttendanceOfflineState extends State<AttendanceOffline> {
           InkWell(
             onTap: () {
               //resend take attendance offline
+              print('asdd');
               sendDataToServer();
             },
             child: CustomText(
