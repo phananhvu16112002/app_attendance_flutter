@@ -32,7 +32,7 @@ class API {
   }
 
   Future<String> refreshAccessToken(String refreshToken) async {
-    var url = 'http://$baseURL:8080/api/token/refreshAccessToken'; // $baseURL
+    var url = '$baseURL/api/token/refreshAccessToken'; // $baseURL
     var headers = {'authorization': refreshToken};
 
     try {
@@ -102,7 +102,7 @@ class API {
   }
 
   Future<List<ClassesStudent>> getClassesStudent(int? semesterID) async {
-    var URL = 'http://$baseURL:8080/api/student/classes?semester=$semesterID'; //$baseURL
+    var URL = '$baseURL/api/student/classes?semester=$semesterID'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -190,7 +190,7 @@ class API {
   }
 
   Future<List<ReportModel>> getReportDataForStudent() async {
-    final URL = 'http://$baseURL:8080/api/student/reports'; //$baseURL
+    final URL = '$baseURL/api/student/reports'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -283,7 +283,7 @@ class API {
 
   Future<List<ReportModelClass>> getReportInClass(String classID) async {
     final URL =
-        'http://$baseURL:8080/api/student/classes/$classID/reports'; //$baseURL
+        '$baseURL/api/student/classes/$classID/reports'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -369,7 +369,7 @@ class API {
   Future<List<AttendanceDetailDataForDetailPage>>
       getAttendanceDetailForDetailPage(String classID) async {
     final URL =
-        'http://$baseURL:8080/api/student/classes/detail/$classID'; //$baseURL
+        '$baseURL/api/student/classes/detail/$classID'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -458,7 +458,7 @@ class API {
   }
 
   Future<List<NotificationModel>> getNotification() async {
-    final URL = 'http://$baseURL:8080/api/student/notifications';
+    final URL = '$baseURL/api/student/notifications';
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -542,7 +542,7 @@ class API {
   }
 
   Future<bool> uploadMultipleImage(String studentID, List<XFile> images) async {
-    final url = 'http://$baseURL:8080/api/student/sendImages';
+    final url = '$baseURL/api/student/sendImages';
     var accessToken = await getAccessToken();
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
@@ -593,7 +593,7 @@ class API {
 
   Future<ReportData?> viewReport(int? reportID) async {
     final URL =
-        'http://$baseURL:8080/api/student/reports/detail/$reportID'; //$baseURL
+        '$baseURL/api/student/reports/detail/$reportID'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -637,7 +637,7 @@ class API {
 
   Future<String> submitReport(String classID, String formID, String topic,
       String problem, String message, List<XFile?> listXFile) async {
-    final URL = 'http://$baseURL:8080/api/student/report/submit'; //$baseURL
+    final URL = '$baseURL/api/student/report/submit'; //$baseURL
     // var imageBytes = await fileImage.readAsBytes();
     // var imageFile =
     //     http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -735,7 +735,7 @@ class API {
   Future<String> editReport(int reportID, String topic, String problem,
       String message, List<XFile?> listXFile, List<String> listDelete) async {
     final URL =
-        'http://$baseURL:8080/api/student/report/edit/$reportID'; //$baseURL
+        '$baseURL/api/student/report/edit/$reportID'; //$baseURL
     // var imageBytes = await fileImage.readAsBytes();
     // var imageFile =
     //     http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -845,7 +845,7 @@ class API {
   //     XFile fileImage,
   //     int typeAttendance) async {
   //   var request;
-  //   var URL = 'http://$baseURL:8080/api/student/takeAttendance';
+  //   var URL = '$baseURL/api/student/takeAttendance';
   //   if (typeAttendance == 0 || typeAttendance == 1) {
   //     var imageBytes = await fileImage.readAsBytes();
   //     var imageFile = http.MultipartFile.fromBytes('file', imageBytes,
@@ -913,7 +913,7 @@ class API {
       XFile fileImage,
       int typeAttendance) async {
     var request;
-    var URL = 'http://$baseURL:8080/api/student/takeAttendance';
+    var URL = '$baseURL/api/student/takeAttendance';
     if (typeAttendance == 0 || typeAttendance == 1) {
       var imageBytes = await fileImage.readAsBytes();
 
@@ -989,7 +989,7 @@ class API {
   //     double latitude,
   //     double longitude,
   //     XFile fileImage) async {
-  //   var URL = 'http://$baseURL:8080/api/student/takeAttendanceOffline';
+  //   var URL = '$baseURL/api/student/takeAttendanceOffline';
   //   var imageBytes = await fileImage.readAsBytes();
   //   var imageFile =
   //       http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -1037,7 +1037,7 @@ class API {
       double latitude,
       double longitude,
       XFile fileImage) async {
-    var URL = 'http://$baseURL:8080/api/student/takeAttendanceOffline';
+    var URL = '$baseURL/api/student/takeAttendanceOffline';
 
     try {
       var imageBytes = await fileImage.readAsBytes();
@@ -1093,7 +1093,7 @@ class API {
 
   Future<StudentModel?> getImageFace() async {
     var accessToken = await getAccessToken();
-    var url = 'http://$baseURL:8080/api/student/images';
+    var url = '$baseURL/api/student/images';
     var headers = {'authorization': accessToken};
     try {
       final response = await http.get(Uri.parse(url), headers: headers);
@@ -1130,7 +1130,7 @@ class API {
 
   Future<List<ClassRoom>> getRoommate(String classID) async {
     final URL =
-        'http://$baseURL:8080/api/student/classes/detail/$classID/students';
+        '$baseURL/api/student/classes/detail/$classID/students';
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -1216,7 +1216,7 @@ class API {
   Future<List<AttendanceDetailOffline>> getAttendanceDetailOffline(
       String classID) async {
     final URL =
-        'http://$baseURL:8080/api/student/classes/detail/offline/$classID';
+        '$baseURL/api/student/classes/detail/offline/$classID';
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -1301,7 +1301,7 @@ class API {
 
 
   Future<List<Semester>> getSemester() async {
-    var URL = 'http://$baseURL:8080/api/student/semester';
+    var URL = '$baseURL/api/student/semester';
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -1390,7 +1390,7 @@ class API {
   }
 
   Future<bool> testHello() async {
-    final url = 'http://$baseURL:8080/test/testHello';
+    final url = '$baseURL/test/testHello';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       dynamic resData = jsonDecode(response.body);

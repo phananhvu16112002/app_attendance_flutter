@@ -1,5 +1,5 @@
 class Constrants{
-  final String baseURlLocalhost = '192.168.1.16';
+  final String baseURlLocalhost = 'https://k8sattendancesystem.org';//10.0.2.2:8080
   //10.0.2.2
   //192.168.1.15
   final String baseURLOthers = 'http://192.168.1.13:8080';

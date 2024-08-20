@@ -8,7 +8,7 @@ class Authenticate {
   final String baseURl = Constrants().baseURlLocalhost;
   Future<String> registerUser(
       String userName, String email, String password) async {
-    var URL = 'http://$baseURl:8080/api/student/register';
+    var URL = '$baseURl/api/student/register';
     var headers = {
       'Content-type': 'application/json; charset=UTF-8',
       'Accept': 'application/json',
@@ -28,7 +28,7 @@ class Authenticate {
   }
 
   Future<bool> verifyOTP(String email, String otp) async {
-    final URL = 'http://${baseURl}:8080/api/student/verifyRegister';
+    final URL = '${baseURl}/api/student/verifyRegister';
     var headers = {
       'Content-type': 'application/json; charset=UTF-8',
       'Accept': 'application/json',
@@ -50,7 +50,7 @@ class Authenticate {
   //<String, String> code (200, requireImage) => requireImage = false => chuyen trang Home, requiredImage = true => chuyen trang chup anh
   Future<String> login(String email, String password) async {
     final deviceToken = await SecureStorage().readSecureData('tokenFirebase');
-    final URL = 'http://${baseURl}:8080/api/student/login';
+    final URL = '${baseURl}/api/student/login';
     var request = {'email': email, 'password': password, 'deviceToken': deviceToken};
     var body = json.encode(request);
     var headers = {
@@ -89,7 +89,7 @@ class Authenticate {
   }
 
   Future<String> forgotPassword(String email) async {
-    final URL = 'http://${baseURl}:8080/api/student/forgotPassword';
+    final URL = '${baseURl}/api/student/forgotPassword';
     var request = {'email': email};
     var body = jsonEncode(request);
     var headers = {
@@ -111,7 +111,7 @@ class Authenticate {
 
   Future<bool> verifyForgotPassword(String email, String otp) async {
     final response = await http.post(
-        Uri.parse('http://${baseURl}:8080/api/student/verifyForgotPassword'),
+        Uri.parse('${baseURl}/api/student/verifyForgotPassword'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'Accept': 'application/json',
@@ -131,7 +131,7 @@ class Authenticate {
   Future<String> resetPassword(String email, String newPassword) async {
     final resetToken = await SecureStorage().readSecureData("resetToken");
     final response = await http.post(
-        Uri.parse('http://${baseURl}:8080/api/student/resetPassword'),
+        Uri.parse('${baseURl}/api/student/resetPassword'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Accept': 'application/json',
@@ -150,7 +150,7 @@ class Authenticate {
   }
 
   Future<bool> resendOTPRegister(String email) async {
-    final URL = 'http://${baseURl}:8080/api/student/resendOTPRegister';
+    final URL = '${baseURl}/api/student/resendOTPRegister';
     var request = {'email': email};
     var body = jsonEncode(request);
     var headers = {
@@ -169,7 +169,7 @@ class Authenticate {
   }
 
   Future<String> resendOTP(String email) async {
-    final URL = 'http://${baseURl}:8080/api/student/resendOTP';
+    final URL = '${baseURl}/api/student/resendOTP';
     var request = {'email': email};
     var body = jsonEncode(request);
     var headers = {
