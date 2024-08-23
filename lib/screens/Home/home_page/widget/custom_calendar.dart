@@ -12,9 +12,7 @@ class CustomCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     return EasyDateTimeLine(
       initialDate: DateTime.now(),
-      onDateChange: (selectedDate) {
-        //`selectedDate` the new date selected.
-      },
+      onDateChange: null,
       headerProps: EasyHeaderProps(
           selectedDateFormat: SelectedDateFormat.fullDateMonthAsStrDY,
           selectedDateStyle: TextStyle(

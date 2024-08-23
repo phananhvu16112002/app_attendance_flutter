@@ -589,7 +589,7 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
 
   String formatDate(String? date) {
     if (date != null || date != "") {
-      DateTime serverDateTime = DateTime.parse(date!).toLocal();
+      DateTime serverDateTime = DateTime.parse(date!);
       String formattedDate = DateFormat('MMMM d, y').format(serverDateTime);
       return formattedDate;
     }
@@ -598,7 +598,7 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
 
   String formatTime(String? time) {
     if (time != null || time != "") {
-      DateTime serverDateTime = DateTime.parse(time!).toLocal();
+      DateTime serverDateTime = DateTime.parse(time!);
       String formattedTime = DateFormat("HH:mm:ss a").format(serverDateTime);
       return formattedTime;
     }

@@ -281,11 +281,11 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                                     getResult(0),
                                                     '',
                                                     '',
-                                                    data.status,
+                                                    data.status ?? false,
                                                     data,
                                                     attendanceFormDataForDetailPageProvider,
                                                     null,
-                                                    data.type),
+                                                    data.type ?? 1),
                                               );
                                             } else {
                                               return const Text('Data is null');
@@ -376,7 +376,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                                 left: 10.w,
                                                 right: 10.w),
                                             child: customCard(
-                                              reversedIndex + 1,
+                                              index + 1, //reversedIndex + 1
                                               formatTime(data
                                                   .attendanceForm.startTime),
                                               formatTime(
@@ -392,11 +392,12 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                                   ? data.location
                                                   : 'null',
                                               data.url ?? '',
-                                              data.attendanceForm.status,
+                                              data.attendanceForm.status ?? false,
                                               data.attendanceForm,
                                               attendanceFormDataForDetailPageProvider,
                                               data.report,
-                                              data.attendanceForm.type,
+                                              data.attendanceForm.type ?? 1,
+                                              data.attendanceForm.periodDateTime ?? ''
                                             ),
                                           );
                                         } else {
@@ -606,15 +607,34 @@ class _DetailPageBodyState extends State<DetailPageBody> {
       AttendanceFormDataForDetailPageProvider
           attendanceFormDataForDetailPageProvider,
       ReportData? reportData,
-      int type) {
-    DateTime endTimeParse =
-        DateTime.parse(attendanceFormForDetailPage.endTime).toLocal();
-    DateTime dateParse =
-        DateTime.parse(attendanceFormForDetailPage.dateOpen).toLocal();
-    var now = DateTime.now();
+      int type,
+      String periodDateTime) {
+    DateTime endTimeParse = DateTime.parse(attendanceFormForDetailPage.endTime ?? '');
+    DateTime dateParse = DateTime.parse(attendanceFormForDetailPage.dateOpen ?? '');
+    DateTime nowTimeLocal = DateTime.now();
+
+    DateTime nowTimeUtcWithLocalValue = DateTime.utc(
+      nowTimeLocal.year,
+      nowTimeLocal.month,
+      nowTimeLocal.day,
+      nowTimeLocal.hour,
+      nowTimeLocal.minute,
+      nowTimeLocal.second,
+      nowTimeLocal.millisecond,
+      nowTimeLocal.microsecond,
+    );
     var tempDateParse =
         DateTime(dateParse.year, dateParse.month, dateParse.day);
-    var tempNowParse = DateTime(now.year, now.month, now.day);
+    var tempNowParse =
+        DateTime(nowTimeLocal.year, nowTimeLocal.month, nowTimeLocal.day);
+    print('timeAttendn ${timeAttendance}');
+    print('status ${statusForm}');
+    print('endTimeParse ${endTimeParse}');
+    print('now ${nowTimeLocal}');
+    print('before ${nowTimeLocal.isBefore(endTimeParse)}');
+    print('tempParse ${tempDateParse}');
+    print('tempNow ${tempNowParse}');
+    print('compare ${tempDateParse.isAtSameMomentAs(tempNowParse)}');
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -634,7 +654,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
         children: [
           Center(
             child: CustomText(
-              message: 'Day $day, ${date.toString()}',
+              message: 'Day $day, ${formatDate(periodDateTime.toString())}',
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.primaryText,
@@ -725,7 +745,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
           ),
           15.verticalSpace,
           if (statusForm &&
-              now.isBefore(endTimeParse) &&
+              nowTimeUtcWithLocalValue.isBefore(endTimeParse) &&
               tempDateParse.isAtSameMomentAs(tempNowParse) &&
               timeAttendance == "null")
             InkWell(
@@ -736,10 +756,14 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                       print(
                           'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
                       DateTime startTimeParse = DateTime.parse(
-                              attendanceFormDataForDetailPageProvider
-                                  .attendanceFormData.startTime)
-                          .toLocal();
-                      if (DateTime.now().isAfter(startTimeParse)) {
+                          attendanceFormDataForDetailPageProvider
+                              .attendanceFormData.startTime ?? '');
+                      DateTime endTimeParse = DateTime.parse(
+                          attendanceFormDataForDetailPageProvider
+                              .attendanceFormData.endTime ?? '');
+
+                      if (nowTimeUtcWithLocalValue.isAfter(startTimeParse) &&
+                          nowTimeUtcWithLocalValue.isBefore(endTimeParse)) {
                         Navigator.push(
                           context,
                           PageRouteBuilder(
@@ -1011,7 +1035,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                         'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
                     DateTime startTimeParse = DateTime.parse(
                             attendanceFormDataForDetailPageProvider
-                                .attendanceFormData.startTime)
+                                .attendanceFormData.startTime ?? '')
                         .toLocal();
                     if (DateTime.now().isAfter(startTimeParse)) {
                       Navigator.push(
@@ -1130,7 +1154,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
 
   String formatDate(String? date) {
     if (date != null || date != '') {
-      DateTime serverDateTime = DateTime.parse(date!).toLocal();
+      DateTime serverDateTime = DateTime.parse(date!);
       String formattedDate = DateFormat('MMMM d, y').format(serverDateTime);
       return formattedDate;
     }
@@ -1139,7 +1163,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
 
   String formatTime(String? time) {
     if (time != null || time != '') {
-      DateTime serverDateTime = DateTime.parse(time!).toLocal();
+      DateTime serverDateTime = DateTime.parse(time!);
       String formattedTime = DateFormat("HH:mm:ss a").format(serverDateTime);
       return formattedTime;
     }

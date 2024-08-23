@@ -1,24 +1,26 @@
 class AttendanceFormDataForDetailPage {
-  final String formID;
-  final String startTime;
-  final String endTime;
-  final bool status;
-  final String dateOpen;
-  final int type;
-  final double latitude;
-  final double longitude;
-  final double radius;
+   String? formID;
+   String? startTime;
+   String? endTime;
+   bool? status;
+   String? dateOpen;
+   int? type;
+   double? latitude;
+   double? longitude;
+   double? radius;
+   String? periodDateTime;
 
   AttendanceFormDataForDetailPage({
-    required this.formID,
-    required this.startTime,
-    required this.endTime,
-    required this.status,
-    required this.dateOpen,
-    required this.type,
-    required this.latitude,
-    required this.longitude,
-    required this.radius,
+     this.formID,
+     this.startTime,
+     this.endTime,
+     this.status,
+     this.dateOpen,
+     this.type,
+     this.latitude,
+     this.longitude,
+     this.radius,
+     this.periodDateTime
   });
 
   factory AttendanceFormDataForDetailPage.fromJson(Map<String, dynamic> json) {
@@ -33,6 +35,7 @@ class AttendanceFormDataForDetailPage {
       latitude: double.parse(json['latitude'].toString()),
       longitude: double.parse(json['longitude'].toString()),
       radius: double.parse(json['radius'].toString()),
+      periodDateTime: json['periodDateTime']
     );
   }
 }

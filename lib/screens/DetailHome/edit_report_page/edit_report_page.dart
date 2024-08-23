@@ -968,7 +968,7 @@ class _EditReportPageState extends State<EditReportPage> {
   }
 
   String formatDate(String date) {
-    DateTime serverDateTime = DateTime.parse(date).toLocal();
+    DateTime serverDateTime = DateTime.parse(date);
     String formattedDate = DateFormat('MMMM d, y').format(serverDateTime);
     return formattedDate;
   }

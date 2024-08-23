@@ -101,8 +101,8 @@ class _AttendancePageState extends State<AttendanceFormPage> {
         Provider.of<AttendanceFormDataForDetailPageProvider>(context,
             listen: false);
     endTime = DateTime.parse(
-            attendanceFormDataForDetailPageProvider.attendanceFormData.endTime)
-        .toLocal();
+            attendanceFormDataForDetailPageProvider.attendanceFormData.endTime ?? '')
+        ;
     timer =
         Timer.periodic(Duration(seconds: 1), (Timer t) => updateCountdown());
   }
@@ -263,7 +263,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                     ]),
                 child: Center(
                   child: Text(
-                    'Scan your face',
+                    'Check in',
                     style: GoogleFonts.inter(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
@@ -308,14 +308,14 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                                   studentID,
                                   classesStudent.classID,
                                   attendanceFormDataForDetailPageProvider
-                                      .attendanceFormData.formID,
+                                      .attendanceFormData.formID ?? '',
                                   DateTime.now().toString(),
                                   studentDataProvider.userData.location,
                                   studentDataProvider.userData.latitude,
                                   studentDataProvider.userData.longtitude,
                                   file!,
                                   attendanceFormDataForDetailPageProvider
-                                      .attendanceFormData.type);
+                                      .attendanceFormData.type ?? 1);
                           if (data != null) {
                             print('Take Attendance Successfully');
                             socketServerProvider.takeAttendance(
@@ -712,7 +712,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
 
   String formatDate(String? date) {
     if (date != null || date != '') {
-      DateTime serverDateTime = DateTime.parse(date!).toLocal();
+      DateTime serverDateTime = DateTime.parse(date!);
       String formattedDate = DateFormat('MMMM d, y').format(serverDateTime);
       return formattedDate;
     }
@@ -721,7 +721,7 @@ class _AttendancePageState extends State<AttendanceFormPage> {
 
   String formatTime(String? time) {
     if (time != '' || time != null) {
-      DateTime serverDateTime = DateTime.parse(time!).toLocal();
+      DateTime serverDateTime = DateTime.parse(time!);
       String formattedTime = DateFormat("HH:mm:ss a").format(serverDateTime);
       return formattedTime;
     }

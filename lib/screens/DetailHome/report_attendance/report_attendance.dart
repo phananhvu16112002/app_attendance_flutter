@@ -321,7 +321,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
                                           .submitReport(
                                               classesStudent.classID,
                                               attendanceFormDataForDetailPage
-                                                  .formID,
+                                                  .formID ?? '',
                                               _topicController.text.isNotEmpty
                                                   ? _topicController.text
                                                   // : 'Attendance Form',
@@ -784,7 +784,7 @@ class _ReportAttendanceState extends State<ReportAttendance> {
 
   String formatDate(String? date) {
     if (date != null || date != "") {
-      DateTime serverDateTime = DateTime.parse(date!).toLocal();
+      DateTime serverDateTime = DateTime.parse(date!);
       String formattedDate = DateFormat('MMMM d, y').format(serverDateTime);
       return formattedDate;
     }

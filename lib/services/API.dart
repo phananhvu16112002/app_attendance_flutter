@@ -200,7 +200,6 @@ class API {
       // print('message: ${jsonDecode(response.body)['message']}');
       if (response.statusCode == 200) {
         dynamic responseData = jsonDecode(response.body);
-        // print('data:${response.body}');
         List<ReportModel> data = [];
 
         if (responseData is List) {
@@ -233,6 +232,7 @@ class API {
           headers['authorization'] = newAccessToken;
           final retryResponse =
               await http.get(Uri.parse(URL), headers: headers);
+              print('restry ${retryResponse.body}');
           // print('Status: ${retryResponse.statusCode}');
           if (retryResponse.statusCode == 200) {
             // print('-- RetryResponse.body ${retryResponse.body}');
@@ -272,7 +272,7 @@ class API {
           return [];
         }
       } else {
-        print('Failed to load data. Status code: ${response.statusCode}');
+        print('Failed to load data. Status code: ${response.statusCode} ');
         return [];
       }
     } catch (e) {
@@ -1038,7 +1038,6 @@ class API {
       double longitude,
       XFile fileImage) async {
     var URL = '$baseURL/api/student/takeAttendanceOffline';
-
     try {
       var imageBytes = await fileImage.readAsBytes();
 
@@ -1082,7 +1081,10 @@ class API {
         print('Failed to take attendance: $message');
         return false;
       } else {
-        print('Failed to take attendance. Status code: ${response.statusCode}');
+         Map<String, dynamic> data =
+            json.decode(await response.stream.bytesToString());
+        String message = data['message'];
+        print('Failed to take attendance. Status code: ${response.statusCode} ${message}');
         return false;
       }
     } catch (e) {

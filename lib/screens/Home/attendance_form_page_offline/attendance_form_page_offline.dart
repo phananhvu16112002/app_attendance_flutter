@@ -664,7 +664,7 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
 
   String formatDate(String? date) {
     if (date != null || date != '') {
-      DateTime serverDateTime = DateTime.parse(date!).toLocal();
+      DateTime serverDateTime = DateTime.parse(date!);
       String formattedDate = DateFormat('MMMM d, y').format(serverDateTime);
       return formattedDate;
     }
@@ -673,7 +673,7 @@ class _AttendancePageState extends State<AttendanceFormPageOffline> {
 
   String formatTime(String? time) {
     if (time != '' || time != null) {
-      DateTime serverDateTime = DateTime.parse(time!).toLocal();
+      DateTime serverDateTime = DateTime.parse(time!);
       String formattedTime = DateFormat("HH:mm:ss a").format(serverDateTime);
       return formattedTime;
     }

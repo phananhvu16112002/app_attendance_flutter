@@ -12,7 +12,7 @@ import 'dart:async';
 class SocketServerProvider with ChangeNotifier {
   late IO.Socket _socket;
   bool _isConnected = false;
-  final String baseURL = Constrants().baseURlLocalhost;
+  final String baseURL = Constrants().urlSocket;
 
   IO.Socket get socket => _socket;
   bool get isConnected => _isConnected;
@@ -32,7 +32,7 @@ class SocketServerProvider with ChangeNotifier {
   }
 
   void connectToSocketServer(data) {
-    _socket = IO.io('http://$baseURL:9000', <String, dynamic>{
+    _socket = IO.io('$baseURL', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
       'headers': {'Content-Type': 'application/json'},
