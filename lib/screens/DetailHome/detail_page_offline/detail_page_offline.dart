@@ -344,8 +344,8 @@ class _DetailPageOfflineState extends State<DetailPageOffline> {
                 Expanded(
                   child: Container(
                     // margin: EdgeInsets.only(right: 10.w, top: 10.h),
-                    height: 130.h,
-                    width: 100.w,
+                    height: 120.h,
+                    width: 80.w,
                     child: file != null
                         ? Image.file(
                             fit: BoxFit.fill,
