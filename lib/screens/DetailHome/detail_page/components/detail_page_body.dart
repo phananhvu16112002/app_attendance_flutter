@@ -492,7 +492,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                           Row(
                             children: [
                               CustomText(
-                                message: 'CourseID: ',
+                                message: 'CourseID ',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -519,13 +519,13 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                           Row(
                             children: [
                               CustomText(
-                                message: ' Room: ',
+                                message: AppLocalizations.of(context)?.field_course_room ?? ' Room: ',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                               ),
                               CustomText(
-                                message: '${classesStudent.roomNumber} ',
+                                message: ' ${classesStudent.roomNumber} ',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.white,
@@ -544,13 +544,13 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomText(
-                                message: 'Shift: ',
+                                message: AppLocalizations.of(context)?.field_course_shift ?? 'Shift: ',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                               ),
                               CustomText(
-                                message: '${classesStudent.shiftNumber} ',
+                                message: ' ${classesStudent.shiftNumber} ',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.white,
@@ -569,13 +569,13 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                             width: 5.w,
                           ),
                           CustomText(
-                            message: ' Lecturer: ',
+                            message:AppLocalizations.of(context)?.field_lecturer ??  ' Lecturer: ',
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                           CustomText(
-                            message: '${classesStudent.teacherName} ',
+                            message: ' ${classesStudent.teacherName} ',
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                             color: Colors.white,
@@ -857,7 +857,7 @@ class _DetailPageBodyState extends State<DetailPageBody> {
               },
               child: Center(
                 child: CustomText(
-                  message: 'Report',
+                  message: AppLocalizations.of(context)?.btn_report ?? 'Report',
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.importantText,

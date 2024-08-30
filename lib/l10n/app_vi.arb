@@ -160,7 +160,9 @@
     "no_time_attendance": "Chưa tới thời gian điểm danh",
     "time_yet": "Thời gian điểm danh chưa đến.",
     "btn_close": "Đóng",
-    "content_no_inside": "Hãy vào khuôn khuôn viên TDTU"
+    "content_no_inside": "Hãy vào khuôn khuôn viên TDTU",
+    "btn_report": "Báo cáo"
+
 
 
 

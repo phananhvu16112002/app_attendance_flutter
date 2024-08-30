@@ -160,7 +160,9 @@
     "no_time_attendance": "It's not time for roll call yet",
     "time_yet": "The roll call time hasn't come yet.",
     "btn_close": "Close",
-    "content_no_inside": "Come to TDTU campus!"
+    "content_no_inside": "Come to TDTU campus!",
+    "btn_report": "Report"
+
 
 
 
