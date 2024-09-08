@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:attendance_system_nodejs/TestApp/TestWork.dart';
 import 'package:attendance_system_nodejs/adapter/attendance_form_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/class_student_adapter.dart';
 import 'package:attendance_system_nodejs/adapter/course_adapter.dart';
@@ -22,8 +24,9 @@ import 'package:attendance_system_nodejs/providers/language_provider.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
-import 'package:attendance_system_nodejs/screens/Authentication/flash_screen.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
+import 'package:attendance_system_nodejs/screens/Authentication/flash_screen.dart';
+import 'package:attendance_system_nodejs/utils/constraints.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:face_camera/face_camera.dart';
@@ -31,12 +34,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:workmanager/workmanager.dart';
 import 'firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:firebase_app_installations/firebase_app_installations.dart';
+import 'package:http/http.dart' as http;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
@@ -45,13 +51,68 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void _firebaseMessagingForegroundHandler(RemoteMessage message) {
   print("Handling a foreground message: ${message.messageId}");
 }
+
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 bool isInternetConnected = false;
 bool isEngland = true;
+
+void callBackDispatcher() {
+  Workmanager().executeTask((taskName, inputData) async {
+    print('task ${taskName} asdasd');
+    switch (taskName) {
+      case 'sendLastLocation':
+        print('input $inputData');
+      
+        await sendTrackingLocation(inputData?['formID'],
+            inputData?['studentID'], inputData?['classID']);
+        return Future.value(true);
+
+      default:
+        print('No task');
+    }
+
+    return Future.value(true);
+  });
+}
+
+Future<void> sendTrackingLocation(
+    String formID, String studentID, String classID) async {
+  final baseURlLocalhost = Constrants().baseURlLocalhost;
+  Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high);
+  String url = '$baseURlLocalhost/api/student/tracking';
+  var request = {
+    'formID': formID,
+    'studentID': studentID,
+    'classID': classID,
+    'latitude': position.latitude,
+    'longitude': position.longitude,
+    "trackingtime": DateTime.now().toString()
+  };
+  var body = json.encode(request);
+  var headers = {
+    'Content-type': 'application/json; charset=UTF-8',
+    'Accept': 'application/json',
+  };
+  try {
+    var response =
+        await http.post(Uri.parse(url), headers: headers, body: body);
+    var data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      print('Success ${data['message']}');
+    } else {
+      print('Failed ${data['message']}');
+    }
+  } catch (e) {
+    print('error $e');
+  }
+}
+
 void main() async {
   SecureStorage secureStorage = SecureStorage();
   WidgetsFlutterBinding.ensureInitialized();
+  Workmanager().initialize(callBackDispatcher, isInDebugMode: true);
   Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
     if (result == ConnectivityResult.mobile ||
         result == ConnectivityResult.wifi) {
@@ -131,11 +192,8 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +206,7 @@ class MyAppState extends State<MyApp> {
             bool isEnglish = languageProvider.isEnglish;
             Locale locale = isEnglish ? Locale('en') : Locale('vi');
             return MaterialApp(
+              scaffoldMessengerKey: scaffoldMessengerKey,
               supportedLocales: L10n.all,
               locale: locale,
               localizationsDelegates: const [

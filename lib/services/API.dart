@@ -232,7 +232,7 @@ class API {
           headers['authorization'] = newAccessToken;
           final retryResponse =
               await http.get(Uri.parse(URL), headers: headers);
-              print('restry ${retryResponse.body}');
+          print('restry ${retryResponse.body}');
           // print('Status: ${retryResponse.statusCode}');
           if (retryResponse.statusCode == 200) {
             // print('-- RetryResponse.body ${retryResponse.body}');
@@ -282,8 +282,7 @@ class API {
   }
 
   Future<List<ReportModelClass>> getReportInClass(String classID) async {
-    final URL =
-        '$baseURL/api/student/classes/$classID/reports'; //$baseURL
+    final URL = '$baseURL/api/student/classes/$classID/reports'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -368,8 +367,7 @@ class API {
 
   Future<List<AttendanceDetailDataForDetailPage>>
       getAttendanceDetailForDetailPage(String classID) async {
-    final URL =
-        '$baseURL/api/student/classes/detail/$classID'; //$baseURL
+    final URL = '$baseURL/api/student/classes/detail/$classID'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -592,8 +590,7 @@ class API {
   }
 
   Future<ReportData?> viewReport(int? reportID) async {
-    final URL =
-        '$baseURL/api/student/reports/detail/$reportID'; //$baseURL
+    final URL = '$baseURL/api/student/reports/detail/$reportID'; //$baseURL
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -734,8 +731,7 @@ class API {
 
   Future<String> editReport(int reportID, String topic, String problem,
       String message, List<XFile?> listXFile, List<String> listDelete) async {
-    final URL =
-        '$baseURL/api/student/report/edit/$reportID'; //$baseURL
+    final URL = '$baseURL/api/student/report/edit/$reportID'; //$baseURL
     // var imageBytes = await fileImage.readAsBytes();
     // var imageFile =
     //     http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg');
@@ -1081,10 +1077,11 @@ class API {
         print('Failed to take attendance: $message');
         return false;
       } else {
-         Map<String, dynamic> data =
+        Map<String, dynamic> data =
             json.decode(await response.stream.bytesToString());
         String message = data['message'];
-        print('Failed to take attendance. Status code: ${response.statusCode} ${message}');
+        print(
+            'Failed to take attendance. Status code: ${response.statusCode} ${message}');
         return false;
       }
     } catch (e) {
@@ -1131,8 +1128,7 @@ class API {
   }
 
   Future<List<ClassRoom>> getRoommate(String classID) async {
-    final URL =
-        '$baseURL/api/student/classes/detail/$classID/students';
+    final URL = '$baseURL/api/student/classes/detail/$classID/students';
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -1217,8 +1213,7 @@ class API {
 
   Future<List<AttendanceDetailOffline>> getAttendanceDetailOffline(
       String classID) async {
-    final URL =
-        '$baseURL/api/student/classes/detail/offline/$classID';
+    final URL = '$baseURL/api/student/classes/detail/offline/$classID';
 
     var accessToken = await getAccessToken();
     var headers = {'authorization': accessToken};
@@ -1300,7 +1295,6 @@ class API {
       return [];
     }
   }
-
 
   Future<List<Semester>> getSemester() async {
     var URL = '$baseURL/api/student/semester';
@@ -1388,6 +1382,58 @@ class API {
     } catch (e) {
       print('Error: $e');
       return [];
+    }
+  }
+
+  Future<void> trackingAttendance(
+      String formId,
+      String studentID,
+      String classID,
+      double latitude,
+      double longitude,
+      String timeTracking) async {
+    String url = '$baseURL/api/student/tracking';
+    var accessToken = await getAccessToken();
+    var request = {
+      'formID': classID,
+      'studentID': studentID,
+      'classID': classID,
+      'latitude': latitude,
+      'longitude': longitude,
+      "trackingtime": timeTracking
+    };
+    var body = json.encode(request);
+    var headers = {
+      'authorization': accessToken,
+      'Content-type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+    };
+    try {
+      print('body:$body');
+      final response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      if (response.statusCode == 200) {
+        print('Tracking successfully');
+      } else if (response.statusCode == 498 || response.statusCode == 401) {
+        var refreshToken = await SecureStorage().readSecureData('refreshToken');
+        var newAccessToken = await refreshAccessToken(refreshToken);
+        if (newAccessToken.isNotEmpty) {
+          headers['authorization'] = newAccessToken;
+          final retryResponse =
+              await http.post(Uri.parse(url), headers: headers, body: body);
+          if (retryResponse.statusCode == 200) {
+            print('Tracking successfully');
+          } else {
+            print('Tracking failed');
+          }
+        } else {
+          print('New Access Token is empty');
+        }
+      } else {
+        print('Failed to load data. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
     }
   }
 

@@ -298,59 +298,6 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                           }
                                         }),
                                     10.verticalSpace,
-                                    // ListView.builder(
-                                    //   padding: const EdgeInsets.all(0),
-                                    //   itemCount: snapshot1.data!.length,
-                                    //   shrinkWrap: true,
-                                    //   controller: _controller,
-                                    //   itemBuilder:
-                                    //       (BuildContext context, int index) {
-                                    //     var data = snapshot1.data![index];
-                                    //     var reversedIndex =
-                                    //         snapshot1.data!.length - 1 - index;
-                                    //     if ((activePresent &&
-                                    //             data.result == 1) ||
-                                    //         (activeAbsent &&
-                                    //             data.result == 0) ||
-                                    //         (activeLate &&
-                                    //             data.result == 0.5) ||
-                                    //         activeTotal) {
-                                    //       return Padding(
-                                    //         padding: EdgeInsets.only(
-                                    //             bottom: 15.h,
-                                    //             left: 10.w,
-                                    //             right: 10.w),
-                                    //         child: customCard(
-                                    //           reversedIndex + 1,
-                                    //           formatTime(data
-                                    //               .attendanceForm.startTime),
-                                    //           formatTime(
-                                    //               data.attendanceForm.endTime),
-                                    //           formatDate(
-                                    //               data.attendanceForm.dateOpen),
-                                    //           data.dateAttendanced != ''
-                                    //               ? formatTime(
-                                    //                   data.dateAttendanced)
-                                    //               : 'null',
-                                    //           getResult(data.result),
-                                    //           data.dateAttendanced != ''
-                                    //               ? data.location
-                                    //               : 'null',
-                                    //           data.url ?? '',
-                                    //           data.attendanceForm.status,
-                                    //           data.attendanceForm,
-                                    //           attendanceFormDataForDetailPageProvider,
-                                    //           data.report,
-                                    //           data.attendanceForm.type,
-                                    //         ),
-                                    //       );
-                                    //     } else {
-                                    //       return SizedBox
-                                    //           .shrink();
-                                    //     }
-                                    //   },
-                                    // ),
-
                                     ListView.builder(
                                       padding: const EdgeInsets.all(0),
                                       itemCount: snapshot1.data!.length,
@@ -376,29 +323,31 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                                 left: 10.w,
                                                 right: 10.w),
                                             child: customCard(
-                                              index + 1, //reversedIndex + 1
-                                              formatTime(data
-                                                  .attendanceForm.startTime),
-                                              formatTime(
-                                                  data.attendanceForm.endTime),
-                                              formatDate(
-                                                  data.attendanceForm.dateOpen),
-                                              data.dateAttendanced != ''
-                                                  ? formatTime(
-                                                      data.dateAttendanced)
-                                                  : 'null',
-                                              getResult(data.result),
-                                              data.dateAttendanced != ''
-                                                  ? data.location
-                                                  : 'null',
-                                              data.url ?? '',
-                                              data.attendanceForm.status ?? false,
-                                              data.attendanceForm,
-                                              attendanceFormDataForDetailPageProvider,
-                                              data.report,
-                                              data.attendanceForm.type ?? 1,
-                                              data.attendanceForm.periodDateTime ?? ''
-                                            ),
+                                                index + 1, //reversedIndex + 1
+                                                formatTime(data
+                                                    .attendanceForm.startTime),
+                                                formatTime(data
+                                                    .attendanceForm.endTime),
+                                                formatDate(data
+                                                    .attendanceForm.dateOpen),
+                                                data.dateAttendanced != ''
+                                                    ? formatTime(
+                                                        data.dateAttendanced)
+                                                    : 'null',
+                                                getResult(data.result),
+                                                data.dateAttendanced != ''
+                                                    ? data.location
+                                                    : 'null',
+                                                data.url ?? '',
+                                                data.attendanceForm.status ??
+                                                    false,
+                                                data.attendanceForm,
+                                                attendanceFormDataForDetailPageProvider,
+                                                data.report,
+                                                data.attendanceForm.type ?? 1,
+                                                data.attendanceForm
+                                                        .periodDateTime ??
+                                                    ''),
                                           );
                                         } else {
                                           return SizedBox
@@ -406,7 +355,6 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                                         }
                                       },
                                     ),
-
                                     25.verticalSpace
                                   ],
                                 ),
@@ -519,7 +467,9 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                           Row(
                             children: [
                               CustomText(
-                                message: AppLocalizations.of(context)?.field_course_room ?? ' Room: ',
+                                message: AppLocalizations.of(context)
+                                        ?.field_course_room ??
+                                    ' Room: ',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -544,7 +494,9 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomText(
-                                message: AppLocalizations.of(context)?.field_course_shift ?? 'Shift: ',
+                                message: AppLocalizations.of(context)
+                                        ?.field_course_shift ??
+                                    'Shift: ',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -569,7 +521,9 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                             width: 5.w,
                           ),
                           CustomText(
-                            message:AppLocalizations.of(context)?.field_lecturer ??  ' Lecturer: ',
+                            message:
+                                AppLocalizations.of(context)?.field_lecturer ??
+                                    ' Lecturer: ',
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -609,8 +563,10 @@ class _DetailPageBodyState extends State<DetailPageBody> {
       ReportData? reportData,
       int type,
       String periodDateTime) {
-    DateTime endTimeParse = DateTime.parse(attendanceFormForDetailPage.endTime ?? '');
-    DateTime dateParse = DateTime.parse(attendanceFormForDetailPage.dateOpen ?? '');
+    DateTime endTimeParse =
+        DateTime.parse(attendanceFormForDetailPage.endTime ?? '');
+    DateTime dateParse =
+        DateTime.parse(attendanceFormForDetailPage.dateOpen ?? '');
     DateTime nowTimeLocal = DateTime.now();
 
     DateTime nowTimeUtcWithLocalValue = DateTime.utc(
@@ -627,14 +583,6 @@ class _DetailPageBodyState extends State<DetailPageBody> {
         DateTime(dateParse.year, dateParse.month, dateParse.day);
     var tempNowParse =
         DateTime(nowTimeLocal.year, nowTimeLocal.month, nowTimeLocal.day);
-    print('timeAttendn ${timeAttendance}');
-    print('status ${statusForm}');
-    print('endTimeParse ${endTimeParse}');
-    print('now ${nowTimeLocal}');
-    print('before ${nowTimeLocal.isBefore(endTimeParse)}');
-    print('tempParse ${tempDateParse}');
-    print('tempNow ${tempNowParse}');
-    print('compare ${tempDateParse.isAtSameMomentAs(tempNowParse)}');
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -757,10 +705,12 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                           'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
                       DateTime startTimeParse = DateTime.parse(
                           attendanceFormDataForDetailPageProvider
-                              .attendanceFormData.startTime ?? '');
+                                  .attendanceFormData.startTime ??
+                              '');
                       DateTime endTimeParse = DateTime.parse(
                           attendanceFormDataForDetailPageProvider
-                              .attendanceFormData.endTime ?? '');
+                                  .attendanceFormData.endTime ??
+                              '');
 
                       if (nowTimeUtcWithLocalValue.isAfter(startTimeParse) &&
                           nowTimeUtcWithLocalValue.isBefore(endTimeParse)) {
@@ -1035,7 +985,8 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                         'data: ${attendanceFormDataForDetailPageProvider.attendanceFormData.startTime}');
                     DateTime startTimeParse = DateTime.parse(
                             attendanceFormDataForDetailPageProvider
-                                .attendanceFormData.startTime ?? '')
+                                    .attendanceFormData.startTime ??
+                                '')
                         .toLocal();
                     if (DateTime.now().isAfter(startTimeParse)) {
                       Navigator.push(

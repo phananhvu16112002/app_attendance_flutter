@@ -7,24 +7,17 @@ import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
 import 'package:attendance_system_nodejs/common/colors/colors.dart';
 import 'package:attendance_system_nodejs/models/attendance_detail.dart';
 import 'package:attendance_system_nodejs/models/class_student.dart';
-import 'package:attendance_system_nodejs/models/ModelForAPI/ModelAPI_DetailPage_Version2/attendance_form_for_detail_page.dart';
-import 'package:attendance_system_nodejs/models/student_classes.dart';
 import 'package:attendance_system_nodejs/providers/attendanceDetail_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/attendanceFormForDetailPage_data_provider.dart';
-import 'package:attendance_system_nodejs/providers/attendanceForm_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/check_location_provider.dart';
-import 'package:attendance_system_nodejs/providers/classesStudent_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/socketServer_data_provider.dart';
-import 'package:attendance_system_nodejs/providers/studentClass_data_provider.dart';
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/screens/Home/after_attendance_form/after_attendance_form.dart';
 import 'package:attendance_system_nodejs/services/api.dart';
 import 'package:attendance_system_nodejs/services/smart_camera/smart_camera.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
-import 'package:flutter/cupertino.dart';
 // import 'package:attendance_system_nodejs/utils/SecureStorage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -33,6 +26,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:workmanager/workmanager.dart';
 
 class AttendanceFormPage extends StatefulWidget {
   AttendanceFormPage({super.key, required this.classesStudent});
@@ -101,8 +95,8 @@ class _AttendancePageState extends State<AttendanceFormPage> {
         Provider.of<AttendanceFormDataForDetailPageProvider>(context,
             listen: false);
     endTime = DateTime.parse(
-            attendanceFormDataForDetailPageProvider.attendanceFormData.endTime ?? '')
-        ;
+        attendanceFormDataForDetailPageProvider.attendanceFormData.endTime ??
+            '');
     timer =
         Timer.periodic(Duration(seconds: 1), (Timer t) => updateCountdown());
   }
@@ -176,6 +170,13 @@ class _AttendancePageState extends State<AttendanceFormPage> {
   void dispose() {
     super.dispose();
     timer.cancel();
+  }
+
+  Duration calculateMinutesBetween(String nowString, String endTimeString) {
+    DateTime now = DateTime.parse(nowString);
+    DateTime endTime = DateTime.parse(endTimeString);
+    Duration difference = endTime.difference(now);
+    return difference;
   }
 
   @override
@@ -299,7 +300,8 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                       textColor: Colors.white,
                       function: () async {
                         //add 12/5
-                        if (locationCheckProvider.isInsideLocation == true) { //edit lại thành true
+                        if (locationCheckProvider.isInsideLocation == true) {
+                          //edit lại thành true
                           var studentID =
                               await SecureStorage().readSecureData('studentID');
                           _progressDialog.show();
@@ -308,16 +310,24 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                                   studentID,
                                   classesStudent.classID,
                                   attendanceFormDataForDetailPageProvider
-                                      .attendanceFormData.formID ?? '',
+                                          .attendanceFormData.formID ??
+                                      '',
                                   DateTime.now().toString(),
                                   studentDataProvider.userData.location,
                                   studentDataProvider.userData.latitude,
                                   studentDataProvider.userData.longtitude,
                                   file!,
                                   attendanceFormDataForDetailPageProvider
-                                      .attendanceFormData.type ?? 1);
+                                          .attendanceFormData.type ??
+                                      1);
                           if (data != null) {
                             print('Take Attendance Successfully');
+                            var caculate = calculateMinutesBetween(
+                                DateTime.now().toString(),
+                                attendanceFormDataForDetailPageProvider
+                                        .attendanceFormData.endTime ??
+                                    '');
+                            print('caculate ${caculate}');
                             socketServerProvider.takeAttendance(
                                 data.studentDetail,
                                 data.classDetail,
@@ -328,6 +338,15 @@ class _AttendancePageState extends State<AttendanceFormPage> {
                                 data.longitude,
                                 data.result,
                                 data.url);
+                            Workmanager().registerOneOffTask(
+                                data.attendanceForm.formID, "sendLastLocation",
+                                initialDelay: caculate,
+                                inputData: {
+                                  'formID': data.attendanceForm.formID,
+                                  "studentID": data.studentDetail,
+                                  "classID": data.classDetail,
+                                });
+
                             if (mounted) {
                               await Navigator.pushReplacement(
                                 context,

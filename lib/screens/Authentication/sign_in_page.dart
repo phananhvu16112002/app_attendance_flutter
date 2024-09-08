@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:attendance_system_nodejs/common/bases/custom_button.dart';
 import 'package:attendance_system_nodejs/common/bases/custom_text.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -30,9 +33,13 @@ class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   bool isCheckPassword = true;
   late ProgressDialog _progressDialog;
+  bool _canLogin = false;
+  Timer? _countdownTimer;
+  int _remainingTime = 0;
 
   @override
   void initState() {
+    _checkLoginAllowed();
     super.initState();
     _progressDialog = ProgressDialog(context,
         isDismissible: false,
@@ -63,10 +70,61 @@ class _SignInPageState extends State<SignInPage> {
         ));
   }
 
+  Future<void> _checkLoginAllowed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? logoutTime = prefs.getInt('logoutTime');
+
+    if (logoutTime != null) {
+      int currentTime = DateTime.now().millisecondsSinceEpoch;
+      int difference = currentTime - logoutTime;
+      const threeHoursInMillis = 3 * 60 * 60 * 1000;
+
+      if (difference < threeHoursInMillis) {
+        int remainingMillis = threeHoursInMillis - difference;
+        setState(() {
+          _canLogin = false;
+          _remainingTime =
+              remainingMillis ~/ 1000; // Convert milliseconds to seconds
+        });
+        _startCountdownTimer();
+      } else {
+        setState(() {
+          _canLogin = true;
+        });
+      }
+    } else {
+      setState(() {
+        _canLogin = true; // Allow login if no logout time found
+      });
+    }
+  }
+
+  void _startCountdownTimer() {
+    _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_remainingTime > 0) {
+        setState(() {
+          _remainingTime--;
+        });
+      } else {
+        timer.cancel();
+        setState(() {
+          _canLogin = true;
+        });
+      }
+    });
+  }
+
+  String _formatTime(int seconds) {
+    int minutes = seconds ~/ 60;
+    int remainingSeconds = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+
   @override
   void dispose() {
     emailAddress.dispose();
     password.dispose();
+    _countdownTimer?.cancel();
     super.dispose();
   }
 
@@ -216,115 +274,136 @@ class _SignInPageState extends State<SignInPage> {
                             ))),
 
                     20.verticalSpace,
-                    Padding(
-                      padding: const EdgeInsets.only(right: 0, left: 0),
-                      child: CustomButton(
-                          fontSize: 18.sp,
-                          // height: 60,
-                          // width: 400,
-                          buttonName:
-                              AppLocalizations.of(context)?.login ?? 'Login',
-                          colorShadow: Colors.transparent,
-                          backgroundColorButton: AppColors.primaryButton,
-                          borderColor: Colors.white,
-                          textColor: Colors.white,
-                          function: () async {
-                            // SharedPreferences sharedPreferences =
-                            //     await SharedPreferences.getInstance();
-                            if (_formKey.currentState!.validate()) {
-                              try {
-                                _progressDialog.show();
-                                String check = await Authenticate()
-                                    .login(emailAddress.text, password.text);
-                                if (check == '' || check.isEmpty) {
-                                  var studentID =
-                                      await SecureStorage() //520h0380
-                                          .readSecureData('studentID');
-                                  var studentEmail =
-                                      await SecureStorage() //520h3080@student.tdtu.edu
-                                          .readSecureData('studentEmail');
-                                  var studentName = await SecureStorage()
-                                      .readSecureData('studentName');
-                                  var requiredImage = await SecureStorage()
-                                      .readSecureData('requiredImage');
-                                  // var requiredImage = sharedPreferences
-                                  //     .getBool('requiredImage');
-                                  studentDataProvider.setStudentID(studentID);
-                                  studentDataProvider
-                                      .setStudentEmail(studentEmail);
-                                  studentDataProvider
-                                      .setStudentName(studentName);
+                    _canLogin
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 0, left: 0),
+                            child: CustomButton(
+                                fontSize: 18.sp,
+                                // height: 60,
+                                // width: 400,
+                                buttonName:
+                                    AppLocalizations.of(context)?.login ??
+                                        'Login',
+                                colorShadow: Colors.transparent,
+                                backgroundColorButton: _canLogin
+                                    ? AppColors.primaryButton
+                                    : AppColors.secondaryText,
+                                borderColor: Colors.white,
+                                textColor: Colors.white,
+                                function: () async {
+                                  // SharedPreferences sharedPreferences =
+                                  //     await SharedPreferences.getInstance();
+                                  if (_formKey.currentState!.validate()) {
+                                    try {
+                                      _progressDialog.show();
+                                      String check = await Authenticate().login(
+                                          emailAddress.text, password.text);
+                                      if (check == '' || check.isEmpty) {
+                                        var studentID =
+                                            await SecureStorage() //520h0380
+                                                .readSecureData('studentID');
+                                        var studentEmail =
+                                            await SecureStorage() //520h3080@student.tdtu.edu
+                                                .readSecureData('studentEmail');
+                                        var studentName = await SecureStorage()
+                                            .readSecureData('studentName');
+                                        var requiredImage =
+                                            await SecureStorage()
+                                                .readSecureData(
+                                                    'requiredImage');
+                                        // var requiredImage = sharedPreferences
+                                        //     .getBool('requiredImage');
+                                        studentDataProvider
+                                            .setStudentID(studentID);
+                                        studentDataProvider
+                                            .setStudentEmail(studentEmail);
+                                        studentDataProvider
+                                            .setStudentName(studentName);
 
-                                  // ignore: use_build_context_synchronously
-                                  await Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          requiredImage == 'true'
-                                              ? const UploadImage()
-                                              : const HomePage(),
-                                      transitionDuration:
-                                          const Duration(milliseconds: 1000),
-                                      transitionsBuilder: (context, animation,
-                                          secondaryAnimation, child) {
-                                        var curve = Curves.easeInOutCubic;
-                                        var tween = Tween(
-                                                begin: const Offset(1.0, 0.0),
-                                                end: Offset.zero)
-                                            .chain(CurveTween(curve: curve));
-                                        var offsetAnimation =
-                                            animation.drive(tween);
-                                        return SlideTransition(
-                                          position: offsetAnimation,
-                                          child: child,
+                                        // ignore: use_build_context_synchronously
+                                        await Navigator.pushAndRemoveUntil(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimation) =>
+                                                requiredImage == 'true'
+                                                    ? const UploadImage()
+                                                    : const HomePage(),
+                                            transitionDuration: const Duration(
+                                                milliseconds: 1000),
+                                            transitionsBuilder: (context,
+                                                animation,
+                                                secondaryAnimation,
+                                                child) {
+                                              var curve = Curves.easeInOutCubic;
+                                              var tween = Tween(
+                                                      begin: const Offset(
+                                                          1.0, 0.0),
+                                                      end: Offset.zero)
+                                                  .chain(
+                                                      CurveTween(curve: curve));
+                                              var offsetAnimation =
+                                                  animation.drive(tween);
+                                              return SlideTransition(
+                                                position: offsetAnimation,
+                                                child: child,
+                                              );
+                                            },
+                                          ),
+                                          (route) => false,
                                         );
-                                      },
-                                    ),
-                                    (route) => false,
-                                  );
-                                  await _progressDialog.hide();
+                                        await _progressDialog.hide();
 
-                                  // ignore: use_build_context_synchronously
-                                  await Flushbar(
-                                    title: AppLocalizations.of(context)
-                                            ?.title_successfully ??
-                                        'Successfully',
-                                    message: AppLocalizations.of(context)
-                                            ?.title_content_successfully ??
-                                        "Processing Data...",
-                                    duration: const Duration(seconds: 3),
-                                  ).show(context);
-                                } else {
-                                  await _progressDialog.hide();
-                                  // ignore: use_build_context_synchronously
+                                        // ignore: use_build_context_synchronously
+                                        await Flushbar(
+                                          title: AppLocalizations.of(context)
+                                                  ?.title_successfully ??
+                                              'Successfully',
+                                          message: AppLocalizations.of(context)
+                                                  ?.title_content_successfully ??
+                                              "Processing Data...",
+                                          duration: const Duration(seconds: 3),
+                                        ).show(context);
+                                      } else {
+                                        await _progressDialog.hide();
+                                        // ignore: use_build_context_synchronously
 
-                                  await Flushbar(
-                                    title: AppLocalizations.of(context)
-                                        ?.title_failed,
-                                    message: "$check",
-                                    duration: const Duration(seconds: 3),
-                                  ).show(context);
-                                }
-                              } catch (e) {
-                                print(e);
-                              } finally {
-                                await _progressDialog.hide();
-                              }
-                            } else {
-                              await _progressDialog.hide();
-                              await Flushbar(
-                                title: AppLocalizations.of(context)
-                                        ?.title_invalid_form ??
-                                    'Invalid Form',
-                                message: AppLocalizations.of(context)
-                                        ?.title_complete_form ??
-                                    "Please complete the form property",
-                                duration: const Duration(seconds: 10),
-                              ).show(context); //CustomFlushBar Note in Facebook
-                            }
-                          }),
-                    ),
+                                        await Flushbar(
+                                          title: AppLocalizations.of(context)
+                                              ?.title_failed,
+                                          message: "$check",
+                                          duration: const Duration(seconds: 3),
+                                        ).show(context);
+                                      }
+                                    } catch (e) {
+                                      print(e);
+                                    } finally {
+                                      await _progressDialog.hide();
+                                    }
+                                  } else {
+                                    await _progressDialog.hide();
+                                    await Flushbar(
+                                      title: AppLocalizations.of(context)
+                                              ?.title_invalid_form ??
+                                          'Invalid Form',
+                                      message: AppLocalizations.of(context)
+                                              ?.title_complete_form ??
+                                          "Please complete the form property",
+                                      duration: const Duration(seconds: 10),
+                                    ).show(
+                                        context); //CustomFlushBar Note in Facebook
+                                  }
+                                }),
+                          )
+                        : CustomButton(
+                            buttonName:
+                                "Login available in ${_formatTime(_remainingTime)}",
+                            backgroundColorButton: Colors.transparent,
+                            borderColor: Colors.transparent,
+                            textColor: AppColors.secondaryText,
+                            function: null,
+                            fontSize: 16.sp,
+                            colorShadow: Colors.transparent),
                     // const SizedBox(
                     //   height: 10,
                     // ),

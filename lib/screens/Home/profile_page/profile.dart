@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({
@@ -184,41 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 '${AppLocalizations.of(context)?.about_us ?? 'About us'}'),
             InkWell(
                 onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (builder) => AlertDialog(
-                            backgroundColor: Colors.white,
-                            title: const Text('Sign out'),
-                            content: const Text('Are you sure ?'),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Cancel')),
-                              TextButton(
-                                  onPressed: () async {
-                                    await SecureStorage()
-                                        .deleteSecureData('refreshToken');
-                                    await SecureStorage()
-                                        .deleteSecureData('accessToken');
-                                    await SecureStorage()
-                                        .deleteSecureData('_image1');
-                                    await SecureStorage()
-                                        .deleteSecureData('_image2');
-                                    await SecureStorage()
-                                        .deleteSecureData('_image3');
-
-                                    await Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (builder) =>
-                                                const SignInPage()),
-                                        (route) => false);
-                                  },
-                                  child: const Text('OK'))
-                            ],
-                          ));
+                  _showLogoutWarning(context);
                 },
                 child: customOptions(context, 'assets/icons/signout.png',
                     '${AppLocalizations.of(context)?.sign_out ?? 'Sign out'}')),
@@ -226,6 +193,42 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> _showLogoutWarning(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (builder) => AlertDialog(
+              backgroundColor: Colors.white,
+              title: const Text('Sign out'),
+              content: const Text('Are you sure ?'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel')),
+                TextButton(
+                    onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setInt(
+                          'logoutTime', DateTime.now().millisecondsSinceEpoch);
+                      await SecureStorage().deleteSecureData('refreshToken');
+                      await SecureStorage().deleteSecureData('accessToken');
+                      await SecureStorage().deleteSecureData('_image1');
+                      await SecureStorage().deleteSecureData('_image2');
+                      await SecureStorage().deleteSecureData('_image3');
+
+                      await Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => const SignInPage()),
+                          (route) => false);
+                    },
+                    child: const Text('OK'))
+              ],
+            ));
   }
 
   Padding customOptions(
