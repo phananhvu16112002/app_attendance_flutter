@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:math';
 
 import 'package:attendance_system_nodejs/providers/student_data_provider.dart';
 import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
@@ -7,6 +5,7 @@ import 'package:attendance_system_nodejs/utils/sercure_storage.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class GetLocation {
   double? latitude;
@@ -49,6 +48,44 @@ class GetLocation {
   //   return position;
   // }
 
+  // Future<Position> determinePosition() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+
+  //   while (true) {
+  //     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //     if (!serviceEnabled) {
+  //       print('Location service are disabled');
+  //       await Future.delayed(Duration(seconds: 1));
+  //       continue;
+  //     }
+  //     permission = await Geolocator.checkPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       permission = await Geolocator.requestPermission();
+  //       if (permission == LocationPermission.denied) {
+  //         print("Location permission denied");
+  //         return Future.error("Location permission denied");
+  //       }
+  //     }
+
+  //     if (permission == LocationPermission.deniedForever) {
+  //       print("Location permission are permanently denied");
+  //       return Future.error("Location permission are permanently denied");
+  //     }
+
+  //     try {
+  //       Position position = await Geolocator.getCurrentPosition(
+  //           desiredAccuracy: LocationAccuracy.high,
+  //           timeLimit: const Duration(hours: 2),
+  //           forceAndroidLocationManager: true);
+  //       return position;
+  //     } catch (e) {
+  //       print('Error: $e');
+  //       await Future.delayed(Duration(seconds: 1));
+  //     }
+  //   }
+  // }
+
   Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -56,33 +93,48 @@ class GetLocation {
     while (true) {
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        print('Location service are disabled');
+        print('Location services are disabled. Please enable them.');
         await Future.delayed(Duration(seconds: 1));
-        continue;
+        continue; 
       }
+
       permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          print("Location permission denied");
-          return Future.error("Location permission denied");
+          print("Location permission denied. Retrying...");
+          await Future.delayed(Duration(seconds: 1));
+          continue; 
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        print("Location permission are permanently denied");
-        return Future.error("Location permission are permanently denied");
+        print(
+            "Location permission is permanently denied. Redirecting to settings...");
+
+        bool opened = await openAppSettings();
+        if (!opened) {
+          print("Failed to open app settings.");
+          return Future.error("Unable to open app settings.");
+        }
+
+        await Future.delayed(Duration(seconds: 2));
+        continue;
       }
 
-      try {
-        Position position = await Geolocator.getCurrentPosition(
+      if (permission == LocationPermission.whileInUse ||
+          permission == LocationPermission.always) {
+        try {
+          Position position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high,
             timeLimit: const Duration(hours: 2),
-            forceAndroidLocationManager: true);
-        return position;
-      } catch (e) {
-        print('Error: $e');
-        await Future.delayed(Duration(seconds: 1));
+            forceAndroidLocationManager: true,
+          );
+          return position; 
+        } catch (e) {
+          print('Error retrieving position: $e');
+          await Future.delayed(Duration(seconds: 1));
+        }
       }
     }
   }
